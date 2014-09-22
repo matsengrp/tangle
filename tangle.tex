@@ -9,11 +9,15 @@
 \newtheorem{proposition}[theorem]{Proposition}
 \newtheorem{example}[theorem]{Example}
 \newtheorem{definition}[theorem]{Definition}
-\newcommand{\RR}{{\mathbb R}}
+
+\newcommand{\RR}{\mathbb R}
+\newcommand{\fS}{\mathfrak S}
+\newcommand{\fT}{\mathfrak T}
+\newcommand{\fP}{\mathfrak P}
 
 
 \begin{document}
-\title{Symmetries of pairs of phylogenetic trees}
+\title{Symmetries of tanglegrams}
 \author[Matsen]{Frederick Matsen}
 \address{}
 \thanks{}
@@ -50,10 +54,31 @@ In this paper we explore the mapping of pairs of leaf-labeled trees into the set
 
 \section{Formalism}
 
-\begin{definition}
-A \textit{$n$-tanglegram}
-\end{definition}
+All of our trees will be bifurcating (i.e.\ internal nodes have degree three), and without leaf labels if not otherwise specified.
 
+The following definition is almost equivalent definition to the previous (cite Gusfield, etc), but will be easier for our needs.
+\begin{definition}
+An $n$-\textit{tanglegram} is an ordered triple $(t_1, t_2, \phi)$ where $t_1$ and $t_2$ are trees with $n$ leaves, and $\phi$ is a map from the leaves of $t_1$ to those of $t_2$.
+Let $\fT_n$ denote the set of $n$-tanglegrams.
+\end{definition}
+Note that we have not specified whether the trees in the definition are rooted or not.
+There is no essential difference between these two cases because if present, as the root of $t_1$ naturally maps to the root of $t_2$.
+Thus we will assume that the trees are unrooted.
+
+There is a natural action of the symmetric group $\fS_n$ on $n$-tanglegrams whereby an element of the symmetric group reorders the image of the leaf-to-leaf mapping.
+That is, for $\sigma_n \in \fS_n$ and $(t_1, t_2, \phi) \in \fT_n$,
+\[
+\sigma \cdot (t_1, t_2, \phi) := (t_1, t_2, \sigma \cdot \phi),
+\]
+where $\sigma \cdot \phi$ is the leaf-to-leaf mapping obtained by rearranging the image of $\phi$ according to $\sigma$, i.e.\ $(\sigma \cdot \phi)(x) = \sigma(\phi(x))$.
+
+Let $\fP_n$ be the set of ordered pairs of phylogenetic (i.e.\ leaf-labeled) trees on the same taxon set of size $n$.
+There is a corresponding action of $\fS_n$ on $\fP_n$ where the action permutes the leaf labels of the second tree, i.e.\ $\sigma \cdot (p_1, p_2) \mapsto (p_1, \sigma \cdot p_2)$, where $\sigma \cdot p_2$ is $p_2$ with leaf labels permuted by $\sigma$.
+
+There is an obvious mapping $\fP_n \rightarrow \fT_n$ whereby the needed $\phi$ maps the leaf corresponding to each taxon in $p_1$ to the leaf with that taxon in $p_2$.
+This map is equivariant with respect to the action of $\fS_n$.
+We will call this map the \textit{canonical map}.
+Much of our work will be in learning the properties of this canonical map.
 
 
 % \bibliographystyle{plain}
