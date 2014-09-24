@@ -13,8 +13,8 @@
 \newcommand{\RR}{\mathbb R}
 \newcommand{\fS}{\mathfrak S}
 
-\newcommand{\match}{\mu}
-\newcommand{\tangle}{\mathsf{T}}
+\newcommand{\pairing}{\mu}
+\newcommand{\tangle}{\mathsf{G}}
 \newcommand{\ptree}{\mathsf{P}}
 \newcommand{\ptpair}{\ptree^2}
 \newcommand{\ptequiv}{\bar{\ptree}}  % Phylogenetic tree equivalence classes under the syummetric group.
@@ -57,7 +57,7 @@ Thus all such problems that are defined as such are actually defined in terms of
 This concept of a relative leaf labeling has been formalized as a \textit{tanglegram}.
 There has been extensive work concerning tanglegrams, focusing on the problem of drawing them in a way that has minimum crossings.
 
-In this paper we explore the mapping of pairs of leaf-labeled trees into the set of tanglegrams and explore the action of the symmetric group on the relatively labeled pairs of trees.
+In this paper we explore the mapping of pairs of leaf-labeled trees into the set of tanglegrams and explore the action of the symmetric group on tanglegrams.
 
 
 \section{Formalism}
@@ -66,54 +66,72 @@ All of our trees will be bifurcating (i.e.\ internal nodes have degree three), a
 
 The following definition is almost equivalent definition to the previous (cite Gusfield, etc), but will be easier for our needs.
 \begin{definition}
-An $n$-\textit{tanglegram} is an ordered triple $(t_1, t_2, \match)$ where $t_1$ and $t_2$ are trees with $n$ leaves, and $\match$ is a bijection from the leaves of $t_1$ to those of $t_2$ which we will call the ``matching.''
+An $n$-\textit{tanglegram} is an ordered triple $(t_1, t_2, \pairing)$ where $t_1$ and $t_2$ are trees with $n$ leaves, and $\pairing$ is a bijection from the leaves of $t_1$ to those of $t_2$ which we will call the ``pairing.''
 Let $\tangle_n$ denote the set of $n$-tanglegrams.
 \end{definition}
 Note that we have not specified whether the trees in the definition are rooted or not.
 There is no essential difference between these two cases because if present, as the root of $t_1$ naturally maps to the root of $t_2$.
 Thus we will assume that the trees are unrooted.
 
-Let $\ptree_n$ be the \emph{phylogenetic} trees on $n$ leaves.
-Given the action of the symmetric group $\fS_n$ on the leaves of trees in $\ptree_n$, there is a natural action of $\fS_n$ on $n$-tanglegrams whereby an element of the symmetric group reorders the image of the leaf-to-leaf mapping.
-That is, for $\sigma_n \in \fS_n$ and $(t_1, t_2, \match) \in \tangle_n$,
-\[
-\sigma \cdot (t_1, t_2, \match) := (t_1, t_2, \sigma \cdot \match),
-\]
-where $\sigma \cdot \match$ is the leaf-to-leaf mapping obtained by rearranging the image of $\match$ according to $\sigma$, i.e.\ $(\sigma \cdot \match)(x) = \sigma(\match(x))$.
+The traditional way of specifying a tanglegram is by specifying two trees with the same leaf labels, with the idea that pairs of leaves that share a label are paired in the tanglegram.
+These labels do not themselves carry information for the tanglegram but just to make these connections.
+However, for the purposes of classification it is more straightforward to specify tanglegrams in terms of standardized trees and a permutation.
 
-Let $\ptpair_n$ be the set of ordered pairs of phylogenetic (i.e.\ leaf-labeled) trees on the same taxon set of size $n$.
-There is a corresponding action of $\fS_n$ on $\ptpair_n$ where the action permutes the leaf labels of the second tree, i.e.\ $\sigma \cdot (p_1, p_2) \mapsto (p_1, \sigma \cdot p_2)$, where $\sigma \cdot p_2$ is $p_2$ with leaf labels permuted by $\sigma$.
+Assume we are working with $n$ taxa.
+Let $\ptree$ be the \emph{phylogenetic} trees on $n$ leaves.
+Let $\ptequiv$ be the equivalence classes of $n$ taxon phylogenetic trees under the action of the symmetric group $\fS_n$ on the leaf labels, and let $k$ be the number of such equivalence classes.
+These are in one-to-one correspondence with the (graph-isomorphically-) distinct unlabeled bifurcating trees.
 
-There is an obvious mapping $\bigproj: \ptpair_n \rightarrow \tangle_n$ such that $\match$ maps the leaf corresponding to each taxon in $p_1$ to the leaf with that taxon in $p_2$.
-This map is equivariant with respect to the action of $\fS_n$.
-
-Let $\ptequiv_n$ be the equivalence classes of $n$ taxon phylogenetic trees under the symmetric group.
-Let $\stpair$ be the Cartesian product $\ptequiv \times \ptree$, which is the set of equivalence classes of $\ptpair_n$ under the \emph{product} group action.
-We can think of $\stpair$ as being the pairs of phylogenetic trees such that the labeling of the first tree is standardized.
-
-Now $\bigproj$ factors through a map $\proj: \stpair_n \rightarrow \tangle_n$.
-This map is not trivial.
-For example, say we have distinct leaves in $t_1$ that get mapped to a cherry in $t_2$ by $\match$.
+Let us fix representatives $\{s_i\}_{i=1,\ldots,k}$ of the equivalence classes $\ptequiv$.
+Any tree $t$ has a representative $s_i$ of its equivalence class in $\ptequiv$, and there is a corresponding $\sigma \in \fS_n$ that maps the leaf labels of $s_i$ to those of $t$.
+We will call this $\sigma$ the \emph{standard permutation} of $t$.
 
 
 \section{Computation}
 
-In order to compute all of the $n$-tanglegrams for each $n$, it is easiest to start with $\stpair$ and then find equivalences.
-An alternative approach would be to recursively construct all of the tanglegrams by taking the previous generation of tanglegrams and inserting a new taxon everywhere, but this is going to be tricky because there are lots of nontrivial isomorphisms.
+Consider two phylogenetic trees $t_1, t_2$ with representatives $s_{(1)}$ and $s_{(2)}$ and standard permutations $\sigma_1$ and $\sigma_2$.
+The group element $\sigma_2^{-1} \, \sigma_1$ maps the leaves of $s_{(1)}$ to the leaves of $s_{(2)}$ that they correspond to in the $(t_1, t_2)$ tanglegram.
+Indeed, $\sigma_1$ maps the leaves of $s_{(1)}$ to the corresponding leaves of $t_1$, $t_1$ and $t_2$ have identical leaf labels for leaves connected in the tanglegram, and $\sigma_2^{-1}$ maps the leaves of $t_2$ to the corresponding leaves of $s_{(2)}$.
+Thus, the tanglegram formed by the two phylogenetic trees $t_1$ and $t_2$ on the same leaf set is uniquely determined up to isomorphism by the triple $(s_{(1)}, s_{(2)}, \sigma_2^{-1} \, \sigma_1)$.
 
-Define equivalence relation on $(t_1, t_2, \match)$?
-Rather than pairs of phylogenetic trees we could have such triples.
-Obviously, $(t_1, t_2, \match) \sim (t_1, t_2, \sigma \match \sigma^{-1})$.
-Could take the triples to have one fixed leaf labeling for each tree "shape".
-That way each $\match$ is just a map from $[n]$ to $[n]$.
+Now given a list of trees $t_1, \ldots, t_\ell$ one can enumerate all tanglegrams formed by pairs of $t_i$ with two straightforward steps.
+First, for each tree $t_i$ find a representative $s_{(i)}$ and standard permutation $\sigma_i$.
+Second, create every triple $(s_{(i)},s_{(j)}, \sigma_j^{-1} \sigma_i)$.
 
-Given $(t_1, t_2, \match) \in \tangle_n$, let's say that $\sigma$ is an automorphism of $t_1$.
-Then $(t_1, t_2, \match) \sim (t_1, t_2, \sigma \match)$.
-Now say that $\sigma$ is an automorphism of $t_2$.
-Then $(t_1, t_2, \match) \sim (t_1, t_2, \match \sigma^{-1})$.
+
+
+\section{Action of the symmetric group}
+
+Given the action of the symmetric group $\fS_n$ on the leaves of trees in $\ptree_n$, there is a natural action of $\fS_n$ on $n$-tanglegrams whereby an element of the symmetric group reorders the image of the leaf-to-leaf mapping.
+That is, for $\sigma_n \in \fS_n$ and $(t_1, t_2, \pairing) \in \tangle_n$,
+\[
+\sigma \cdot (t_1, t_2, \pairing) := (t_1, t_2, \sigma \cdot \pairing),
+\]
+where $\sigma \cdot \pairing$ is the leaf-to-leaf mapping obtained by rearranging the image of $\pairing$ according to $\sigma$, i.e.\ $(\sigma \cdot \pairing)(x) = \sigma(\pairing(x))$.
+
+
 
 
 
 % \bibliographystyle{plain}
 % \bibliography{tangle}
 \end{document}
+
+
+
+An alternative approach would be to recursively construct all of the tanglegrams by taking the previous generation of tanglegrams and inserting a new taxon everywhere, but this is going to be tricky because there are lots of nontrivial isomorphisms.
+
+
+Let $\ptpair_n$ be the set of ordered pairs of phylogenetic (i.e.\ leaf-labeled) trees on the same taxon set of size $n$.
+There is an obvious mapping $\bigproj: \ptpair_n \rightarrow \tangle_n$ such that $\pairing$ maps the leaf corresponding to each taxon in $p_1$ to the leaf with that taxon in $p_2$.
+There is a corresponding action of $\fS_n$ on $\ptpair_n$ where the action permutes the leaf labels of the second tree, i.e.\ $\sigma \cdot (p_1, p_2) \mapsto (p_1, \sigma \cdot p_2)$, where $\sigma \cdot p_2$ is $p_2$ with leaf labels permuted by $\sigma$.
+This map is equivariant with respect to the action of $\fS_n$.
+
+Let $\stpair$ be the Cartesian product $\ptequiv \times \ptree$, which is the set of equivalence classes of $\ptpair_n$ under the \emph{product} group action.
+We can think of $\stpair$ as being the pairs of phylogenetic trees such that the labeling of the first tree is standardized.
+
+Now $\bigproj$ factors through a map $\proj: \stpair_n \rightarrow \tangle_n$.
+This map is not trivial.
+For example, say we have distinct leaves in $t_1$ that get mapped to a cherry in $t_2$ by $\pairing$.
+
+
