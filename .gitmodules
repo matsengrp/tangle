@@ -1,0 +1,3 @@
+[submodule "curvature"]
+	path = curvature
+	url = git@github.com:matsen/curvature.git
