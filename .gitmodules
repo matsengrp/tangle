@@ -1,3 +1,6 @@
 [submodule "curvature"]
 	path = curvature
 	url = git@github.com:matsen/curvature.git
+[submodule "gricci"]
+	path = gricci
+	url = git@github.com:matsen/gricci.git
