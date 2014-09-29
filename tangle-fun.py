@@ -48,7 +48,7 @@ def make_tangles(n, symmetric=True, verbose=True):
     tangles = set()
     # Iterate over all pairs of trees. Some of these will be duplicates for sure.
     for i in range(len(trees)):
-        print "Working on tree {} of {}".format(i, len(trees))
+        print "Working on tree {} of {}".format(i+1, len(trees))
         for j in range(i+1,len(trees)):
             if symmetric and sidxs[i] > sidxs[j]:
                 continue # If symmetric we only have to check unordered pairs of representatives.
