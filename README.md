@@ -13,3 +13,6 @@ This project uses git submodules.
 
 [A pdf version of Fulton and Harris' book on representation theory](http://isites.harvard.edu/fs/docs/icb.topic1381051.files/fulton-harris-representation-theory.pdf).
 Note that we will only be needing the section concerning complex representations of the symmetric group, so Lectures 1 through 4.
+
+[Erick's collection of related papers](https://paperpile.com/shared/psHcVI).
+Please send papers to add.
