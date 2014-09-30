@@ -50,7 +50,7 @@ In this paper we develop methods to enumerate tanglegrams up to isomorphism, and
 % \listoftodos\relax
 
 
-\section{Introduction}
+\section{Introduction (quite rough!)}
 Pairs of trees on the same leaf set come up everywhere in phylogenetics.
 Many people work on problems concerning pairs of trees.
 For example SPR.
@@ -58,10 +58,10 @@ Pairs of trees on the same taxa are endowed with a natural symmetry, which can b
 
 Moreover, all of these problems do not concern the actual leaf labels as such, but rather use the leaf labels as markers that can be used to map leaves of one phylogenetic tree on to another.
 Due to the natural symmetries that exist in all phylogenetic trees, any given problem has an alternative phrasing with leaf labels moved in one or both of the trees.
-Thus all such problems that are defined as such are actually defined in terms of this \textit{relative} leaf labeling.
+Thus all such problems that are defined as such are actually defined in terms of this \emph{relative} leaf labeling.
 
-This concept of a relative leaf labeling has been formalized as a \textit{tanglegram}.
-There has been extensive work concerning tanglegrams, focusing on the problem of drawing them in a way that has minimum crossings.
+This concept of a relative leaf labeling has been formalized as a \emph{tanglegram}.
+There has been extensive work concerning tanglegrams, focusing on the problem of drawing them in a way that has minimum crossings \cite{Buchin2008-lc,Lozano2008-tp,Bansal2009-ni,Bocker2009-xl,Fernau2010-an,Venkatachalam2010-zh}.
 
 In this paper we explore the mapping of pairs of leaf-labeled trees into the set of tanglegrams and explore the action of the symmetric group on tanglegrams.
 
@@ -69,24 +69,24 @@ In this paper we explore the mapping of pairs of leaf-labeled trees into the set
 \section{Formalism}
 All of our trees will be bifurcating (i.e.\ internal nodes have degree three), and without leaf labels if not otherwise specified.
 
-The following definition is almost equivalent definition to the previous (cite Gusfield, etc), but will be easier for our needs.
 \begin{definition}
-An $n$-\textit{tanglegram} is an ordered triple $(t_1, t_2, \pairing)$ where $t_1$ and $t_2$ are trees with $n$ leaves, and $\pairing$ is a bijection from the leaves of $t_1$ to those of $t_2$ which we will call the ``pairing.''
+\label{def:tanglegram}
+An $n$-\emph{tanglegram} is an ordered triple $(t_1, t_2, \pairing)$ where $t_1$ and $t_2$ are trees with $n$ leaves, and $\pairing$ is a bijection from the leaves of $t_1$ to those of $t_2$ which we will call the ``pairing.''
 Let $\tangle_n$ denote the set of $n$-tanglegrams.
 \end{definition}
 Note that we have not specified whether the trees in the definition are rooted or not.
 There is no essential difference between these two cases because if present, as the root of $t_1$ is naturally paired with the root of $t_2$.
-Thus we will assume that the trees are unrooted.
-
-The traditional way of specifying a tanglegram is by specifying two trees with the same leaf labels, with the idea that pairs of leaves that share a label are paired in the tanglegram.
-These labels do not themselves carry information for the tanglegram but just to make these connections.
-However, for the purposes of classification it is more straightforward to specify tanglegrams in terms of standardized trees and a permutation.
-
+Thus we will assume that the trees are rooted.
 Note that our definition considers $(t_1, t_2, \pairing)$ and $(t_2, t_1, \pairing^{-1})$ as different maps.
-We can also consider an unordered tanglegram, or \textit{utanglegram}, by identifying them.
+We can also consider an unordered tanglegram, or \emph{utanglegram}, by identifying them.
 
+A common way of specifying a tanglegram is by specifying two trees with the same leaf labels, with the idea that pairs of leaves that share a label are paired in the tanglegram.
+These labels do not themselves carry information for the tanglegram but just to make these connections, motivating the definition above in terms of a bijection.
+However, for our purposes it will be useful to have a notion of a \emph{labeled tanglegram}, which consists of a pair of trees on the same leaf labels such that pairs of leaves that share a label are paired in the tanglegram.
+
+For the purposes of classification it is more straightforward to specify tanglegrams in terms of standardized trees and a permutation rather than in terms of the bijection in Definition~\ref{def:tanglegram}.
 Assume we are working with $n$ taxa.
-Let $\ptree$ be the \emph{phylogenetic} trees on $n$ leaves.
+Let $\ptree$ be the set of \emph{phylogenetic} trees on $n$ leaves.
 Let $\ptequiv$ be the equivalence classes of $n$ taxon phylogenetic trees under the action of the symmetric group $\fS_n$ on the leaf labels, and let $k$ be the number of such equivalence classes.
 These are in one-to-one correspondence with the (graph-isomorphically-) distinct unlabeled bifurcating trees.
 
@@ -104,15 +104,23 @@ Consider two phylogenetic trees $t_1, t_2$ with representatives $s_{(1)}$ and $s
 The group element $\sigma_2^{-1} \, \sigma_1$ maps the leaves of $s_{(1)}$ to the leaves of $s_{(2)}$ that they correspond to in the $(t_1, t_2)$ tanglegram.
 Indeed, $\sigma_1$ maps the leaves of $s_{(1)}$ to the corresponding leaves of $t_1$, $t_1$ and $t_2$ have identical leaf labels for leaves connected in the tanglegram, and $\sigma_2^{-1}$ maps the leaves of $t_2$ to the corresponding leaves of $s_{(2)}$.
 Thus the triple $(s_{(1)}, s_{(2)}, \sigma_2^{-1} \, \sigma_1)$ defines the tanglegram formed by the two phylogenetic trees $t_1$ and $t_2$.
-(Note that here and everywhere we are using the convention that group action of a product starts with the rightmost element and then proceeds to the left.)
+(Note that here and everywhere we are using the convention that group action of a product starts with the rightmost group element and then proceeds to the left.)
 
-However, there are additional symmetries defined by automorphisms of the two trees.
-Indeed, any pair of automorphisms $\alpha_1 \in \fA_1, \alpha_2 \in \fA_2$ induce an isomorphic tanglegram $(s_{(1)}, s_{(2)}, \left(\sigma_2 \alpha_2 \right)^{-1} \, \sigma_1 \alpha_1)$
-Thus every tanglegram is uniquely defined up to isomorphism by its \textit{standardization}, which we define to be the orbit
+However, there are additional symmetries defined by automorphisms of the two trees: any pair of automorphisms $\alpha_1 \in \fA_1, \alpha_2 \in \fA_2$ induce an isomorphic tanglegram $(s_{(1)}, s_{(2)}, \left(\sigma_2 \alpha_2 \right)^{-1} \, \sigma_1 \alpha_1)$.
+Define the \emph{standardization} of a (labeled) tanglegram to be the triple
 \begin{equation}
 \label{eq:orbit}
-(s_{(1)}, s_{(2)}, \left(\sigma_2 \alpha_2 \right)^{-1} \, \sigma_1 \alpha_1) \qquad \forall \alpha_1 \in \fA_1, \alpha_2 \in \fA_2.
+\left(s_{(1)}, s_{(2)}, \left\{(\sigma_2 \alpha_2)^{-1} \, \sigma_1 \alpha_1 : \alpha_1 \in \fA_1, \alpha_2 \in \fA_2  \right\}\right)
 \end{equation}
+or more simply $(s_{(1)}, s_{(2)}, [\sigma_2^{-1} \, \sigma_1])$ where the brackets imply equivalence class under the automorphisms.
+The third element in this triple will be called the \emph{orbit} of the tanglegram.
+
+There is a one-to-one correspondence between tanglegrams and standardizations.
+.
+Indeed, assume that we have two isomorphic tanglegrams, which we consider as a pair of labeled tanglegrams with an arbitrary label set.
+The isomorphism between the two labeled tanglegrams can be expressed as a permutation $\tau$ of the leaf labels.
+Each of the first trees must have the same standardization, and also the same orbit because $[\left(\tau \sigma_2\right)^{-1} \, \tau \sigma_1] = [\sigma_2^{-1} \, \sigma_1]$.
+Now if we are given a standardization, we can pick a representative from the orbit and assemble the corresponding tanglegram, which is well defined because tree automorphisms do not change the underlying tanglegram.
 
 Now given a list of trees $t_1, \ldots, t_\ell$ one can enumerate all tanglegrams formed by pairs of $t_i$ with two straightforward steps.
 First, for each tree $t_i$ find a representative $s_{(i)}$ and standard permutation $\sigma_i$.
@@ -138,13 +146,7 @@ In terms of the standardization this is
 Q: What representation is this?
 
 
-
-
-% \bibliographystyle{plain}
-% \bibliography{tangle}
+\bibliographystyle{unsrt}
+\bibliography{tangle}
 \end{document}
-
-
-
-An alternative approach would be to recursively construct all of the tanglegrams by taking the previous generation of tanglegrams and inserting a new taxon everywhere, but this is going to be tricky because there are lots of nontrivial isomorphisms.
 
