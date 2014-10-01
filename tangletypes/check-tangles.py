@@ -1,0 +1,29 @@
+from sage.all import *
+from itertools import product
+
+load("../curvature/tree-fun.py")
+load("../tangle-fun.py")
+
+
+for i in range(4, 6):
+    fname = "tangle{}.sobj".format(i)
+    print ("Checking "+fname)
+    tangles = load(fname)
+    gl = list(graph_of_tangle(*tangle) for tangle in tangles)
+
+    (map_to_class, certs) = equivalence_classes(
+        lambda x, y: x.is_isomorphic(y, certify=True),
+        gl)
+
+    if map_to_class == range(len(map_to_class)):
+        print "\tAll tangles are graph-distinct."
+    else:
+        for j in range(len(map_to_class)):
+            if j != map_to_class[j]:
+                print "\tIsomorphic tangles:"
+                print_tangle(*(tangles[map_to_class[j]]))
+                print_tangle(*(tangles[j]), print_orbit=True)
+                print certs[j]
+
+    total_tangles = sum(len(orbit) for (_, _, orbit) in tangles)
+    print "There are {} tangles (standardized T_1) with {} leaves.".format(total_tangles, i)

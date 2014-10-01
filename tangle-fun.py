@@ -27,10 +27,13 @@ def graph_of_tangle(t1, t2, orbit):
     return g
 
 
-def print_tangle(t1, t2, orbit):
+def print_tangle(t1, t2, orbit, print_orbit=False):
     print to_newick(t1)
     print to_newick(t2)
-    print orbit[0]
+    if print_orbit:
+        print orbit
+    else:
+        print orbit[0]
 
 
 def make_tangles(n, symmetric=True, verbose=True):
