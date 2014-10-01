@@ -1,3 +1,5 @@
+#!/usr/bin/env sage
+
 from sage.all import *
 from itertools import product
 
