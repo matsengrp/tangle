@@ -37,6 +37,10 @@ def print_tangle(t1, t2, orbit, print_orbit=False):
 
 
 def make_tangles(n, symmetric=True, verbose=True):
+    """
+    Make all the tangles with n leaves.
+    symmetric determines if we should consider all ordered or unordered pairs of trees.
+    """
     trees = enumerate_rooted_trees(n)
     fS = SymmetricGroup(n)
     # sidxs are the indices of the representatives, and sigmatilde are the standard permutations extended to all internal nodes.
@@ -49,19 +53,24 @@ def make_tangles(n, symmetric=True, verbose=True):
     # but it probably doesn't matter compared to the following quadratic step.
     autos = list(leaf_autom_group(trees[sidx]) for sidx in sidxs)
     tangles = set()
-    # Iterate over all pairs of trees. Some of these will be duplicates for sure.
+    # Iterate over all pairs of trees. Some of these will be duplicates for
+    # sure.
     for i in range(len(trees)):
         if verbose:
             print "Working on tree {} of {}".format(i+1, len(trees))
-        for j in range(i+1,len(trees)):
+        for j in range(i+1, len(trees)):
             if symmetric and sidxs[i] > sidxs[j]:
-                continue # If symmetric we only have to check unordered pairs of representatives.
+                # If symmetric we only have to check unordered pairs of
+                # representatives.
+                continue
             orbit = set()
-            # Again, autos[i] is the automorphism group of the _representative_ of the ith tree.
+            # Again, autos[i] is the automorphism group of the _representative_
+            # of the ith tree.
             for ai in autos[i]:
                 for aj in autos[j]:
                     orbit.add((sigmas[j] * aj).inverse() * sigmas[i] * ai)
                     if symmetric:
                         orbit.add((sigmas[i] * ai).inverse() * sigmas[j] * aj)
-            tangles.add((sidxs[i],sidxs[j], frozenset(orbit)))
-    return list((trees[si], trees[sj], tuple(shortest_fewest_cycles_sort(o))) for (si, sj, o) in tangles)
+            tangles.add((sidxs[i], sidxs[j], frozenset(orbit)))
+    return list((trees[si], trees[sj], tuple(shortest_fewest_cycles_sort(o)))
+                for (si, sj, o) in tangles)
