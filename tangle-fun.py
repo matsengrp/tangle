@@ -41,36 +41,20 @@ def make_tangles(n, symmetric=True, verbose=True):
     Make all the tangles with n leaves.
     symmetric determines if we should consider all ordered or unordered pairs of trees.
     """
-    trees = enumerate_rooted_trees(n)
     fS = SymmetricGroup(n)
-    # sidxs are the indices of the representatives, and sigmatilde are the standard permutations extended to all internal nodes.
-    # Each of these are indexed by the trees.
-    (sidxs, sigmas_tilde) = equivalence_classes(rooted_is_isomorphic, trees)
-    # Here we get the standard permutations, restricted to the leaves.
-    sigmas = list(fS(list(sigma[i] for i in range(1,n+1))) for sigma in sigmas_tilde)
-    # Here the automorphisms are indexed the trees, but they are of the corresponding representatives.
-    # Wasteful computation as we are recomputing the automorphism group for every representative many times,
-    # but it probably doesn't matter compared to the following quadratic step.
-    autos = list(leaf_autom_group(trees[sidx]) for sidx in sidxs)
-    tangles = set()
-    # Iterate over all pairs of trees. Some of these will be duplicates for
-    # sure.
+    trees = tree_shape_representatives(n)
+    tree_autos = list(leaf_autom_group(t) for t in trees)
+    # Iterate over all pairs of tree shape representatives.
+    tangles = []
     for i in range(len(trees)):
         if verbose:
             print "Working on tree {} of {}".format(i+1, len(trees))
         for j in range(i+1, len(trees)):
-            if symmetric and sidxs[i] > sidxs[j]:
+            if symmetric and i > j:
                 # If symmetric we only have to check unordered pairs of
                 # representatives.
                 continue
-            orbit = set()
-            # Again, autos[i] is the automorphism group of the _representative_
-            # of the ith tree.
-            for ai in autos[i]:
-                for aj in autos[j]:
-                    orbit.add((sigmas[j] * aj).inverse() * sigmas[i] * ai)
-                    if symmetric:
-                        orbit.add((sigmas[i] * ai).inverse() * sigmas[j] * aj)
-            tangles.add((sidxs[i], sidxs[j], frozenset(orbit)))
-    return list((trees[si], trees[sj], tuple(shortest_fewest_cycles_sort(o)))
-                for (si, sj, o) in tangles)
+            tangle_autos = fS.subgroup(tree_autos[i].gens() + tree_autos[j].gens())
+            for coset in fS.cosets(tangle_autos):
+                tangles.append((trees[i], trees[j], coset))
+    return tangles
