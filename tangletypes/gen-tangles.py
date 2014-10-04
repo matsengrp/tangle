@@ -17,5 +17,5 @@ def _mkdir(newdir):
 
 for i in range(4, 6):
     sage.structure.sage_object.save(
-        list(saveable_tangle(*x) for x in make_tangles(i)),
+        list(saveable_tangle(*x) for x in make_tangles(i, symmetric=False)),
         filename=("tangle"+str(i)))

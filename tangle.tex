@@ -15,7 +15,7 @@
 \newcommand{\RR}{\mathbb R}
 \newcommand{\fS}{\mathfrak S}
 
-\newcommand{\aut}{\mathfrak A}
+\newcommand{\aut}{\mathcal A}
 \newcommand{\pairing}{\mu}
 \newcommand{\tangle}{\mathsf{X}}
 \newcommand{\ptree}{\mathsf{P}}
@@ -85,11 +85,12 @@ There has been extensive work concerning tanglegrams, focusing on the problem of
 In this paper we explore the mapping of pairs of leaf-labeled trees into the set of tanglegrams and explore the action of the symmetric group on tanglegrams.
 We characterize the isomorphism classes in terms of the symmetries of the two phylogenetic trees they contain.
 Furthermore, tanglegrams are equipped with a natural action of the symmetric group on the leaf set, which we describe.
-We use the SAGE mathematics software \cite{SteinJoyner2005} to further explore these symmetries, resulting in tables of representatives of tanglegrams and their multiplicities, as well as the irreducible representations of the symmetric group defined by the action on tanglegrams.
+We use the SAGE \cite{SteinJoyner2005} and GAP \cite{GAP4} mathematics software to further explore these symmetries, resulting in tables of representatives of tanglegrams and their multiplicities, as well as the irreducible representations of the symmetric group defined by the action on tanglegrams.
 
 
 \section{Formalism}
 Define isomorphism of leaf-labeled trees?
+versus graph isomorphism.
 
 It will be convenient for our purposes to use a slightly different \emph{labeled} definition of a tanglegram than has been previously used.
 Let $\fS_n$ denote the symmetric group on $n$ items.
@@ -141,27 +142,41 @@ Define the group $\aut(x)$ of an $n$-tangle $x = (t_1, t_2, \pairing)$ to be the
 \aut(x) = \langle \pairing \alpha_1 \pairing^{-1}, \alpha_2 \mid \alpha_1 \in \aut(t_1), \alpha_2 \in \aut(t_2) \rangle.
 \]
 
-\begin{proposition}
+\begin{lemma}
 For any tanglegram $x$, $\aut(x)$ is the exactly group of graph automorphisms of the corresponding tanglegraph $g_x$.
-\end{proposition}
+\end{lemma}
 \begin{proof}
-Let $\alpha$ be an element of $\aut(x)$, which can be described as a finite product of $\sigma$ and elements of $\aut(t_1)$ and $\aut(t_2)$.
-The tanglegraph $g_{\alpha \cdot x}$ corresponding to $\alpha \cdot x$ can then be ``untangled'' by processing this product by a combination of applying automorphisms of $t_1$ and $t_2$ as well moving between $t_1$ and $t_2$ via $\pairing$.
+Let $\alpha$ be an element of $\aut(x)$, which is as a finite product of elements of $\pairing \aut(t_1) \pairing^{-1}$ and $\aut(t_2)$.
+The tanglegraph $g_{\alpha \cdot x}$ corresponding to $\alpha \cdot x$ can then be ``untangled'' by processing this product by moving between $t_1$ and $t_2$ via $\pairing$ and applying automorphisms of $t_1$ and $t_2$.
+Thus every element in $\aut(x)$ corresponds to a well defined automorphism of $g_x$.
 
 Now let $\tilde \sigma$ be an automorphism of $g_x$ which maps the leaf set of each tree to itself.
 Because the leaves map to themselves, the internal nodes of the trees map to themselves.
 (If they didn't then there would have to be exchange of nodes between trees, and thus they would have to ``hop over'' the leaves.)
-Thus any such graph automorphism must induce a pair of automorphisms $\alpha_1, \alpha_2$ on the (labeled) trees.
-By the same logic as before the induced map between the leaf sets of $t_1$ and $t_2$ can be disentangled into $\pairing$.
+Say $x = (t_1, t_2, \pairing)$.
+Thus any such graph automorphism must induce a pair of automorphisms $\alpha_1$ and $\alpha_2$ on the (labeled) trees $t_1$ and $t_2$.
+This gives a well defined element of $\aut(x)$, namely $\pairing \alpha_1 \pairing^{-1} \, \alpha_2$.
 \end{proof}
 
-This proposition enables us to define the action on tanglegrams in terms of group-theoretic action on cosets.
+We are now in position to enumerate tanglegrams with two given trees and describe their automorphisms in group theoretic terms.
+Recall that a (right) coset of a group $G$ formed by an element $g \in G$ and a subgroup $U$ of $G$ is the set of products $u\, g$.
+\begin{proposition}
+\label{prop:cosets}
+Assume two phylogenetic trees $t_1$ and $t_2$.
+Given a pairing $\pairing \in \fS_n$ use $x_\pairing$ to denote the tanglegram $(t_1, t_2, \pairing)$.
+The set of tanglegrams containing (unlabeled versions of) $t_1$ and $t_2$ up to graph isomorphism is exactly the tangles $x_\pairing$ for the set of distinct cosets $\aut(x_\pairing) \pairing$.
+\end{proposition}
+\begin{proof}
+Let $\sigma$ be any isomorphism between a $x_\pairing$ and an $x_{\pairing'}$, expressed in terms of a leaf relabeling.
+That means that $\pairing' = \sigma \pairing \sigma^{-1}$.
+...
+\end{proof}
+
+Therefore we can compute all $n$-tanglegrams by taking a list of graph-isomorphism-unique phylogenetic trees on $n$ leaves and for each pair calculating the ensemble of distinct cosets of the form $\aut(x_\pairing) \pairing$ for $\pairing \in \fS_n$.
+
 
 
 \section{Computation}
-How to describe the ensemble of tanglegrams.
-For the purposes of classification it is more straightforward to specify tanglegrams in terms of standardized trees and a permutation rather than in terms of the bijection in Definition~\ref{def:tanglegram}.
-Assume we are working with $n$ taxa.
 Let $\ptree$ be the set of \emph{phylogenetic} trees on $n$ leaves.
 Let $\ptequiv$ be the equivalence classes of $n$ taxon phylogenetic trees under the action of the symmetric group $\fS_n$ on the leaf labels, and let $k$ be the number of such equivalence classes.
 These are in one-to-one correspondence with the (graph-isomorphically-) distinct unlabeled bifurcating trees.

@@ -1,18 +1,28 @@
 from sage.all import gap
+# Depends on curvature/tree-fun.py
 
-### Groups
+
+# Groups
 
 def conjugate_subgroups(G, H):
     return [G.subgroup(gap_group=X) for X in
             gap.function_call('ConjugateSubgroups', [gap(G), gap(H)])]
 
 
+def right_coset(U, g):
+    return gap.function_call('RightCoset', [gap(U), gap(g)])
+
+
 def representative(coset):
     return gap.function_call('Representative', coset)
 
 
-def right_coset(U, g):
-    return gap.function_call('RightCoset', [gap(U), gap(g)])
+def acting_domain(coset):
+    return gap.function_call('ActingDomain', coset)
+
+
+def size(domain):
+    return gap.function_call('Size', domain)
 
 
 def shortest_fewest_cycles_sorted(perm_list):
@@ -33,7 +43,7 @@ def shortest_fewest_cycles_sorted(perm_list):
     return l
 
 
-### Tangles
+# Tangles
 
 def graph_of_tangle(t1, t2, coset):
     n = n_leaves(t1) - 1
@@ -76,14 +86,20 @@ def make_tangles(n, symmetric=True, verbose=True):
     tangles = []
     for i in range(len(trees)):
         print "Starting with on tree {} of {}".format(i+1, len(trees))
-        for j in range(i, len(trees)):
+        for j in range(0, len(trees)):
             if symmetric and i > j:
                 # If symmetric we only have to check unordered pairs of
                 # representatives.
                 continue
             cosets = []
             for sigma in fS:
-                c = right_coset(fS.subgroup(tree_autos[i].conjugate(sigma).gens()+tree_autos[j].gens()), sigma)
+                c = right_coset(
+                    fS.subgroup(
+                        # Concatenation of generator lists as per prop:cosets.
+                        # Have to invert because conjugate is g^{-1}Hg.
+                        tree_autos[i].conjugate(sigma.inverse()).gens() +
+                        tree_autos[j].gens()),
+                    sigma)
                 if not any(c == cp for cp in cosets):
                     cosets.append(c)
             if verbose:
