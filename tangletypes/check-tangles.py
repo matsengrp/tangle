@@ -7,14 +7,14 @@ load("../curvature/tree-fun.py")
 load("../tangle-fun.py")
 
 
-for i in range(4, 6):
+for i in range(4, 5):
     fname = "tangle{}.sobj".format(i)
     print ("Checking "+fname)
     tangles = load(fname)
     gl = list(graph_of_tangle(*tangle) for tangle in tangles)
 
     (map_to_class, certs) = equivalence_classes(
-        lambda x, y: x.is_isomorphic(y, certify=True),
+        lambda x, y: x.is_isomorphic(y, certify=True, edge_labels=True),
         gl)
 
     if map_to_class == range(len(map_to_class)):
