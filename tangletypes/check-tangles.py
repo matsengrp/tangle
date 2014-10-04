@@ -10,7 +10,7 @@ load("../tangle-fun.py")
 for i in range(4, 5):
     fname = "tangle{}.sobj".format(i)
     print ("Checking "+fname)
-    tangles = load(fname)
+    tangles = load_tangles(fname)
     gl = list(graph_of_tangle(*tangle) for tangle in tangles)
 
     (map_to_class, certs) = equivalence_classes(
@@ -23,8 +23,8 @@ for i in range(4, 5):
         for j in range(len(map_to_class)):
             if j != map_to_class[j]:
                 print "\tIsomorphic tangles:"
-                print_tangle(*(tangles[map_to_class[j]]), print_orbit=True)
-                print_tangle(*(tangles[j]), print_orbit=True)
+                print_tangle(*(tangles[map_to_class[j]]))
+                print_tangle(*(tangles[j]))
                 print certs[j]
 
     total_tangles = sum(len(orbit) for (_, _, orbit) in tangles)
