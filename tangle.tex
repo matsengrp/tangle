@@ -1,7 +1,9 @@
 \documentclass{amsart}
 
 \usepackage{amsmath}
-% \usepackage[german]{todonotes}
+\usepackage{cite}
+\usepackage{graphicx}
+\usepackage{url}
 
 \newtheorem{theorem}{Theorem}[section]
 \newtheorem{lemma}[theorem]{Lemma}
@@ -13,58 +15,77 @@
 \newcommand{\RR}{\mathbb R}
 \newcommand{\fS}{\mathfrak S}
 
-
 \newcommand{\aut}{\mathsf A}
 \newcommand{\pairing}{\mu}
 \newcommand{\tangle}{\mathsf{G}}
 \newcommand{\ptree}{\mathsf{P}}
-\newcommand{\ptpair}{\ptree^2}
 \newcommand{\ptequiv}{\bar{\ptree}}  % Phylogenetic tree equivalence classes under the symmetric group.
 \newcommand{\stpair}{\mathsf{Q}}  % Shape-tree pair.
 \newcommand{\bigproj}{\tilde \pi}
-\newcommand{\proj}{\pi}
-\newcommand{\ident}{i}
+
+% arxivness
+\newcommand{\arxiv}[1]{#1}
+\newcommand{\notarxiv}[1]{}
+
+\newcommand{\FIGspr}{\
+\label{FIGspr}
+\begin{figure}
+  \arxiv{\includegraphics[width=4in]{figures/spr-definition}}
+\caption{\
+  A subtree-prune-regraft move.
+}
+\end{figure}
+}
 
 
 \begin{document}
 \title{Symmetries of tanglegrams}
-\author[Matsen]{Frederick Matsen}
-\address{}
-\thanks{}
+\author[Matsen]{Frederick A. Matsen IV}
+\address{Fred Hutchinson Cancer Research Center \\ Seattle, WA}
+\thanks{Research supported in part by National Science Foundation award 1223057 and National Institutes of Health grant R01 GM113246-01}
+
 
 \date{\today}
 
 \begin{abstract}
-Many interesting problems in the discrete mathematics of phylogenetic trees are defined by the relative labeling of pairs of leaf-labeled trees.
-These relative labelings are naturally formalized as tanglegrams.
-Although there has been considerable work on planar embeddings of tanglegrams, there has been no work on their symmetries.
-Such work would clarify how many such problems on relatively labeled pairs of trees there are, open up the possibility for amortized algorithms, and reveal natural symmetries of spaces associated with such problems.
+Many interesting discrete mathematics problems concerning phylogenetic trees are defined in terms of the relative labeling of pairs of leaf-labeled trees.
+These relative labelings are naturally formalized as so-called ``tanglegrams.''
+Although there has been considerable work on planar embeddings of tanglegrams, many questions remain concerning their symmetries.
+Understanding symmetries of tanglegrams would give information on how many problems on relatively labeled pairs of trees there are, open up the possibility for amortized algorithms, and reveal natural symmetries of spaces associated with such problems.
 In this paper we develop methods to enumerate tanglegrams up to isomorphism, and we investigate the representation of the symmetric group induced by its action on tanglegrams.
 \end{abstract}
 
 \maketitle
 
-% % Make a todo table of contents.
-% \makeatletter
-% \providecommand\@dotsep{5}
-% \makeatother
-% \listoftodos\relax
 
+\section{Introduction}
+As a motivating example, we consider the problem of computing the \emph{subtree-prune-regraft} (SPR) distance between two leaf-labeled phylogenetic trees.
+An SPR move cuts one edge of the tree and then reattaches the resulting rooted subtree at another edge (Figure~\ref{FIGspr}).
+The SPR distance between two (phylogenetic, implying meaning leaf-labeled) trees $t_1$ and $t_2$ is the minimum number of SPR moves required to transform $t_1$ into $t_2$.
 
-\section{Introduction (quite rough!)}
-Pairs of trees on the same leaf set come up everywhere in phylogenetics.
-Many people work on problems concerning pairs of trees.
-For example SPR.
-Pairs of trees on the same taxa are endowed with a natural symmetry, which can be formalized as an action of the symmetric group.
+Clearly the distance between two such trees does not depend on the actual labels of $t_1$ and $t_2$.
+For example, one could exchange numbers labeling the two trees with their corresponding taxonomic names.
+Or one could simply permute the numerical labels of the leaf nodes, which would result in the same problem if the permutation was applied identically on both the starting and ending trees.
+Furthermore, a path made by SPR moves made by intermediate trees between the two trees could also have its labels permuted in order to give a path between the trees with permuted leaf labels.
+Thus, all of these problems do not concern the actual leaf labels as such, but rather use the leaf labels as markers that can be used to map leaves of one phylogenetic tree on to another: the problem and its solutions are actually defined in terms of a \emph{relative} leaf labeling.
+\FIGspr
 
-Moreover, all of these problems do not concern the actual leaf labels as such, but rather use the leaf labels as markers that can be used to map leaves of one phylogenetic tree on to another.
-Due to the natural symmetries that exist in all phylogenetic trees, any given problem has an alternative phrasing with leaf labels moved in one or both of the trees.
-Thus all such problems that are defined as such are actually defined in terms of this \emph{relative} leaf labeling.
+Such discrete mathematics problems and objects defined in terms of pairs of labeled combinatorial objects are ubiquitous in computational biology.
+In addition to SPR distances and their cousin distances formed by \emph{nearest-neighbor-interchange} and \emph{tree bisection and reattachment} \cite{wiki:treeRearrangement}, we have their corresponding biological questions concerning ``supertree'' reconstruction \cite{Whidden2014-ku} and reconciliation of gene transfer networks \cite{Boon2013-mc}.
+Because such moves are used in both maximum-likelihood heuristic search and Bayesian Markov chain Monte Carlo (MCMC) tree reconstruction, the geometry of phylogenetic trees under such moves has substantial consequences in terms of phylogenetic tree reconstruction \cite{Whidden2014-yt}.
 
-This concept of a relative leaf labeling has been formalized as a \emph{tanglegram}.
+Another line of inquiry in computational biology concerns species delimitation, which can naturally be phrased in terms of inference of a partition of labeled objects.
+In an analogous way, scientists use MCMC to explore the posterior on such partitions \cite{Yang2010-kc}, and comparison of the results can be performed using distances between the partitions via distances such as \cite{Gusfield2002-il}.
+These partitions can also be thought of as a certain type of leaf-labeled tree of height two, and thus they also form a problem concerning relative leaf labeling of phylogenetic trees.
+
+The concept of a pair of phylogenetic trees with a relative leaf labeling is essentially the same as the graph-theoretic notion of a \emph{tanglegram}.
+A tanglegram is a pair of trees on the same set of leaves with matching leaves in the two trees joined by an edge. \cite{Venkatachalam2010-zh}.
 There has been extensive work concerning tanglegrams, focusing on the problem of drawing them in a way that has minimum crossings \cite{Buchin2008-lc,Lozano2008-tp,Bansal2009-ni,Bocker2009-xl,Fernau2010-an,Venkatachalam2010-zh}.
 
 In this paper we explore the mapping of pairs of leaf-labeled trees into the set of tanglegrams and explore the action of the symmetric group on tanglegrams.
+We are able to write down isomorphism classes in terms of the symmetries of the two phylogenetic trees they contain.
+Furthermore, tanglegrams are equipped with a natural action of the symmetric group on the leaf set, which we describe.
+We use the SAGE mathematics software \cite{SteinJoyner2005} to further explore these symmetries, resulting in tables of representatives of tanglegrams and their multiplicities, as well as the irreducible representations of the symmetric group defined by the action on tanglegrams.
 
 
 \section{Formalism}
@@ -196,7 +217,17 @@ Q: can we say anything about the number of tanglegrams?
 Q: What representation is this?
 
 
+
+\section{Acknowledgements}
+This manuscript was substantially shaped by discussions with Michael Landis, Arnold Kas, and Chris Whidden.
+
 \bibliographystyle{unsrt}
 \bibliography{tangle}
+
+
+\notarxiv{
+\section{Figure legends}
+\FIGspr
+}
 \end{document}
 
