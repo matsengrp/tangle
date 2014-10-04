@@ -5,19 +5,19 @@
 \usepackage{graphicx}
 \usepackage{url}
 
-\newtheorem{theorem}{Theorem}[section]
-\newtheorem{lemma}[theorem]{Lemma}
-\newtheorem{corollary}[theorem]{Corollary}
-\newtheorem{proposition}[theorem]{Proposition}
-\newtheorem{example}[theorem]{Example}
-\newtheorem{definition}[theorem]{Definition}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}{Lemma}
+\newtheorem{corollary}{Corollary}
+\newtheorem{proposition}{Proposition}
+\newtheorem{example}{Example}
+\newtheorem{definition}{Definition}
 
 \newcommand{\RR}{\mathbb R}
 \newcommand{\fS}{\mathfrak S}
 
-\newcommand{\aut}{\mathsf A}
+\newcommand{\aut}{\mathfrak A}
 \newcommand{\pairing}{\mu}
-\newcommand{\tangle}{\mathsf{G}}
+\newcommand{\tangle}{\mathsf{X}}
 \newcommand{\ptree}{\mathsf{P}}
 \newcommand{\ptequiv}{\bar{\ptree}}  % Phylogenetic tree equivalence classes under the symmetric group.
 \newcommand{\stpair}{\mathsf{Q}}  % Shape-tree pair.
@@ -83,63 +83,51 @@ A tanglegram is a pair of trees on the same set of leaves with matching leaves i
 There has been extensive work concerning tanglegrams, focusing on the problem of drawing them in a way that has minimum crossings \cite{Buchin2008-lc,Lozano2008-tp,Bansal2009-ni,Bocker2009-xl,Fernau2010-an,Venkatachalam2010-zh}.
 
 In this paper we explore the mapping of pairs of leaf-labeled trees into the set of tanglegrams and explore the action of the symmetric group on tanglegrams.
-We are able to write down isomorphism classes in terms of the symmetries of the two phylogenetic trees they contain.
+We characterize the isomorphism classes in terms of the symmetries of the two phylogenetic trees they contain.
 Furthermore, tanglegrams are equipped with a natural action of the symmetric group on the leaf set, which we describe.
 We use the SAGE mathematics software \cite{SteinJoyner2005} to further explore these symmetries, resulting in tables of representatives of tanglegrams and their multiplicities, as well as the irreducible representations of the symmetric group defined by the action on tanglegrams.
 
 
 \section{Formalism}
-All of our trees will be bifurcating (i.e.\ internal nodes have degree three), and without leaf labels if not otherwise specified.
-I don't think the bifurcating matters, although it will be nice
+Define isomorphism of leaf-labeled trees?
 
-Note that we can't completely treat a rooted tanglegram as unrooted for the purposes of automorphism: we don't want to move a root edge onto a leaf edge.
-
-start with labeled definition?
-Labeled trees and elements of $\fS_n$
-Although these labels don't have any real significance, they are convenient to use when referring to leaves.
-
+It will be convenient for our purposes to use a slightly different \emph{labeled} definition of a tanglegram than has been previously used.
+Let $\fS_n$ denote the symmetric group on $n$ items.
 \begin{definition}
 \label{def:tanglegram}
-An $n$-\emph{tanglegram} is an ordered triple $(t_1, t_2, \pairing)$ where $t_1$ and $t_2$ are trees with $n$ leaves, and $\pairing$ is a bijection from the leaves of $t_1$ to those of $t_2$ which we will call the ``pairing.''
+A rooted (resp. unrooted) $n$-\emph{tanglegram} is an ordered triple $(t_1, t_2, \pairing)$ where $t_1$ and $t_2$ are rooted (resp. unrooted) trees with $n$ leaves on the same leaf set, and $\pairing \in \fS_n$ is a permutation of the leaf labels of their common leaf set.
 Let $\tangle_n$ denote the set of $n$-tanglegrams.
 \end{definition}
-Note that we have not specified whether the trees in the definition are rooted or not.
-There is no essential difference between these two cases because if present, as the root of $t_1$ is naturally paired with the root of $t_2$.
-Thus we will assume that the trees are rooted.
-Note that our definition considers $(t_1, t_2, \pairing)$ and $(t_2, t_1, \pairing^{-1})$ as different maps.
+\begin{definition}
+\label{def:tanglegraph}
+A rooted (resp. unrooted) $n$-\emph{tanglegraph} is a graph consisting of two non-leaf-labeled rooted (resp. unrooted) trees $t_1$ and $t_2$ with an edge connecting every leaf of $t_1$ to a leaf of $t_2$.
+\end{definition}
+There is a clear 1-to-1 correspondence between isomorphism classes of tanglegrams under relabeling $t_1, t_2, and \pairing$ and tanglegraphs (assuming they are considered up to graph isomorphism) by joining leaves of $t_1$ with their corresponding leaves in $t_2$ under $\pairing$.
+If the two trees are rooted, we assume that something is done to distinguish the root nodes from other nodes of the tree.
+
+Note that our definition respects the order of $t_1$ and $t_2$ by considering $(t_1, t_2, \pairing)$ to be different than the tanglegram $(t_2, t_1, \pairing^{-1})$.
 We can also consider an unordered tanglegram, or \emph{utanglegram}, by identifying them.
-
-A common way of specifying a tanglegram is by specifying two trees with the same leaf labels, with the idea that pairs of leaves that share a label are paired in the tanglegram.
-These labels do not themselves carry information for the tanglegram but just to make these connections, motivating the definition above in terms of a bijection.
-However, for our purposes it will be useful to sometimes refer to a tanglegram as if it consists of a pair of trees on the same leaf labels such that pairs of leaves that share a label are paired in the tanglegram.
-
-We can also construct a (unlabeled) graph $g(x)$ for a given tanglegram $x$ by connecting corresponding leaves.
 
 
 \section{Symmetric group action and tanglegram symmetries}
-Let $\fS_n$ denote the symmetric group on $n$ items.
-We define the action of $\fS_n$ on $n$-tanglegrams to be such that an element of the symmetric group reorders the image of the leaf-to-leaf mapping.
-That is, for $\sigma_n \in \fS_n$ and $(t_1, t_2, \pairing) \in \tangle_n$,
+We define the action of the symmetric group induced by left multiplication on $\pairing$, i.e.\ for $\sigma_n \in \fS_n$ and $(t_1, t_2, \pairing) \in \tangle_n$,
 \[
-\sigma \cdot (t_1, t_2, \pairing) := (t_1, t_2, \sigma \cdot \pairing),
+\sigma \cdot (t_1, t_2, \pairing) := (t_1, t_2, \sigma \pairing).
 \]
-where $\sigma \cdot \pairing$ is the leaf-to-leaf mapping obtained by rearranging the image of $\pairing$ according to $\sigma$, i.e.\ $(\sigma \cdot \pairing)(x) = \sigma(\pairing(x))$.
+We can think about this as giving the leaf-to-leaf mapping obtained by reordering the \emph{image} of the pairing map, which are the leaves of $t_1$.
 
-Thus far we have groups acting on the left, such that $(\sigma \tau) \cdot x = \sigma \cdot (\tau \cdot x)$.
-When applied to a pairing $\mu$ this means that the group action happens on the image of $\mu$, i.e.\ the leaves of $t_2$.
-However, we can effectively act on the leaves of $t_1$ by conjugating with $\pairing$:
+However, we can also effectively act on the leaves of $t_1$ by conjugating with $\pairing$:
 \begin{equation}
 \label{eq:rightAction}
-(\pairing \alpha_1 \pairing^{-1}) \cdot x
-= (t_1, t_2, \pairing \alpha_1 \pairing^{-1} \pairing)
-= (t_1, t_2, \pairing \alpha_1)
+(\pairing \sigma \pairing^{-1}) \cdot x
+= (t_1, t_2, \pairing \sigma \pairing^{-1} \pairing)
+= (t_1, t_2, \pairing \sigma)
 \end{equation}
 
-Given a (rooted) phylogenetic tree $t$ let $\aut(t)$ be its leaf automorphism group.
-That is, if $t$ has $n$ leaves (excluding the root if it exists) these are the elements $\alpha$ of $\fS_n$ that do not change $t$ when applied permute its leaves.
+Given a (rooted) phylogenetic tree $t$ on $n$ leaves, let $\aut(t) \subset \fS_n$ be its leaf automorphism group: the elements $\alpha$ of $\fS_n$ that result in an isomorphic leaf labeled tree when $\alpha$ is applied to permute its leaves.
 Because every tree has at least one cherry (a subtree of size 2), the automorphism group of every tree has at least the symmetry of exchanging the two leaves of that cherry.
 
-These symmetries determine the symmetries of the tanglegram.
+Such tree symmetries induce symmetries of tanglegrams.
 It is clear that for $\alpha_2 \in \aut(t_2)$, and $x = (t_1, t_2, \pairing)$,
 \[
 \alpha_2 \cdot x = (t_1, t_2, \alpha_2 \pairing) = x.
@@ -153,18 +141,21 @@ Define the group $\aut(x)$ of an $n$-tangle $x = (t_1, t_2, \pairing)$ to be the
 \aut(x) = \langle \pairing \alpha_1 \pairing^{-1}, \alpha_2 \mid \alpha_1 \in \aut(t_1), \alpha_2 \in \aut(t_2) \rangle.
 \]
 
-It is clear that each element of $\aut(x)$ induces an automorphism of the graph $g(x)$ by leaving the trees fixed, and permuting the connections between them as per the group action on tangles.
-Now let $\tilde \sigma$ be an automorphism of $g(x)$ which maps the leaf set of each tree to itself.
-Because the leaves map to themselves, the internal nodes of the trees map to themselves.
-(If they didn't then there would have to be exchange of nodes between trees, and thus they would have to "hop over" the leaves.)
-Thus any such graph automorphism must be a pair automorphisms $\alpha_1, \alpha_2$ of the trees.
-There is a one-to-one correspondence between the elements of the symmetric group and their matching graphs.
-Thus if it is an isomorphism of $\aut(x)$ then it induces an identical $\mu$.
-This shows:
 \begin{proposition}
-For any tanglegram $x$ that does not have degree two edges, $\aut(x)$ is the exactly group of graph automorphisms of the graph $g(x)$ that fix the leaf sets of $x$.
+For any tanglegram $x$, $\aut(x)$ is the exactly group of graph automorphisms of the corresponding tanglegraph $g_x$.
 \end{proposition}
+\begin{proof}
+Let $\alpha$ be an element of $\aut(x)$, which can be described as a finite product of $\sigma$ and elements of $\aut(t_1)$ and $\aut(t_2)$.
+The tanglegraph $g_{\alpha \cdot x}$ corresponding to $\alpha \cdot x$ can then be ``untangled'' by processing this product by a combination of applying automorphisms of $t_1$ and $t_2$ as well moving between $t_1$ and $t_2$ via $\pairing$.
 
+Now let $\tilde \sigma$ be an automorphism of $g_x$ which maps the leaf set of each tree to itself.
+Because the leaves map to themselves, the internal nodes of the trees map to themselves.
+(If they didn't then there would have to be exchange of nodes between trees, and thus they would have to ``hop over'' the leaves.)
+Thus any such graph automorphism must induce a pair of automorphisms $\alpha_1, \alpha_2$ on the (labeled) trees.
+By the same logic as before the induced map between the leaf sets of $t_1$ and $t_2$ can be disentangled into $\pairing$.
+\end{proof}
+
+This proposition enables us to define the action on tanglegrams in terms of group-theoretic action on cosets.
 
 
 \section{Computation}
