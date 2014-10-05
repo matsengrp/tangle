@@ -13,12 +13,20 @@ def right_coset(U, g):
     return gap.function_call('RightCoset', [gap(U), gap(g)])
 
 
+def left_coset(U, g):
+    return right_coset(U, g.inverse())
+
+
 def representative(coset):
     return gap.function_call('Representative', coset)
 
 
 def acting_domain(coset):
     return gap.function_call('ActingDomain', coset)
+
+
+def as_list(coset):
+    return gap.function_call('AsList', coset)
 
 
 def size(domain):
@@ -93,11 +101,10 @@ def make_tangles(n, symmetric=True, verbose=True):
                 continue
             cosets = []
             for sigma in fS:
-                c = right_coset(
+                c = left_coset(
                     fS.subgroup(
                         # Concatenation of generator lists as per prop:cosets.
-                        # Have to invert because conjugate is g^{-1}Hg.
-                        tree_autos[i].conjugate(sigma.inverse()).gens() +
+                        tree_autos[i].conjugate(sigma).gens() +
                         tree_autos[j].gens()),
                     sigma)
                 if not any(c == cp for cp in cosets):
