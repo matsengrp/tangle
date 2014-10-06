@@ -27,8 +27,7 @@ for i in range(4, 8):
                 print_tangle(*x1)
                 print_tangle(*x2)
 
-    total_tangles = sum(size(left_acting_group(c)) *
-                       size(right_acting_group(c)) for (_, _, c) in tangles)
+    total_tangles = sum(size(c) for (_, _, c) in tangles)
     print "{}\t{}\t{}".format(i, len(tangles), total_tangles)
 
 if not dirty:

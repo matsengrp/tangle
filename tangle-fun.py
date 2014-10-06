@@ -38,6 +38,9 @@ end
 
 
 def on_double_cosets(coset, g):
+    """
+    Act on a double coset.
+    """
     return gap.function_call('OnDoubleCosets', [coset, gap(g)])
 
 
@@ -61,10 +64,15 @@ def shortest_fewest_cycles_sorted(perm_list):
 
 # Tangles
 
-def graph_of_tangle(t1, t2, coset):
+def coset_dict(t1, t2, coset):
     n = n_leaves(t1) - 1
     assert(n == n_leaves(t2) - 1)
-    mu_d = SymmetricGroup(n)(representative(coset)).dict()
+    return SymmetricGroup(n)(representative(coset)).dict()
+
+
+def graph_of_tangle(t1, t2, coset):
+    n = n_leaves(t1) - 1
+    mu_d = coset_dict(t1, t2, coset)
     g = t1.disjoint_union(duplicate_zero_edge(t2))
     for i in range(1, n+1):
         g.add_edge((0, i), (1, mu_d[i]), True)
@@ -75,6 +83,12 @@ def print_tangle(t1, t2, coset):
     print to_newick(t1)
     print to_newick(t2)
     print coset
+
+
+def to_newick_pair(t1, t2, coset):
+    t2p = t2.copy()
+    t2p.relabel(coset_dict(t1, t2, coset))
+    return "{}\t{}".format(to_newick(t1), to_newick(t2p))
 
 
 def saveable_tangle(t1, t2, coset):
