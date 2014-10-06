@@ -103,7 +103,7 @@ def load_tangles(fname):
     return list(reanimate_tangle(*x) for x in load(fname))
 
 
-def make_tangles(n, symmetric=False, verbose=True):
+def make_tangles(n, symmetric=True, verbose=True):
     """
     Make all the tangles with n leaves.
     symmetric determines if we should consider all ordered or unordered pairs of trees.
