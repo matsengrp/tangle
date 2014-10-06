@@ -7,9 +7,10 @@ load("../curvature/tree-fun.py")
 load("../tangle-fun.py")
 
 
-for i in range(4, 6):
+print "leaves\tclasses\ttotal"
+
+for i in range(4, 5):
     fname = "tangle{}.sobj".format(i)
-    print ("Checking "+fname)
     tangles = load_tangles(fname)
     graphs = list(graph_of_tangle(*tangle) for tangle in tangles)
     dirty = False
@@ -23,9 +24,8 @@ for i in range(4, 6):
                 print_tangle(*x2)
                 print (x1[2] == x2[2])
 
-    if not dirty:
-        print "\tAll tangles are graph-distinct."
-
     total_tangles = sum(size(acting_domain(c)) for (_, _, c) in tangles)
-    print "There are {} tangles of {} isomorphism types on {} leaves.".format(
-        total_tangles, i, len(tangles))
+    print "{}\t{}\t{}".format(i, len(tangles), total_tangles)
+
+if not dirty:
+    print "\nAll tangles are graph-distinct."

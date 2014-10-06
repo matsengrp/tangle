@@ -100,13 +100,22 @@ def make_tangles(n, symmetric=True, verbose=True):
                 # representatives.
                 continue
             cosets = []
-            for sigma in fS:
+            for mu in fS:
                 c = left_coset(
                     fS.subgroup(
                         # Concatenation of generator lists as per prop:cosets.
-                        tree_autos[i].conjugate(sigma).gens() +
-                        tree_autos[j].gens()),
-                    sigma)
+                        # t_1's automorphisms sent down to t_2 via conjugation
+                        # with mu (i.e. untangling):
+                        tree_autos[i].conjugate(mu).gens() +
+                        # t_2's automorphisms:
+                        tree_autos[j].gens() +
+                        # t_1's automorphisms sent down to t_2 via relabeling.
+                        tree_autos[i].gens() +
+                        # t_2's automorphisms sent up to t_1 via relabeling,
+                        # and then back down to t_2 via conjugation. (!)
+                        tree_autos[j].conjugate(mu).gens()
+                        ),
+                    mu)
                 if not any(c == cp for cp in cosets):
                     cosets.append(c)
             if verbose:
