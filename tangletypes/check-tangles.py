@@ -9,7 +9,7 @@ load("../tangle-fun.py")
 
 print "leaves\tclasses\ttotal"
 
-for i in range(4, 5):
+for i in range(4, 8):
     fname = "tangle{}.sobj".format(i)
     tangles = load_tangles(fname)
     graphs = list(graph_of_tangle(*tangle) for tangle in tangles)

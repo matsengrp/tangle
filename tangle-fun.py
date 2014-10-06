@@ -93,7 +93,7 @@ def make_tangles(n, symmetric=True, verbose=True):
     # Iterate over all pairs of tree shape representatives.
     tangles = []
     for i in range(len(trees)):
-        print "Starting with on tree {} of {}".format(i+1, len(trees))
+        print "Tree {} of {}".format(i+1, len(trees))
         for j in range(0, len(trees)):
             if symmetric and i > j:
                 # If symmetric we only have to check unordered pairs of
