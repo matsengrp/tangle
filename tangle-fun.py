@@ -1,28 +1,23 @@
 from sage.all import gap
 # Depends on curvature/tree-fun.py
 
-
-# Groups
-
-def conjugate_subgroups(G, H):
-    return [G.subgroup(gap_group=X) for X in
-            gap.function_call('ConjugateSubgroups', [gap(G), gap(H)])]
+# Cosets
 
 
-def right_coset(U, g):
-    return gap.function_call('RightCoset', [gap(U), gap(g)])
-
-
-def left_coset(U, g):
-    return right_coset(U, g.inverse())
+def double_coset(U, g, V):
+    return gap.function_call('DoubleCoset', [gap(U), gap(g), gap(V)])
 
 
 def representative(coset):
     return gap.function_call('Representative', coset)
 
 
-def acting_domain(coset):
-    return gap.function_call('ActingDomain', coset)
+def left_acting_group(coset):
+    return gap.function_call('LeftActingGroup', coset)
+
+
+def right_acting_group(coset):
+    return gap.function_call('RightActingGroup', coset)
 
 
 def as_list(coset):
@@ -31,6 +26,19 @@ def as_list(coset):
 
 def size(domain):
     return gap.function_call('Size', domain)
+
+
+gap.eval("""
+OnDoubleCosets := function(coset, g)
+      return DoubleCoset(LeftActingGroup(coset),
+               OnRight(Representative(coset), g),
+               RightActingGroup(coset));;
+end
+""")
+
+
+def on_double_cosets(coset, g):
+    return gap.function_call('OnDoubleCosets', [coset, gap(g)])
 
 
 def shortest_fewest_cycles_sorted(perm_list):
@@ -81,7 +89,7 @@ def load_tangles(fname):
     return list(reanimate_tangle(*x) for x in load(fname))
 
 
-def make_tangles(n, symmetric=True, verbose=True):
+def make_tangles(n, symmetric=False, verbose=True):
     """
     Make all the tangles with n leaves.
     symmetric determines if we should consider all ordered or unordered pairs of trees.
@@ -101,21 +109,7 @@ def make_tangles(n, symmetric=True, verbose=True):
                 continue
             cosets = []
             for mu in fS:
-                c = left_coset(
-                    fS.subgroup(
-                        # Concatenation of generator lists as per prop:cosets.
-                        # t_1's automorphisms sent down to t_2 via conjugation
-                        # with mu (i.e. untangling):
-                        tree_autos[i].conjugate(mu).gens() +
-                        # t_2's automorphisms:
-                        tree_autos[j].gens() +
-                        # t_1's automorphisms sent down to t_2 via relabeling.
-                        tree_autos[i].gens() +
-                        # t_2's automorphisms sent up to t_1 via relabeling,
-                        # and then back down to t_2 via conjugation. (!)
-                        tree_autos[j].conjugate(mu).gens()
-                        ),
-                    mu)
+                c = double_coset(tree_autos[i], mu, tree_autos[j])
                 if not any(c == cp for cp in cosets):
                     cosets.append(c)
             if verbose:

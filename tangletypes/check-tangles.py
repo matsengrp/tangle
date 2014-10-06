@@ -1,5 +1,6 @@
 #!/usr/bin/env sage
 
+import os
 from sage.all import *
 from itertools import combinations
 
@@ -11,6 +12,9 @@ print "leaves\tclasses\ttotal"
 
 for i in range(4, 8):
     fname = "tangle{}.sobj".format(i)
+    if not os.path.exists(fname):
+        print "Skipping", fname
+        continue
     tangles = load_tangles(fname)
     graphs = list(graph_of_tangle(*tangle) for tangle in tangles)
     dirty = False
@@ -23,7 +27,8 @@ for i in range(4, 8):
                 print_tangle(*x1)
                 print_tangle(*x2)
 
-    total_tangles = sum(size(acting_domain(c)) for (_, _, c) in tangles)
+    total_tangles = sum(size(left_acting_group(c)) *
+                       size(right_acting_group(c)) for (_, _, c) in tangles)
     print "{}\t{}\t{}".format(i, len(tangles), total_tangles)
 
 if not dirty:
