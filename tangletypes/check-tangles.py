@@ -22,7 +22,6 @@ for i in range(4, 5):
                 print "\tIsomorphic tangles:"
                 print_tangle(*x1)
                 print_tangle(*x2)
-                print (x1[2] == x2[2])
 
     total_tangles = sum(size(acting_domain(c)) for (_, _, c) in tangles)
     print "{}\t{}\t{}".format(i, len(tangles), total_tangles)
