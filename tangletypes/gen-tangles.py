@@ -1,6 +1,7 @@
 #!/usr/bin/env sage
 
 import time
+from sys import stdout
 from sage.all import *
 from collections import Counter
 load("../curvature/tree-fun.py")
@@ -29,6 +30,7 @@ for n in (int(a) for a in sys.argv[1:]):
         for x in tangles:
             f.write(to_newick_pair(*x)+"\n")
     with open("tangle"+str(n)+".idx", "w") as f:
+        print "-"*len(tangles)
         for (t1, t2, coset) in tangles:
             t2p = t2.copy()
             t2p.relabel(symmetric_group_dict(t1, t2, representative(coset)))
@@ -42,4 +44,7 @@ for n in (int(a) for a in sys.argv[1:]):
                 newick_pair_str,
                 isom_count[t1_idx]
                 ]])+"\n")
+            stdout.write("*")
+            stdout.flush()
+        print ""
     print "{}\t{}".format(n, time.time() - old_time)
