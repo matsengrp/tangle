@@ -1,7 +1,24 @@
 from sage.all import gap
 # Depends on curvature/tree-fun.py
 
-# Cosets
+# Groups and cosets
+
+def size(domain):
+    return gap.function_call('Size', domain)
+
+
+def as_list(domain):
+    return gap.function_call('AsList', domain)
+
+
+# Group action on double cosets.
+gap.eval("""
+OnDoubleCosets := function(coset, g)
+      return DoubleCoset(LeftActingGroup(coset),
+               OnRight(Representative(coset), g),
+               RightActingGroup(coset));;
+end
+""")
 
 
 def double_coset(U, g, V):
@@ -20,21 +37,16 @@ def right_acting_group(coset):
     return gap.function_call('RightActingGroup', coset)
 
 
-def as_list(coset):
-    return gap.function_call('AsList', coset)
-
-
-def size(domain):
-    return gap.function_call('Size', domain)
-
-
-gap.eval("""
-OnDoubleCosets := function(coset, g)
-      return DoubleCoset(LeftActingGroup(coset),
-               OnRight(Representative(coset), g),
-               RightActingGroup(coset));;
-end
-""")
+def double_coset_as_list(coset):
+    """
+    Turn a double coset into a list of its elements.
+    Apparently AsList is not defined for them in GAP.
+    """
+    s = set()
+    for l in as_list(left_acting_group(coset)):
+        for r in as_list(right_acting_group(coset)):
+            s.add(l * representative(coset) * r)
+    return list(s)
 
 
 def on_double_cosets(coset, g):
@@ -64,15 +76,15 @@ def shortest_fewest_cycles_sorted(perm_list):
 
 # Tangles
 
-def coset_dict(t1, t2, coset):
+def symmetric_group_dict(t1, t2, mu):
     n = n_leaves(t1) - 1
     assert(n == n_leaves(t2) - 1)
-    return SymmetricGroup(n)(representative(coset)).dict()
+    return SymmetricGroup(n)(mu).dict()
 
 
 def graph_of_tangle(t1, t2, coset):
     n = n_leaves(t1) - 1
-    mu_d = coset_dict(t1, t2, coset)
+    mu_d = symmetric_group_dict(t1, t2, representative(coset))
     g = t1.disjoint_union(duplicate_zero_edge(t2))
     for i in range(1, n+1):
         g.add_edge((0, i), (1, mu_d[i]), True)
@@ -85,10 +97,21 @@ def print_tangle(t1, t2, coset):
     print coset
 
 
-def to_newick_pair(t1, t2, coset):
+def _to_newick_pair(t1, t2, mu):
     t2p = t2.copy()
-    t2p.relabel(coset_dict(t1, t2, coset))
+    t2p.relabel(symmetric_group_dict(t1, t2, mu))
     return "{}\t{}".format(to_newick(t1), to_newick(t2p))
+
+
+def to_newick_pair(t1, t2, coset):
+    return _to_newick_pair(t1, t2, representative(coset))
+
+
+def to_newick_pairs(t1, t2, coset):
+    """
+    Make a list of all Newick pairs corresponding to that coset.
+    """
+    return [_to_newick_pair(t1, t2, mu) for mu in double_coset_as_list(coset)]
 
 
 def saveable_tangle(t1, t2, coset):
