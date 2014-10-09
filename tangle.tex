@@ -4,6 +4,7 @@
 \usepackage{cite}
 \usepackage{graphicx}
 \usepackage{url}
+\usepackage{color}
 
 \newtheorem{theorem}{Theorem}
 \newtheorem{lemma}{Lemma}
@@ -26,6 +27,13 @@
 % arxivness
 \newcommand{\arxiv}[1]{#1}
 \newcommand{\notarxiv}[1]{}
+
+% notes
+\definecolor{violet}{rgb}{0.730,0.555,0.769}
+\definecolor{purple}{rgb}{0.459,0.109,0.538}
+\definecolor{grey}{rgb}{0.4,0.4,0.4}
+\newcommand{\LB}[1]{\colorbox{yellow}{Lola: #1}} % feel free to customize!
+\newcommand{\EM}[1]{\colorbox{violet}{\textcolor{white}{Erick: #1}}}
 
 \newcommand{\FIGspr}{\
 \label{FIGspr}
@@ -75,18 +83,20 @@ The SPR distance between two (phylogenetic, implying meaning leaf-labeled) trees
 
 Clearly the distance between two such trees does not depend on the actual labels of $t_1$ and $t_2$.
 For example, one could exchange numbers labeling the two trees with their corresponding taxonomic names.
-Or one could simply permute the numerical labels of the leaf nodes, which would result in the same problem if the permutation was applied identically on both the starting and ending trees.
+Or one could simply permute the numerical labels of the leaf nodes, which would result in the same distance if the permutation was applied identically on both the starting and ending trees (and trees on the shortest SPR path between the two).
 Furthermore, a path made by SPR moves made by intermediate trees between the two trees could also have its labels permuted in order to give a path between the trees with permuted leaf labels.
-Thus, all of these problems do not concern the actual leaf labels as such, but rather use the leaf labels as markers that can be used to map leaves of one phylogenetic tree on to another: the problem and its solutions are actually defined in terms of a \emph{relative} leaf labeling.
+Thus, all problems like SPR distance [make more formal] do not concern the actual leaf labels as such, but rather use the leaf labels as markers that can be used to map leaves of one phylogenetic tree on to another: the problem and its solutions are actually defined in terms of a \emph{relative} leaf labeling.
 \FIGspr
 
 Such discrete mathematics problems and objects defined in terms of pairs of labeled combinatorial objects are ubiquitous in computational biology.
 In addition to SPR distances and their cousin distances formed by \emph{nearest-neighbor-interchange} and \emph{tree bisection and reattachment} \cite{wiki:treeRearrangement}, we have their corresponding biological questions concerning ``supertree'' reconstruction \cite{Whidden2014-ku} and reconciliation of gene transfer networks \cite{Boon2013-mc}.
 Because such moves are used in both maximum-likelihood heuristic search and Bayesian Markov chain Monte Carlo (MCMC) tree reconstruction, the geometry of phylogenetic trees under such moves has substantial consequences in terms of phylogenetic tree reconstruction \cite{Whidden2014-yt}.
 
+[Expound on what this symmetry means for graphs of trees, such as the SPR graph. gh-4]
+
 Another line of inquiry in computational biology concerns species delimitation, which can naturally be phrased in terms of inference of a partition of labeled objects.
 In an analogous way, scientists use MCMC to explore the posterior on such partitions \cite{Yang2010-kc}, and comparison of the results can be performed using distances between the partitions via distances such as \cite{Gusfield2002-il}.
-These partitions can also be thought of as a certain type of leaf-labeled tree of height two, and thus they also form a problem concerning relative leaf labeling of phylogenetic trees.
+These partitions can also be thought of as a certain type of leaf-labeled tree of height two (see description below), and thus they also form a problem concerning relative leaf labeling of phylogenetic trees.
 
 The concept of a pair of phylogenetic trees with a relative leaf labeling is essentially the same as the graph-theoretic notion of a \emph{tanglegram}.
 A tanglegram is a pair of trees on the same set of leaves with matching leaves in the two trees joined by an edge. \cite{Venkatachalam2010-zh}.
@@ -99,8 +109,9 @@ We use the SAGE \cite{SteinJoyner2005} and GAP \cite{GAP4} mathematics software 
 
 
 \section{Formalism}
-Define isomorphism of leaf-labeled trees?
-versus graph isomorphism.
+Define isomorphism of leaf-labeled trees. Mapping of leaves to themselves that induces an isomorphism of the rest of the tree.
+Contrast with graph isomorphism, which doesn't take labels into account.
+Describe isomorphism graph theoretically versus phylogenetically?
 
 It will be convenient for our purposes to use a slightly different \emph{labeled} definition of a tanglegram than has been previously used.
 Let $\fS_n$ denote the symmetric group on $n$ items.
@@ -113,10 +124,10 @@ Let $\tangle_n$ denote the set of $n$-tanglegrams.
 \label{def:tanglegraph}
 A rooted (resp. unrooted) $n$-\emph{tanglegraph} is a graph consisting of two non-leaf-labeled rooted (resp. unrooted) trees $t_1$ and $t_2$ with an edge connecting every leaf of $t_1$ to a leaf of $t_2$.
 \end{definition}
-There is a clear 1-to-1 correspondence between isomorphism classes of tanglegrams under relabeling $t_1, t_2, and \pairing$ and tanglegraphs (assuming they are considered up to graph isomorphism) by joining leaves of $t_1$ with their corresponding leaves in $t_2$ under $\pairing$.
+There is a clear 1-to-1 correspondence between isomorphism classes of tanglegrams under relabeling $(t_1, t_2, \pairing)$ and tanglegraphs (assuming they are considered up to graph isomorphism) by joining leaves of $t_1$ with their corresponding leaves in $t_2$ under $\pairing$.
 If the two trees are rooted, we assume that something is done to distinguish the root nodes from other nodes of the tree.
 
-Note that our definition respects the order of $t_1$ and $t_2$ by considering $(t_1, t_2, \pairing)$ to be different than the tanglegram $(t_2, t_1, \pairing^{-1})$.
+Note that our definition respects the order of $t_1$ and $t_2$ by considering $(t_1, t_2, \pairing)$ to be different than the tanglegram $(t_2, t_1, \pairing^{-1})$ when $t_1$ and $t_2$ are different graph theoretically.
 We can also consider an unordered tanglegram, or \emph{utanglegram}, by identifying them.
 
 We will use cycle notation for elements of the symmetric group, such as $(1\ 2) (3\ 4)$, which can be distinguished from phylogenetic trees in Newick format \cite{wiki:newick}, such as $((1,2),(3,4));$, because symmetric group elements do not have commas or a trailing semicolon.
