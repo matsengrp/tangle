@@ -109,6 +109,7 @@ We characterize the isomorphism classes in terms of the symmetries of the two ph
 Furthermore, tanglegrams are equipped with a natural action of the symmetric group on the leaf set, which we describe.
 We use the SAGE \cite{SteinJoyner2005} and GAP \cite{GAP4} mathematics software to further explore these symmetries, resulting in tables of representatives of tanglegrams and their multiplicities, as well as the irreducible representations of the symmetric group defined by the action on tanglegrams.
 
+We note that even if one was not interested in group-theoretic properties as such, and might instead just be interested in a unique list of tanglegrams, it would be worth using a group theoretic approach because comparing group cosets (defined below) is inherently faster than checking graph isomorphism.
 
 \section{Formalism}
 Define planar embedding of a phylogenetic tree.
@@ -173,6 +174,8 @@ There is a well-defined injective map from $n$-tanglegrams to ordered triples $(
 \end{observation}
 This map is well defined because any $\pairing$ defined by an alternate planar embedding of the tanglegram only differs from the arbitrary embedding by elements of $\aut(t_1)$ and $\aut(t_2)$.
 It is injective because any if any pair of planar tanglegrams $(t_1, t_2, \pairing)$ and $(t'_1, t'_2, \pairing')$ map to the same element, it means that the trees are (graph theoretically) isomorphic, defining $\alpha_i$ mapping $t_i$ to $t'_i$; then $\pairing = \alpha_1 \pairing' \alpha_2^{-1}$ and thus that they have the same double coset.
+
+This map is thus a bijection onto its image, and so we will refer, e.g., to the coset of a tanglegram.
 
 \LB{I'm stopping here for now. Will make my way through the rest of the stuff later.}
 
