@@ -47,12 +47,14 @@
 \end{figure}
 }
 
-\newcommand{\FIGrelabeling}{\
-\label{FIGrelabeling}
+\newcommand{\FIGtanglegram}{\
+\label{FIGtanglegram}
 \begin{figure}
   \arxiv{\includegraphics[width=5in]{figures/relabeling-example}}
 \caption{\
-  A relabeling symmetry (see text for details).
+  Two equivalent representations of the same tanglegrams.
+  These two representations can be thought of as two planar embeddings of the same graph.
+  Alternatively, they can be thought of as two permutations that are equivalent after taking symmetries of $t_2$ into account, or more formally two elements of the symmetric group which are equivalent under the action of the leaf automorphism group of $t_2$.
 }
 \end{figure}
 }
@@ -82,13 +84,13 @@ In this paper we develop methods to enumerate tanglegrams up to isomorphism, and
 As a motivating example, we consider the problem of computing the \emph{subtree-prune-regraft} (SPR) distance between two leaf-labeled phylogenetic trees.
 An SPR move cuts one edge of the tree and then reattaches the resulting rooted subtree at another edge (Figure~\ref{FIGspr}).
 The SPR distance between two (phylogenetic, implying meaning leaf-labeled) trees $t_1$ and $t_2$ is the minimum number of SPR moves required to transform $t_1$ into $t_2$.
+\FIGspr
 
 Clearly the distance between two such trees does not depend on the actual labels of $t_1$ and $t_2$.
 For example, one could exchange numbers labeling the two trees with their corresponding taxonomic names.
 Or one could simply permute the numerical labels of the leaf nodes, which would result in the same distance if the permutation was applied identically on both the starting and ending trees (and trees on the shortest SPR path between the two).
 Furthermore, a path made by SPR moves made by intermediate trees between the two trees could also have its labels permuted in order to give a path between the trees with permuted leaf labels.
 Thus, all problems like SPR distance [make more formal] do not concern the actual leaf labels as such, but rather use the leaf labels as markers that can be used to map leaves of one phylogenetic tree on to another: the problem and its solutions are actually defined in terms of a \emph{relative} leaf labeling.
-\FIGspr
 
 Such discrete mathematics problems and objects defined in terms of pairs of labeled combinatorial objects are ubiquitous in computational biology.
 In addition to SPR distances and their cousin distances formed by \emph{nearest-neighbor-interchange} and \emph{tree bisection and reattachment} \cite{wiki:treeRearrangement}, we have their corresponding biological questions concerning ``supertree'' reconstruction \cite{Whidden2014-ku} and reconciliation of gene transfer networks \cite{Boon2013-mc}.
@@ -100,9 +102,10 @@ Another line of inquiry in computational biology concerns species delimitation, 
 In an analogous way, scientists use MCMC to explore the posterior on such partitions \cite{Yang2010-kc}, and comparison of the results can be performed using distances between the partitions via distances such as \cite{Gusfield2002-il}.
 These partitions can also be thought of as a certain type of leaf-labeled tree of height two (see description below), and thus they also form a problem concerning relative leaf labeling of phylogenetic trees.
 
-The concept of a pair of phylogenetic trees with a relative leaf labeling can be formalized as the graph-theoretic notion of a \emph{tanglegram}.
+The concept of a pair of phylogenetic trees with a relative leaf labeling can be formalized as the graph-theoretic notion of a \emph{tanglegram} (Figure~\ref{FIGtanglegram}).
 A tanglegram is a pair of trees on the same set of leaves with matching leaves in the two trees joined by an edge. \cite{Venkatachalam2010-zh}.
 There has been extensive work concerning tanglegrams, focusing on the problem of drawing them in a way that has minimum crossings \cite{Buchin2008-lc,Lozano2008-tp,Bansal2009-ni,Bocker2009-xl,Fernau2010-an,Venkatachalam2010-zh}.
+\FIGtanglegram
 
 In this paper we explore the mapping of pairs of plane-embedded trees into the set of tanglegrams and explore the action of the symmetric group on tanglegrams.
 We characterize the isomorphism classes in terms of the symmetries of the two phylogenetic trees they contain.
@@ -124,16 +127,16 @@ A rooted (resp. unrooted) \emph{planar $n$-tanglegram} is an ordered triple $(t_
 Let $\ptangle_n$ denote the set of planar $n$-tanglegrams.
 \end{definition}
 
-In order to be able to uniquely describe elements of the symmetric group, we will use the convention that the first tree in planar tanglegrams is labeled clockwise, and the second tree is labeled counter-clockwise, so that they end up looking like so
+In order to be able to uniquely describe elements of the symmetric group, we will use the convention that the first tree in planar tanglegrams is labeled counter-clockwise, and the second tree is labeled clockwise, so that they end up looking like so
 
 \begin{verbatim}
-     /-- 1        1 --\
+     /-- 3        3 --\
 t1   \            2 --/\   t2
       \/-- 2            \
-       \-- 3        3 --/
+       \-- 1        1 --/
 \end{verbatim}
 
-[Or do we always want them in the vertical orientation?]
+[Perhaps we always want to draw them in a vertical orientation?]
 
 \begin{definition}
 \label{def:tanglegram}
@@ -156,6 +159,7 @@ We will correspondingly consider groups as acting on the right, such that the ac
 
 
 \section{Tanglegram symmetries}
+It will be straightforward to describe the symmetries of tanglegrams in terms of symmetries of the trees from which they are built.
 \begin{definition}
 Given a (rooted) phylogenetic tree $t$ on $n$ leaves embedded in the plane, let $\aut(t) \subset \fS_n$ be its leaf automorphism group: given a leaf labeling of $t$, $\aut(t)$ are the elements $\alpha$ of $\fS_n$ such that relabeling $t$ according to $\alpha$ results in an isomorphic leaf labeled tree.
 \end{definition}
@@ -163,70 +167,24 @@ Because every tree has at least one cherry (a subtree of size 2), the automorphi
 
 Such tree symmetries induce symmetries of planar tanglegrams.
 Given two subgroups $J$ and $K$ of a group $G$, a \emph{double coset} $JgK$ for some $g \in G$ is the set of elements $\{jgk \mid j \in J, k \in K\}$.
-In fact, we will show is a one-to-one correspondence between classes of planar tanglegrams $(t_1, t_2, \pairing)$ that have the same tanglegram, and ordered triples $(t_1, t_2, \aut(t_1) \pairing \aut(t_2))$ composed of two phylogenetic trees and a double coset.
-[gh-3: Say something about utanglegrams?]
-
+In fact,
 \begin{observation}
-There is a well-defined injective map from $n$-tanglegrams to ordered triples $(t_1, t_2, C)$ where $C$ is a double coset of $\fS_n$ defined by taking an arbitrary planar embedding $(t_1, t_2, \pairing)$ of the tanglegram and mapping
+There is a well-defined injective map from $n$-tanglegrams to ordered triples $(t_1, t_2, C)$ where $C$ is a double coset of $\fS_n$ defined by taking an arbitrary planar embedding $(\tilde t_1, \tilde t_2, \pairing_\phi)$ of the tanglegram and mapping
 \[
-(t_1, t_2, \pairing) \mapsto (t_1, t_2, \aut(t_1) \pairing \aut(t_2)).
+(t_1, t_2, \phi) \mapsto (t_1, t_2, \aut(t_1) \pairing_\phi \aut(t_2)).
 \]
 \end{observation}
 This map is well defined because any $\pairing$ defined by an alternate planar embedding of the tanglegram only differs from the arbitrary embedding by elements of $\aut(t_1)$ and $\aut(t_2)$.
-It is injective because any if any pair of planar tanglegrams $(t_1, t_2, \pairing)$ and $(t'_1, t'_2, \pairing')$ map to the same element, it means that the trees are (graph theoretically) isomorphic, defining $\alpha_i$ mapping $t_i$ to $t'_i$; then $\pairing = \alpha_1 \pairing' \alpha_2^{-1}$ and thus that they have the same double coset.
+It is injective because any if any pair of planar tanglegrams $(t_1, t_2, \phi)$ and $(t'_1, t'_2, \phi')$ map to the same element, it means that the trees are (graph theoretically) isomorphic, defining $\alpha_i$ mapping $t_i$ to $t'_i$; then $\pairing_\phi = \alpha_1 \pairing_{\phi'} \alpha_2^{-1}$ and thus that they have the same double coset.
 
-This map is thus a bijection onto its image, and so we will refer, e.g., to the coset of a tanglegram.
+This map is thus a bijection onto its image, and so we will use the two representations interchangeably.
+For example, we will refer often to the coset of a tanglegram.
+Given an arbitrary numbering of the leaves of $t_1$, we can actually realize each element of the coset as an element of the corresponding symmetric group.
+With labeling equivalences in mind, we will often express a given tanglegram as a two leaf-labeled trees and an element of the symmetric group.
+We note that the various planar embeddings of the tanglegram graph are equivalent to choices of representatives $\pairing'$ of the coset tanglegram (i.e.\ $\pairing'$ such that $\aut(t_1) \pairing' \aut(t_2) = C$) given a choice of numbering for $t_1$.
 
-\LB{I'm stopping here for now. Will make my way through the rest of the stuff later.}
-
-\begin{lemma}
-There is a bijection between $n$-tanglegrams $x = (t_1, t_2, \pairing)$, $\aut(x)$ is the exactly group of graph automorphisms of the corresponding tanglegraph $g_x$.
-\end{lemma}
-\begin{proof}
-Let $\alpha$ be an element of $\aut(x)$, which is as a finite product of elements of $\pairing^{-1} \aut(t_1) \pairing$ and $\aut(t_2)$.
-The tanglegraph $g_{x . \alpha}$ corresponding to $x . \alpha$ can then be ``untangled'' by processing this product by moving between $t_1$ and $t_2$ via $\pairing$ and applying automorphisms of $t_1$ and $t_2$.
-Thus every element in $\aut(x)$ corresponds to a well defined automorphism of $g_x$.
-
-Now let $\tilde \sigma$ be an automorphism of $g_x$ which maps the leaf set of each tree to itself.
-Because the leaves map to themselves, the internal nodes of the trees map to themselves.
-(If they didn't then there would have to be exchange of nodes between trees, and thus they would have to ``hop over'' the leaves.)
-Say $x = (t_1, t_2, \pairing)$.
-Thus any such graph automorphism must induce a pair of automorphisms $\alpha_1$ and $\alpha_2$ on the (labeled) trees $t_1$ and $t_2$.
-This gives a well defined element of $\aut(x)$, namely $\pairing \alpha_1 \pairing^{-1} \, \alpha_2$.
-\end{proof}
-
-
-
-We call another type of symmetries the \emph{relabeling} symmetries which comes from our labeled definition of tanglegrams.
-In this symmetry the symmetries of one tree are communicated to symmetries of another simply by relabeling the second tree according to the automorphism of the first.
-This is distinct from untangling symmetries.
-For example, assume we have $t_1 = ((((1,2),3),4),5);$, $t_2 = (((1,2),3),(4,5));$ and $\mu = (3\ 4)$ (Figure~\ref{FIGrelabeling}).
-If we first apply the automorphism $(4\ 5)$ of $t_2$ together with the relabeling isomorphism also exchanging $4$ and $5$, we get an equivalence between that $(t_1,t_2,\pairing)$ and $(t'_1,t_2,\pairing)$ where $t'_1 = ((((1,2),3),4),5);$.
-\FIGrelabeling
-
-Define the group $\aut(x)$ of an $n$-tangle $x = (t_1, t_2, \pairing)$ to be the subgroup of $\fS_n$ generated by $\pairing^{-1} \aut(t_1) \pairing$ and $\aut(t_2)$:
-\[
-\aut(x) = \langle \pairing^{-1} \alpha_1 \pairing, \alpha_2 \mid \alpha_1 \in \aut(t_1), \alpha_2 \in \aut(t_2) \rangle.
-\]
-
-We are now in position to enumerate tanglegrams with two given trees and describe their automorphisms in group theoretic terms.
-Recall that a (right) coset of a group $G$ formed by an element $g \in G$ and a subgroup $U$ of $G$ is the set of products $u\, g$.
-\begin{proposition}
-\label{prop:cosets}
-Assume two phylogenetic trees $t_1$ and $t_2$.
-Given a pairing $\pairing \in \fS_n$ use $x_\pairing$ to denote the tanglegram $(t_1, t_2, \pairing)$.
-The set of tanglegrams containing (unlabeled versions of) $t_1$ and $t_2$ up to graph isomorphism is exactly the tangles $x_\pairing$ for the set of distinct cosets $\pairing \aut(x_\pairing)$.
-\end{proposition}
-\begin{proof}
-Let $\sigma$ be any isomorphism between a $x_\pairing$ and an $x_{\pairing'}$, expressed in terms of a leaf relabeling.
-That is, $\pairing' = \sigma^{-1} \pairing \sigma$.
-By the lemma, there is an element $\alpha$ of $\aut(x)$ such that $\pairing' = \pairing \alpha$.
-Thus the cosets $\pairing \aut(x_\pairing)$ and $\pairing' \aut(x_\pairing)$ are identical.
-\end{proof}
-
-Therefore we can compute all $n$-tanglegrams by taking a list of graph-isomorphism-unique phylogenetic trees on $n$ leaves and for each pair calculating the ensemble of distinct cosets of the form $\aut(x_\pairing) \pairing$ for $\pairing \in \fS_n$.
-
-
+It is now straightforward to enumerate tanglegrams with two given trees.
+We can compute all $n$-tanglegrams by taking a list of (graph-isomorphism-unique) trees $t_1$ and $t_2$ on $n$ leaves and for each pair calculating the ensemble of distinct cosets of the form $\aut(t_1) \pairing \aut(t_2)$ for $\pairing \in \fS_n$.
 
 
 \section{Action of the symmetric group}
@@ -246,53 +204,6 @@ x . (\pairing^{-1} \alpha_1 \pairing) = (t_1, t_2, \alpha_1 \pairing) = x.
 
 
 
-\section{Computation}
-Let $\ptree$ be the set of \emph{phylogenetic} trees on $n$ leaves.
-Let $\ptequiv$ be the equivalence classes of $n$ taxon phylogenetic trees under the action of the symmetric group $\fS_n$ on the leaf labels, and let $k$ be the number of such equivalence classes.
-These are in one-to-one correspondence with the (graph-isomorphically-) distinct unlabeled bifurcating trees.
-
-Let us fix representatives $\{s_i\}_{i=1,\ldots,k}$ of the equivalence classes $\ptequiv$.
-Any tree $t$ has a representative $s_i$ of its equivalence class in $\ptequiv$, and there is a corresponding $\sigma \in \fS_n$ that maps the leaf labels of $s_i$ to those of $t$.
-We will call this $\sigma$ the \emph{standard permutation} of $t$.
-
-Consider two phylogenetic trees $t_1, t_2$ with representatives $s_{(1)}$ and $s_{(2)}$ and standard permutations $\sigma_1$ and $\sigma_2$.
-The group element $\sigma_2^{-1} \, \sigma_1$ maps the leaves of $s_{(1)}$ to the leaves of $s_{(2)}$ that they correspond to in the $(t_1, t_2)$ tanglegram.
-Indeed, $\sigma_1$ maps the leaves of $s_{(1)}$ to the corresponding leaves of $t_1$, $t_1$ and $t_2$ have identical leaf labels for leaves connected in the tanglegram, and $\sigma_2^{-1}$ maps the leaves of $t_2$ to the corresponding leaves of $s_{(2)}$.
-Thus the triple $(s_{(1)}, s_{(2)}, \sigma_2^{-1} \, \sigma_1)$ defines the tanglegram formed by the two phylogenetic trees $t_1$ and $t_2$.
-In terms of the standardization this is
-\[
-\sigma \cdot (s_{(1)}, s_{(2)}, \sigma_2^{-1} \, \sigma_1) \mapsto (s_{(1)}, s_{(2)}, \sigma_2^{-1} \, \sigma \sigma_1).
-\]
-
-
-
-However, there are additional symmetries defined by automorphisms of the two trees: any pair of automorphisms $\alpha_1 \in \aut_1, \alpha_2 \in \aut_2$ induce an isomorphic tanglegram $(s_{(1)}, s_{(2)}, \left(\sigma_2 \alpha_2 \right)^{-1} \, \sigma_1 \alpha_1)$.
-Define the \emph{standardization} of a (labeled) tanglegram to be the triple
-\begin{equation}
-\label{eq:orbit}
-\left(s_{(1)}, s_{(2)}, \left\{(\sigma_2 \alpha_2)^{-1} \, \sigma_1 \alpha_1 : \alpha_1 \in \aut_1, \alpha_2 \in \aut_2  \right\}\right)
-\end{equation}
-or more simply $(s_{(1)}, s_{(2)}, [\sigma_2^{-1} \, \sigma_1])$ where the brackets imply equivalence class under the automorphisms.
-The third element in this triple will be called the \emph{orbit} of the tanglegram.
-
-There is a one-to-one correspondence between tanglegrams and standardizations.
-.
-Indeed, assume that we have two isomorphic tanglegrams, which we consider as a pair of labeled tanglegrams with an arbitrary label set.
-The isomorphism between the two labeled tanglegrams can be expressed as a permutation $\tau$ of the leaf labels.
-Each of the first trees must have the same standardization, and also the same orbit because $[\left(\tau \sigma_2\right)^{-1} \, \tau \sigma_1] = [\sigma_2^{-1} \, \sigma_1]$.
-Now if we are given a standardization, we can pick a representative from the orbit and assemble the corresponding tanglegram, which is well defined because tree automorphisms do not change the underlying tanglegram.
-
-Now given a list of trees $t_1, \ldots, t_\ell$ one can enumerate all tanglegrams formed by pairs of $t_i$ with two straightforward steps.
-First, for each tree $t_i$ find a representative $s_{(i)}$ and standard permutation $\sigma_i$.
-Second, create every triple $(s_{(i)}, s_{(j)}, \sigma_j^{-1} \sigma_i)$.
-Third, compute the orbit \eqref{eq:orbit}.
-
-Q: can we say anything about the number of tanglegrams?
-
-
-Q: What representation is this?
-
-
 
 \section{Acknowledgements}
 This manuscript was substantially shaped by discussions with Michael Landis, Arnold Kas, and Chris Whidden.
@@ -304,6 +215,7 @@ This manuscript was substantially shaped by discussions with Michael Landis, Arn
 \notarxiv{
 \section{Figure legends}
 \FIGspr
+\FIGtanglegram
 }
 \end{document}
 
