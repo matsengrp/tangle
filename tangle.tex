@@ -170,12 +170,13 @@ Given two subgroups $J$ and $K$ of a group $G$, a \emph{double coset} $JgK$ for 
 In fact,
 \begin{observation}
 There is a well-defined injective map from $n$-tanglegrams to ordered triples $(t_1, t_2, C)$ where $C$ is a double coset of $\fS_n$ defined by taking an arbitrary planar embedding $(\tilde t_1, \tilde t_2, \pairing_\phi)$ of the tanglegram and mapping
-\[
+\begin{equation}
+\label{eq:cosetMap}
 (t_1, t_2, \phi) \mapsto (t_1, t_2, \aut(t_1) \pairing_\phi \aut(t_2)).
-\]
+\end{equation}
 \end{observation}
 This map is well defined because any $\pairing$ defined by an alternate planar embedding of the tanglegram only differs from the arbitrary embedding by elements of $\aut(t_1)$ and $\aut(t_2)$.
-It is injective because any if any pair of planar tanglegrams $(t_1, t_2, \phi)$ and $(t'_1, t'_2, \phi')$ map to the same element, it means that the trees are (graph theoretically) isomorphic, defining $\alpha_i$ mapping $t_i$ to $t'_i$; then $\pairing_\phi = \alpha_1 \pairing_{\phi'} \alpha_2^{-1}$ and thus that they have the same double coset.
+It is injective because any if any pair of planar tanglegrams $(\tilde t_1, \tilde t_2, \tilde \pairing)$ and $(\hat t_1, \hat t_2, \hat \pairing)$ map to the same element, it means that the trees are (graph theoretically) isomorphic, defining $\alpha_i \in \fS_n$ mapping the leaves of $\tilde t_i$ to those of $\hat t_i$; then $\tilde \pairing = \alpha_1 \hat \pairing \alpha_2^{-1}$ and thus they have the same double coset image under the mapping \eqref{eq:cosetMap}.
 
 This map is thus a bijection onto its image, and so we will use the two representations interchangeably.
 For example, we will refer often to the coset of a tanglegram.
