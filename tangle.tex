@@ -21,10 +21,8 @@
 \newcommand{\pairing}{\mu}
 \newcommand{\ptangle}{\mathsf{X}}
 \newcommand{\tangle}{\mathsf{Y}}
-\newcommand{\ptree}{\mathsf{P}}
-\newcommand{\ptequiv}{\bar{\ptree}}  % Phylogenetic tree equivalence classes under the symmetric group.
-\newcommand{\stpair}{\mathsf{Q}}  % Shape-tree pair.
-\newcommand{\bigproj}{\tilde \pi}
+\newcommand{\ltangle}{\mathsf{L}}
+\newcommand{\ccollection}{\mathsf{C}}
 
 % arxivness
 \newcommand{\arxiv}[1]{#1}
@@ -83,10 +81,10 @@ In this paper we develop methods to enumerate tanglegrams up to isomorphism, and
 \section{Introduction}
 As a motivating example, we consider the problem of computing the \emph{subtree-prune-regraft} (SPR) distance between two leaf-labeled phylogenetic trees.
 An SPR move cuts one edge of the tree and then reattaches the resulting rooted subtree at another edge (Figure~\ref{FIGspr}).
-The SPR distance between two (phylogenetic, implying meaning leaf-labeled) trees $t_1$ and $t_2$ is the minimum number of SPR moves required to transform $t_1$ into $t_2$.
+The SPR distance between two (phylogenetic, meaning leaf-labeled) trees $l_1$ and $l_2$ is the minimum number of SPR moves required to transform $l_1$ into $l_2$.
 \FIGspr
 
-Clearly the distance between two such trees does not depend on the actual labels of $t_1$ and $t_2$.
+Clearly the distance between two such trees does not depend on the actual labels of $l_1$ and $l_2$.
 For example, one could exchange numbers labeling the two trees with their corresponding taxonomic names.
 Or one could simply permute the numerical labels of the leaf nodes, which would result in the same distance if the permutation was applied identically on both the starting and ending trees (and trees on the shortest SPR path between the two).
 Furthermore, a path made by SPR moves made by intermediate trees between the two trees could also have its labels permuted in order to give a path between the trees with permuted leaf labels.
@@ -123,7 +121,7 @@ We will start with a notion of a \emph{planar} tanglegram, which is a slight sim
 Let $\fS_n$ denote the symmetric group on $n$ items.
 \begin{definition}
 \label{def:ptanglegram}
-A rooted (resp. unrooted) \emph{planar $n$-tanglegram} is an ordered triple $(t_1, t_2, \pairing)$ where $t_1$ and $t_2$ are rooted (resp. unrooted) trees with $n$ leaves embedded in the plane, and $\pairing \in \fS_n$.
+A rooted (resp. unrooted) \emph{planar $n$-tanglegram} is an ordered triple $(p_1, p_2, \pairing)$ where $p_1$ and $p_2$ are rooted (resp. unrooted) trees with $n$ leaves embedded in the plane, and $\pairing \in \fS_n$.
 Let $\ptangle_n$ denote the set of planar $n$-tanglegrams.
 \end{definition}
 
@@ -131,7 +129,7 @@ In order to be able to uniquely describe elements of the symmetric group, we wil
 
 \begin{verbatim}
      /-- 3        3 --\
-t1   \            2 --/\   t2
+p1   \            2 --/\   p2
       \/-- 2            \
        \-- 1        1 --/
 \end{verbatim}
@@ -140,10 +138,11 @@ t1   \            2 --/\   t2
 
 \begin{definition}
 \label{def:tanglegram}
-A rooted (resp. unrooted) $n$-\emph{tanglegram} is a triple $(t_1, t_2, \phi)$ consisting of two non-leaf-labeled rooted (resp. unrooted) trees $t_1$ and $t_2$ and a bijection $\phi$ between the leaves of $t_1$ and the leaves of $t_2$.
+A rooted (resp. unrooted) $n$-\emph{tanglegram} is an ordered triple $(t_1, t_2, \phi)$ consisting of two non-leaf-labeled rooted (resp. unrooted) trees $t_1$ and $t_2$ and a bijection $\phi$ between the leaves of $t_1$ and the leaves of $t_2$.
+Let $\tangle_n$ denote the set of $n$-tanglegrams.
 \end{definition}
-There is a clear graph representation of a tanglegram where every leaf of $t_1$ is connected via an edge to the corresponding leaf of $t_2$.
-There is a clear 1-to-1 correspondence between tanglegrams under relabeling and tanglegraphs (assuming they are considered up to graph isomorphism) by joining leaves of $t_1$ with their corresponding leaves in $t_2$ under $\pairing$.
+There is a graph realization of a tanglegram where every leaf of $t_1$ is connected via an edge to the corresponding leaf of $t_2$.
+There is a clear 1-to-1 correspondence between tanglegrams under relabeling and their graph realization (assuming they are considered up to graph isomorphism) by joining leaves of $t_1$ with their corresponding leaves in $t_2$ under $\pairing$.
 If the two trees are rooted, we assume that something is done to distinguish the root nodes from other nodes of the tree.
 
 [Clarify what graph isomorphism means in this context.]
@@ -151,15 +150,18 @@ If the two trees are rooted, we assume that something is done to distinguish the
 Note that our definition respects the order of $t_1$ and $t_2$ by considering $(t_1, t_2, \pairing)$ to be different than the tanglegram $(t_2, t_1, \pairing^{-1})$ when $t_1$ and $t_2$ are different graph theoretically.
 We can also consider an unordered tanglegram, or \emph{utanglegram}, by identifying them.
 
-We will use cycle notation for elements of the symmetric group, such as $(1\ 2) (3\ 4)$, which can be distinguished from phylogenetic trees in Newick format \cite{wiki:newick}, such as $((1,2),(3,4));$, because symmetric group elements do not have commas or a trailing semicolon.
-
-In order to conform to the convention used in GAP \cite{GAP4} and hence by SAGE \cite{SteinJoyner2005}, \emph{we will use the leftmost first convention of writing products in the symmetric group.}
-Thus, in cycle notation, $(1\ 2) (1\ 3) = (1\ 2\ 3)$.
-We will correspondingly consider groups as acting on the right, such that the action of $x.(\sigma \tau)$ is $(x.\sigma) . \tau)$.
+One might also consider a notion of \emph{labeled $n$-tanglegram} $(l_1, l_2, \pairing)$ in which $l_1$ and $l_2$ are phylogenetic (leaf-labeled) trees on the leaf set $\{1, \ldots, n\}$, and $\pairing \in \fS_n$ as before.
+Let $\ltangle_n$ denote the set of labeled $n$-tanglegrams.
+This is perhaps the most natural definition in terms of phylogenetics.
 
 
 \section{Tanglegram symmetries}
 It will be straightforward to describe the symmetries of tanglegrams in terms of symmetries of the trees from which they are built.
+We will use cycle notation for elements of the symmetric group, such as $(1\ 2) (3\ 4)$, which can be distinguished from phylogenetic trees in Newick format \cite{wiki:newick}, such as $((1,2),(3,4));$, because symmetric group elements do not have commas or a trailing semicolon.
+In order to conform to the convention used in GAP \cite{GAP4} and hence by SAGE \cite{SteinJoyner2005}, \emph{we will use the leftmost first convention of writing products in the symmetric group.}
+Thus, in cycle notation, $(1\ 2) (1\ 3) = (1\ 2\ 3)$.
+We will correspondingly consider groups as acting on the right, such that the action of $x.(\sigma \tau)$ is $(x.\sigma) . \tau)$.
+
 \begin{definition}
 Given a (rooted) phylogenetic tree $t$ on $n$ leaves embedded in the plane, let $\aut(t) \subset \fS_n$ be its leaf automorphism group: given a leaf labeling of $t$, $\aut(t)$ are the elements $\alpha$ of $\fS_n$ such that relabeling $t$ according to $\alpha$ results in an isomorphic leaf labeled tree.
 \end{definition}
@@ -181,11 +183,24 @@ It is injective because any if any pair of planar tanglegrams $(\tilde t_1, \til
 This map is thus a bijection onto its image, and so we will use the two representations interchangeably.
 For example, we will refer often to the coset of a tanglegram.
 Given an arbitrary numbering of the leaves of $t_1$, we can actually realize each element of the coset as an element of the corresponding symmetric group.
-With labeling equivalences in mind, we will often express a given tanglegram as a two leaf-labeled trees and an element of the symmetric group.
+With labeling equivalences in mind, we will often express a given tanglegram as two leaf-labeled trees and an element of the symmetric group.
 We note that the various planar embeddings of the tanglegram graph are equivalent to choices of representatives $\pairing'$ of the coset tanglegram (i.e.\ $\pairing'$ such that $\aut(t_1) \pairing' \aut(t_2) = C$) given a choice of numbering for $t_1$.
 
-It is now straightforward to enumerate tanglegrams with two given trees.
-We can compute all $n$-tanglegrams by taking a list of (graph-isomorphism-unique) trees $t_1$ and $t_2$ on $n$ leaves and for each pair calculating the ensemble of distinct cosets of the form $\aut(t_1) \pairing \aut(t_2)$ for $\pairing \in \fS_n$.
+It is now straightforward to enumerate tanglegrams.
+Start by enumerating a list of (graph-isomorphism-unique) trees, and for each ordered pair $t_1$ and $t_2$ on $n$ leaves calculating the ensemble of distinct cosets $C$ of the form $\aut(t_1) \pairing \aut(t_2)$ for $\pairing \in \fS_n$.
+The tanglegrams are then the set of triples $(t_1, t_2, C)$.
+We can also pick an arbitrary labeled tanglegram for every tanglegram as its representative; we will call this choice a canonical collection $\ccollection_n$.
+
+Now, given a labeled $n$-tanglegram $(l_1, l_2, \pairing)$, we would like to be able to map it to an element of $\ccollection_n$.
+For each of the $l_i$, there is a leaf relabeling $\sigma \in \fS_n$ such that
+\begin{equation}
+\label{eq:repMap}
+(l_1 . \sigma, l_2 . \sigma, \sigma^{-1} \aut(l_1) \pairing \aut(l_2) \sigma)
+\end{equation}
+is an element of $\ccollection_n$.
+Indeed, $\sigma$ is uniquely defined (up to an element of $\aut(l_1)$) just by considering the relabeling of $l_1$, and using that $\sigma$ there must be a unique such representative \eqref{eq:repMap}, noting that $\alpha^{-1} \aut(l_1) \pairing \aut(l_2) \alpha = \aut(l_1) \pairing \aut(l_2)$ for $\alpha \in \aut(l_1)$ by definition. [does this deserve a little more clarification?]
+
+[gh-3: utanglegram]
 
 
 \section{Action of the symmetric group}
@@ -194,13 +209,9 @@ We define the action of the symmetric group on tanglegrams as that induced by ri
 (t_1, t_2, \pairing) . \sigma := (t_1, t_2, \pairing \sigma).
 \]
 We can think about this as giving the leaf-to-leaf mapping obtained by reordering the \emph{image} of the pairing map, which are the leaves of $t_1$.
-
+We also note that
 \[
-x . \alpha_2 = (t_1, t_2, \pairing \alpha_2) = x.
-\]
-Furthermore, as with \eqref{eq:rightAction}, given $\alpha_1 \in \aut(t_1)$,
-\[
-x . (\pairing^{-1} \alpha_1 \pairing) = (t_1, t_2, \alpha_1 \pairing) = x.
+(t_1, t_2, \pairing) . (\pairing^{-1} \sigma \pairing)  := (t_1, t_2, \sigma \pairing).
 \]
 
 
