@@ -171,6 +171,7 @@ Such tree symmetries induce symmetries of planar tanglegrams.
 Given two subgroups $J$ and $K$ of a group $G$, a \emph{double coset} $JgK$ for some $g \in G$ is the set of elements $\{jgk \mid j \in J, k \in K\}$.
 In fact,
 \begin{observation}
+\label{obs:cosetMap}
 There is a well-defined injective map from $n$-tanglegrams to ordered triples $(t_1, t_2, C)$ where $C$ is a double coset of $\fS_n$ defined by taking an arbitrary planar embedding $(\tilde t_1, \tilde t_2, \pairing_\phi)$ of the tanglegram and mapping
 \begin{equation}
 \label{eq:cosetMap}
@@ -186,7 +187,25 @@ Given an arbitrary numbering of the leaves of $t_1$, we can actually realize eac
 With labeling equivalences in mind, we will often express a given tanglegram as two leaf-labeled trees and an element of the symmetric group.
 We note that the various planar embeddings of the tanglegram graph are equivalent to choices of representatives $\pairing'$ of the coset tanglegram (i.e.\ $\pairing'$ such that $\aut(t_1) \pairing' \aut(t_2) = C$) given a choice of numbering for $t_1$.
 
-It is now straightforward to enumerate tanglegrams.
+
+
+\section{Enumeration}
+It is now straightforward to enumerate tanglegrams on $n$ leaves.
+We will do so by taking \emph{standardized} tree topologies and combining them with various cosets as per Observation~\ref{obs:cosetMap}.
+These standardized topologies are simply a choice of one labeled tree topology $\{s_i\}_{i=1,\ldots,k}$ for each isomorphism class of phylogenetic trees on $n$ leaves under graph-theoretic isomorphism (as unlabeled tree topologies).
+Any tree $t$ has a representative $s_i$ of its equivalence class, and there is a corresponding $\sigma \in \fS_n$ that maps the leaf labels of $s_i$ to those of $t$.
+We will call this $\sigma$ the \emph{standard permutation} of $t$.
+Note that all standard permutations are fixed for all trees on $n$ taxa once we choose a set of standardizations.
+
+Consider two phylogenetic trees $t_1, t_2$ with representatives $s_{(1)}$ and $s_{(2)}$ and standard permutations $\sigma_1$ and $\sigma_2$.
+The group element $\sigma_1^{-1} \, \sigma_2$ maps the leaves of $s_{(1)}$ to the leaves of $s_{(2)}$ that they correspond to in the $(t_1, t_2)$ tanglegram.
+Indeed, $\sigma_1$ maps the leaves of $s_{(1)}$ to the corresponding leaves of $t_1$, $t_1$ and $t_2$ have identical leaf labels for leaves connected in the tanglegram, and $\sigma_2^{-1}$ maps the leaves of $t_2$ to the corresponding leaves of $s_{(2)}$.
+Thus the triple $(s_{(1)}, s_{(2)}, \aut(s_{(1)}) \sigma_1^{-1} \, \sigma_2 \aut(s_{(1)}))$ defines the tanglegram formed by the two phylogenetic trees $t_1$ and $t_2$.
+
+We start by enumerating all (leaf-labeled) phylogenetic trees, and for each one finding its standardization and standard permutation.
+What about all of the different trees that map to the same standardized tree?
+Incorporate double coset counting theorem.
+
 Start by enumerating a list of (graph-isomorphism-unique) trees, and for each ordered pair $t_1$ and $t_2$ on $n$ leaves calculating the ensemble of distinct cosets $C$ of the form $\aut(t_1) \pairing \aut(t_2)$ for $\pairing \in \fS_n$.
 The tanglegrams are then the set of triples $(t_1, t_2, C)$.
 We can also pick an arbitrary labeled tanglegram for every tanglegram as its representative; we will call this choice a canonical collection $\ccollection_n$.
