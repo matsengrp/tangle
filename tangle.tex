@@ -5,6 +5,7 @@
 \usepackage{graphicx}
 \usepackage{url}
 \usepackage{color}
+\usepackage[notref,notcite]{showkeys}
 
 \newtheorem{theorem}{Theorem}
 \newtheorem{lemma}{Lemma}
@@ -23,6 +24,7 @@
 \newcommand{\tangle}{\mathsf{Y}}
 \newcommand{\ltangle}{\mathsf{L}}
 \newcommand{\ccollection}{\mathsf{C}}
+\newcommand{\id}{()}
 
 % arxivness
 \newcommand{\arxiv}[1]{#1}
@@ -52,7 +54,7 @@
 \caption{\
   Two equivalent representations of the same tanglegrams.
   These two representations can be thought of as two planar embeddings of the same graph.
-  Alternatively, they can be thought of as two permutations that are equivalent after taking symmetries of $t_2$ into account, or more formally two elements of the symmetric group which are equivalent under the action of the leaf automorphism group of $t_2$.
+  Alternatively, they can be thought of as two permutations that are equivalent after taking symmetries of $\ell_2$ into account, or more formally two elements of the symmetric group which are equivalent under the action of the leaf automorphism group of $\ell_2$.
 }
 \end{figure}
 }
@@ -81,10 +83,11 @@ In this paper we develop methods to enumerate tanglegrams up to isomorphism, and
 \section{Introduction}
 As a motivating example, we consider the problem of computing the \emph{subtree-prune-regraft} (SPR) distance between two leaf-labeled phylogenetic trees.
 An SPR move cuts one edge of the tree and then reattaches the resulting rooted subtree at another edge (Figure~\ref{FIGspr}).
-The SPR distance between two (phylogenetic, meaning leaf-labeled) trees $l_1$ and $l_2$ is the minimum number of SPR moves required to transform $l_1$ into $l_2$.
+The SPR distance between two (phylogenetic, meaning leaf-labeled) trees $\ell_1$ and $\ell_2$ is the minimum number of SPR moves required to transform $\ell_1$ into $\ell_2$.
+[We will use different letters to distinguish between the various tree concepts: $t$ for a graph-theoretic tree, $p$ for a tree embedded in the plane, and $\ell$ for a (leaf-labeled) phylogenetic tree.]
 \FIGspr
 
-Clearly the distance between two such trees does not depend on the actual labels of $l_1$ and $l_2$.
+Clearly the distance between two such trees does not depend on the actual labels of $\ell_1$ and $\ell_2$.
 For example, one could exchange numbers labeling the two trees with their corresponding taxonomic names.
 Or one could simply permute the numerical labels of the leaf nodes, which would result in the same distance if the permutation was applied identically on both the starting and ending trees (and trees on the shortest SPR path between the two).
 Furthermore, a path made by SPR moves made by intermediate trees between the two trees could also have its labels permuted in order to give a path between the trees with permuted leaf labels.
@@ -156,23 +159,21 @@ This is perhaps the most natural definition in terms of phylogenetics.
 
 
 \section{Tanglegram symmetries}
-It will be straightforward to describe the symmetries of tanglegrams in terms of symmetries of the trees from which they are built.
-We will use cycle notation for elements of the symmetric group, such as $(1\ 2) (3\ 4)$, which can be distinguished from phylogenetic trees in Newick format \cite{wiki:newick}, such as $((1,2),(3,4));$, because symmetric group elements do not have commas or a trailing semicolon.
+We will describe the symmetries of tanglegrams in terms of symmetries of the trees from which they are built.
+We will use cycle notation for elements of the symmetric group, such as $(1\ 2) (3\ 4)$, which can be distinguished from phylogenetic trees in Newick format \cite{wiki:newick} such as $((1,2),(3,4));$, because symmetric group elements do not have commas or a trailing semicolon.
 In order to conform to the convention used in GAP \cite{GAP4} and hence by SAGE \cite{SteinJoyner2005}, \emph{we will use the leftmost first convention of writing products in the symmetric group.}
 Thus, in cycle notation, $(1\ 2) (1\ 3) = (1\ 2\ 3)$.
 We will correspondingly consider groups as acting on the right, such that the action of $x.(\sigma \tau)$ is $(x.\sigma) . \tau)$.
 
 \begin{definition}
-Given a (rooted) phylogenetic tree $t$ on $n$ leaves embedded in the plane, let $\aut(t) \subset \fS_n$ be its leaf automorphism group: given a leaf labeling of $t$, $\aut(t)$ are the elements $\alpha$ of $\fS_n$ such that relabeling $t$ according to $\alpha$ results in an isomorphic leaf labeled tree.
+Given a (rooted) phylogenetic tree $p$ on $n$ leaves embedded in the plane, let $\aut(p) \subset \fS_n$ be its leaf automorphism group: given a leaf labeling of $p$, $\aut(p)$ are the elements $\alpha$ of $\fS_n$ such that relabeling $p$ according to $\alpha$ results in an isomorphic leaf labeled tree.
 \end{definition}
 Because every tree has at least one cherry (a subtree of size 2), the automorphism group of every tree has at least the symmetry of exchanging the two leaves of that cherry.
-
-Such tree symmetries induce symmetries of planar tanglegrams.
 Given two subgroups $J$ and $K$ of a group $G$, a \emph{double coset} $JgK$ for some $g \in G$ is the set of elements $\{jgk \mid j \in J, k \in K\}$.
-In fact,
+Tree symmetries induce symmetries of planar tanglegrams via double cosets:
 \begin{observation}
 \label{obs:cosetMap}
-There is a well-defined injective map from $n$-tanglegrams to ordered triples $(t_1, t_2, C)$ where $C$ is a double coset of $\fS_n$ defined by taking an arbitrary planar embedding $(\tilde t_1, \tilde t_2, \pairing_\phi)$ of the tanglegram and mapping
+There is a well-defined injective map from $n$-tanglegrams $(t_1, t_2, \pairing)$ to ordered triples $(t_1, t_2, C)$ where $C$ is a double coset of $\fS_n$ defined by taking an arbitrary planar embedding $(\tilde t_1, \tilde t_2, \pairing_\phi)$ of the tanglegram and mapping
 \begin{equation}
 \label{eq:cosetMap}
 (t_1, t_2, \phi) \mapsto (t_1, t_2, \aut(t_1) \pairing_\phi \aut(t_2)).
@@ -183,24 +184,48 @@ It is injective because any if any pair of planar tanglegrams $(\tilde t_1, \til
 
 This map is thus a bijection onto its image, and so we will use the two representations interchangeably.
 For example, we will refer often to the coset of a tanglegram.
-Given an arbitrary numbering of the leaves of $t_1$, we can actually realize each element of the coset as an element of the corresponding symmetric group.
-With labeling equivalences in mind, we will often express a given tanglegram as two leaf-labeled trees and an element of the symmetric group.
 We note that the various planar embeddings of the tanglegram graph are equivalent to choices of representatives $\pairing'$ of the coset tanglegram (i.e.\ $\pairing'$ such that $\aut(t_1) \pairing' \aut(t_2) = C$) given a choice of numbering for $t_1$.
 
+Furthermore, given an arbitrary numbering of the leaves of $t_1$, we can actually realize each element of the coset as an element of the corresponding symmetric group.
+This provides another way of expressing a tanglegram: as a equivalence class $[\ell_1, \ell_2, \pairing]$, where two such are equivalent if they give the same unlabeled trees and the same coset $\aut(\ell_1) \pairing \aut(\ell_2)$.
+
+Thus we have three ways of describing tanglegrams:
+first, the classical Definition~\ref{def:tanglegram} in terms of two non-leaf-labeled trees and a bijection $\phi$,
+second, the Observation~\ref{obs:cosetMap} definition in terms of two non-leaf-labeled trees and a coset $C$,
+third, equivalence classes of two phylogenetic (leaf-labeled) trees and an element of the symmetric group.
+This last definition will be useful for concreteness.
 
 
 \section{Enumeration}
 It is now straightforward to enumerate tanglegrams on $n$ leaves.
-We will do so by taking \emph{standardized} tree topologies and combining them with various cosets as per Observation~\ref{obs:cosetMap}.
-These standardized topologies are simply a choice of one labeled tree topology $\{s_i\}_{i=1,\ldots,k}$ for each isomorphism class of phylogenetic trees on $n$ leaves under graph-theoretic isomorphism (as unlabeled tree topologies).
-Any tree $t$ has a representative $s_i$ of its equivalence class, and there is a corresponding $\sigma \in \fS_n$ that maps the leaf labels of $s_i$ to those of $t$.
-We will call this $\sigma$ the \emph{standard permutation} of $t$.
+In order to obtain all of the possible $n$-tanglegrams, we can take all triples $(t_1, t_2, C)$ as per Observation~\ref{obs:cosetMap}.
+This leads to the question of enumerating double cosets of the form $\aut(t_1) \pairing \aut(t_2)$ for a given $t_1$ and $t_2$.
+
+We will step back and consider this problem in terms of a group $G$ with subgroups $H$ and $K$.
+There is an action of $G$ on the right cosets $HgK$ by multiplication on the right:
+\[
+(HgK).g' := Hgg'K.
+\]
+This action is transitive, which is to say that every $(H,K)$ double coset arises in this way.
+The stabilizer of a given $HgK$ is the group generated by the subgroup
+
+
+
+
+
+The implementation of this enumeration is in terms of \emph{standardized} phylogenetic trees.
+These standardized phylogenetic trees are simply a choice of one (leaf-labeled) phylogenetic tree $\{s_i\}_{i=1,\ldots,k}$ for each isomorphism class of phylogenetic trees on $n$ leaves under graph-theoretic isomorphism (as unlabeled tree topologies).
+Any tree $\ell$ has a representative $s_i$ of its equivalence class, and there is a corresponding $\sigma \in \fS_n$ that maps the leaf labels of $s_i$ to those of $\ell$.
+We will call this $\sigma$ the \emph{standard permutation} of $\ell$.
 Note that all standard permutations are fixed for all trees on $n$ taxa once we choose a set of standardizations.
 
-Consider two phylogenetic trees $t_1, t_2$ with representatives $s_{(1)}$ and $s_{(2)}$ and standard permutations $\sigma_1$ and $\sigma_2$.
-The group element $\sigma_1^{-1} \, \sigma_2$ maps the leaves of $s_{(1)}$ to the leaves of $s_{(2)}$ that they correspond to in the $(t_1, t_2)$ tanglegram.
-Indeed, $\sigma_1$ maps the leaves of $s_{(1)}$ to the corresponding leaves of $t_1$, $t_1$ and $t_2$ have identical leaf labels for leaves connected in the tanglegram, and $\sigma_2^{-1}$ maps the leaves of $t_2$ to the corresponding leaves of $s_{(2)}$.
-Thus the triple $(s_{(1)}, s_{(2)}, \aut(s_{(1)}) \sigma_1^{-1} \, \sigma_2 \aut(s_{(1)}))$ defines the tanglegram formed by the two phylogenetic trees $t_1$ and $t_2$.
+Consider two phylogenetic trees $\ell_1, \ell_2$ with representatives $s_{(1)}$ and $s_{(2)}$ and standard permutations $\sigma_1$ and $\sigma_2$.
+The group element $\sigma_1^{-1} \, \sigma_2$ maps the leaves of $s_{(1)}$ to the leaves of $s_{(2)}$ that they correspond to in the $(\ell_1, \ell_2, \id)$ tanglegram, where $\id$ is the identity element of the symmetric group in cycle notation.
+Indeed, $\sigma_1$ maps the leaves of $s_{(1)}$ to the corresponding leaves of $\ell_1$, $\ell_1$ and $\ell_2$ have identical leaf labels for leaves connected in the tanglegram, and $\sigma_2^{-1}$ maps the leaves of $\ell_2$ to the corresponding leaves of $s_{(2)}$.
+Thus the triple $(s_{(1)}, s_{(2)}, \aut(s_{(1)}) \sigma_1^{-1} \, \sigma_2 \aut(s_{(1)}))$ is an alternate way of writing the tanglegram $[\ell_1, \ell_2, \id]$.
+One can see that every tanglegram appears in this way by taking $\ell_1$ to be each of the standardized trees, so that $\sigma_1 = \id$, and $\ell_2$ to be all of the labeled trees such that $\sigma_2$ ranges over all of $\fS_n$.
+Furthermore, by moving relabeling into the element of the symmetric group, we can just limit ourselves to $[\ell_1, \ell_2, \pairing]$ where $\ell_2$ is also a representative.
+
 
 We start by enumerating all (leaf-labeled) phylogenetic trees, and for each one finding its standardization and standard permutation.
 What about all of the different trees that map to the same standardized tree?
