@@ -53,6 +53,10 @@ def double_coset_as_list(coset):
     return list(s)
 
 
+def double_cosets(G, U, V):
+    return gap.function_call('DoubleCosets', [gap(G), gap(U), gap(V)])
+
+
 def on_double_cosets(coset, g):
     """
     Act on a double coset.
@@ -150,11 +154,7 @@ def make_tangles(n, symmetric=True, verbose=True):
                 # If symmetric we only have to check unordered pairs of
                 # representatives.
                 continue
-            cosets = []
-            for mu in fS:
-                c = double_coset(tree_autos[i], mu, tree_autos[j])
-                if not any(c == cp for cp in cosets):
-                    cosets.append(c)
+            cosets = double_cosets(fS, tree_autos[i], tree_autos[j])
             if verbose:
                 print to_newick(trees[i])
                 print to_newick(trees[j])
