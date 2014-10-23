@@ -42,7 +42,9 @@ for n in (int(a) for a in sys.argv[1:]):
         print "-"*len(tangles)
         for (t1, t2, coset) in tangles:
             t2p = t2.copy()
-            t2p.relabel(symmetric_group_dict(t1, t2, representative(coset)))
+            # Need inverse below as described in _to_newick_pair.
+            t2p.relabel(
+                symmetric_group_dict(t1, t2, inverse(representative(coset))))
             t1_idx = find_tree(t1)
             t2p_idx = find_tree(t2p)
             newick_pair_str = "{}\t{}".format(to_newick(t1), to_newick(t2p))

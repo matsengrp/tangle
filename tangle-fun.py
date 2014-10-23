@@ -11,6 +11,10 @@ def as_list(domain):
     return gap.function_call('AsList', domain)
 
 
+def inverse(group_elt):
+    return gap.function_call('Inverse', group_elt)
+
+
 # Group action on double cosets.
 gap.eval("""
 OnDoubleCosets := function(coset, g)
@@ -99,7 +103,9 @@ def print_tangle(t1, t2, coset):
 
 def _to_newick_pair(t1, t2, mu):
     t2p = t2.copy()
-    t2p.relabel(symmetric_group_dict(t1, t2, mu))
+    # Need inverse below because we are relabeling t2's labels in order that
+    # they will line up with t1's.
+    t2p.relabel(symmetric_group_dict(t1, t2, inverse(mu)))
     return "{}\t{}".format(to_newick(t1), to_newick(t2p))
 
 
