@@ -1,7 +1,7 @@
 #!/usr/bin/env sage
 
 import time
-from subprocess import check_call
+from subprocess import check_call, check_output
 from sys import stdout
 from sage.all import *
 from collections import Counter
@@ -33,6 +33,11 @@ for n in (int(a) for a in sys.argv[1:]):
             f.write(to_newick_pair(*x)+"\n")
     check_call(["./tangle_order.sh", tangle_base+".tre"])
     check_call(["mv", tangle_base+".order.tre", tangle_base+".tre"])
+    dups = check_output("sort "+tangle_base+".tre | uniq -d", shell=True)
+    if dups != "":
+        print "Duplicates found:"
+        print dups
+        assert(False)
     with open(tangle_base+".idx", "w") as f:
         print "-"*len(tangles)
         for (t1, t2, coset) in tangles:
