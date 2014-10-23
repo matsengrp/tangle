@@ -1,6 +1,7 @@
 #!/usr/bin/env sage
 
 import time
+from subprocess import check_call
 from sys import stdout
 from sage.all import *
 from collections import Counter
@@ -23,13 +24,16 @@ for n in (int(a) for a in sys.argv[1:]):
     isom_count = [tally[map_to_class[i]] for i in range(len(map_to_class))]
 
     tangles = make_tangles(n, symmetric=True, verbose=False)
+    tangle_base = "tangle{}".format(n)
     sage.structure.sage_object.save(
         list(saveable_tangle(*x) for x in tangles),
-        filename=("tangle"+str(n)))
-    with open("tangle"+str(n)+".tre", "w") as f:
+        filename=tangle_base)
+    with open(tangle_base+".tre", "w") as f:
         for x in tangles:
             f.write(to_newick_pair(*x)+"\n")
-    with open("tangle"+str(n)+".idx", "w") as f:
+    check_call(["./tangle_order.sh", tangle_base+".tre"])
+    check_call(["mv", tangle_base+".order.tre", tangle_base+".tre"])
+    with open(tangle_base+".idx", "w") as f:
         print "-"*len(tangles)
         for (t1, t2, coset) in tangles:
             t2p = t2.copy()
