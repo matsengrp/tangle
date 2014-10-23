@@ -28,6 +28,10 @@ for n in (int(a) for a in sys.argv[1:]):
     sage.structure.sage_object.save(
         list(saveable_tangle(*x) for x in tangles),
         filename=tangle_base)
+    # # Print out string version of cosets.
+    # with open(tangle_base+".cos", "w") as f:
+    #     for (_, _, c) in tangles:
+    #         f.write(str(c).replace("\n", "")+"\n")
     with open(tangle_base+".tre", "w") as f:
         for x in tangles:
             f.write(to_newick_pair(*x)+"\n")
