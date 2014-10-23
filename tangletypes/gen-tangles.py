@@ -11,12 +11,7 @@ load("../tangle-fun.py")
 for n in (int(a) for a in sys.argv[1:]):
     old_time = time.time()
     trees = enumerate_rooted_trees(n)
-
-    def find_tree(t):
-        [t_idx] = filter(lambda i: llt_is_isomorphic(t, trees[i]),
-                         range(len(trees)))
-        return t_idx
-
+    d_trees = {to_newick(trees[i]): i for i in range(len(trees))}
     (map_to_class, _) = equivalence_classes(rooted_is_isomorphic, trees)
     tally = Counter()
     for rep_idx in map_to_class:
@@ -49,8 +44,8 @@ for n in (int(a) for a in sys.argv[1:]):
             # Need inverse below as described in _to_newick_pair.
             t2p.relabel(
                 symmetric_group_dict(t1, t2, inverse(representative(coset))))
-            t1_idx = find_tree(t1)
-            t2p_idx = find_tree(t2p)
+            t1_idx = d_trees[to_newick(t1)]
+            t2p_idx = d_trees[to_newick(t2p)]
             newick_pair_str = "{}\t{}".format(to_newick(t1), to_newick(t2p))
             assert(to_newick_pair(t1, t2, coset) == newick_pair_str)
             f.write("\t".join([str(o) for o in [
