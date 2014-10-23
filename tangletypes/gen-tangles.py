@@ -1,7 +1,7 @@
 #!/usr/bin/env sage
 
 import time
-from subprocess import check_call, check_output
+from subprocess import check_output
 from sys import stdout
 from sage.all import *
 from collections import Counter
@@ -12,7 +12,10 @@ for n in (int(a) for a in sys.argv[1:]):
     old_time = time.time()
     trees = enumerate_rooted_trees(n)
     d_trees = {to_newick(trees[i]): i for i in range(len(trees))}
-    (map_to_class, _) = equivalence_classes(rooted_is_isomorphic, trees)
+    # The following is a little tricky: we reverse the range so that we get the
+    # first occurrence of a shape in the dictionary.
+    d_shapes = {to_newick_shape(trees[i]): i for i in reversed(range(len(trees)))}
+    map_to_class = [d_shapes[to_newick_shape(t)] for t in trees]
     tally = Counter()
     for rep_idx in map_to_class:
         tally[rep_idx] += 1
@@ -30,8 +33,6 @@ for n in (int(a) for a in sys.argv[1:]):
     with open(tangle_base+".tre", "w") as f:
         for x in tangles:
             f.write(to_newick_pair(*x)+"\n")
-    check_call(["./tangle_order.sh", tangle_base+".tre"])
-    check_call(["mv", tangle_base+".order.tre", tangle_base+".tre"])
     dups = check_output("sort "+tangle_base+".tre | uniq -d", shell=True)
     if dups != "":
         print "Duplicates found:"
