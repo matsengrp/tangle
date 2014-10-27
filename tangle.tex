@@ -58,6 +58,18 @@
 \end{figure}
 }
 
+\newcommand{\FIGcount}{\
+\label{FIGcount}
+\begin{figure}
+  \arxiv{\includegraphics[width=5in]{figures/count}}
+\caption{\
+  The number of tanglegrams and the number of phylogenetic trees.
+  We note that the number of distinct tanglegrams is much smaller than the number of distinct pairs of phylogenetic trees.
+}
+\end{figure}
+}
+
+
 
 \begin{document}
 \title{Symmetries of tanglegrams}
@@ -207,6 +219,12 @@ Any tree $\ell$ has a representative $s_i$ of its equivalence class, and there i
 We will call this $\sigma$ the \emph{standard permutation} of $\ell$.
 Note that all standard permutations are fixed for all trees on $n$ taxa once we choose a set of standardizations.
 
+By simply standardizing the first tree of the $n$-tanglegrams, we note:
+\begin{observation}
+\label{obs:count}
+The number of binary rooted $n$-tanglegrams is bounded above by the number of phylogenetic tree shapes on $n$ leaves times the number of phylogenetic trees on $n$ leaves, and thus is asymptotically smaller than the number of pairs of phylogenetic trees.
+\end{observation}
+
 Consider two phylogenetic trees $\ell_1, \ell_2$ with representatives $s_{(1)}, s_{(2)}$ and standard permutations $\sigma_{(1)}$ and $\sigma_{(2)}$.
 The group element $\sigma_{(1)}^{-1} \, \sigma_{(2)}$ maps the leaves of $s_{(1)}$ to the leaves of $s_{(2)}$ that they correspond as in the $[\ell_1, \ell_2, \id]$ tanglegram, where $\id$ is the identity element of the symmetric group in cycle notation.
 Indeed, $\sigma_{(1)}$ maps the leaves of $s_{(1)}$ to the corresponding leaves of $\ell_1$, $\ell_1$ and $\ell_2$ have identical leaf labels for leaves connected in the tanglegram, and $\sigma_{(2)}^{-1}$ maps the leaves of $\ell_2$ to the corresponding leaves of $s_{(2)}$.
@@ -214,7 +232,10 @@ Thus the triple $(s_{(1)}, s_{(2)}, \aut(s_{(1)}) \sigma_{(1)}^{-1} \, \sigma_{(
 Furthermore, one can take $\ell_1$ to be each of the standardized trees, so that $\sigma_1 = \id$, and $\ell_2$ to be all of the labeled trees such that $\sigma_2$ ranges over all of $\fS_n$.
 Furthermore, by moving relabeling into the element of the symmetric group, we can just limit ourselves to $[\ell_1, \ell_2, \pairing]$ where $\ell_2$ is also a standardized tree.
 
-In summary, we will enumerate tanglegrams by taking triples $(s_i, s_j, C)$, where $C$ is a one of the double cosets $\aut(s_i) \pairing \aut(s_j)$ enumerated by GAP.
+In summary, we enumerate tanglegrams by taking triples $(s_i, s_j, C)$, where $C$ is a one of the double cosets $\aut(s_i) \pairing \aut(s_j)$ enumerated by GAP.
+There are lots of these (Figure~\ref{FIGcount}), but fewer than the number of pairs of distinct phylogenetic trees:
+\FIGcount
+
 
 [gh-3: utanglegram]
 
@@ -258,6 +279,9 @@ This manuscript was substantially shaped by discussions with Michael Landis, Arn
 \section{Figure legends}
 \FIGspr
 \FIGtanglegram
+\FIGcount
 }
 \end{document}
+
+
 
