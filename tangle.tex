@@ -254,17 +254,37 @@ By the orbit-stabilizer theorem we get that the number of elements of the double
 
 
 
-\section{Action of the symmetric group}
-We define the action of the symmetric group on tanglegrams as that induced by right multiplication on $\pairing$, i.e.\ for $\sigma \in \fS_n$ and $(t_1, t_2, \pairing) \in \tangle_n$,
+\section{Action of the tree normalizers on tanglegrams}
+Recall that the \emph{normalizer} $N_H(G)$ of a subgroup $H$ in $G$ is the subgroup of elements $g \in G$ such that $gHg^{0} = H$.
+For any tangle $y = (t_1, t_2, \pairing)$ and $\sigma \in N_{\aut(t_2)}(\fS_n)$ there is an element $\rho_\sigma(y) \in \tangle_n$ induced by right multiplication on $\pairing$.
+That is, for $\sigma \in \fS_n$ and $(t_1, t_2, \pairing) \in \tangle_n$,
 \[
-(t_1, t_2, \pairing) . \sigma := (t_1, t_2, \pairing \sigma).
+\rho_\sigma (t_1, t_2, \pairing) := (t_1, t_2, \pairing \sigma).
 \]
+This is well defined by the definition of the normalizer.
 We can think about this as giving the leaf-to-leaf mapping obtained by reordering the \emph{image} of the pairing map, which are the leaves of $t_1$.
+
+Identical considerations hold for the corresponding left map $\lambda_\sigma$.
 We also note that
 \[
-(t_1, t_2, \pairing) . (\pairing^{-1} \sigma \pairing)  := (t_1, t_2, \sigma \pairing).
+\rho_{\pairing^{-1} \sigma \pairing} (t_1, t_2, \pairing) =
+(t_1, t_2, \sigma \pairing) =
+\lambda_{\sigma} (t_1, t_2, \pairing)
 \]
+but that this is only well defined for $\sigma \in N_{\aut(t_2)}(\fS_n)$ as before.
 
+It is important to note that these do not give group actions of $\fS_n$ on the complete set of $n$-tangles $\tangle_n$.
+Indeed, let $t_1$ be the tree $((((1,2),3),4),5)$ and let $t_2$ be the tree $(1,(2,(3,(4,5))))$.
+Abbreviate $\aut(t_i)$ with $A_i$.
+Note that because $(4 5) \in A_2$, $A_1 e A_2$ and $A_1 (4 5) A_2$ are in the same coset yet they have different results upon application of $(3 4)$:
+\begin{align*}
+A_1 (3 4) A_2 & = \langle (1 2) \rangle \{(3 4), (3 5 4)\} \\
+A_1 (4 5) (3 4) A_2 & = \langle (1 2) \rangle \{(3 4), (3 4 5)\}.
+\end{align*}
+
+However, we can restrict the domain to obtain a group action as follows.
+Let $R(t)$ (resp.\ $L(t)$ be the set of tangles $(t_1, t_2, C)$ such that $t_2$ (resp.\ $t_1$) is (graph-theoretically) isomorphic to $t$.
+Now $N_{\aut(t)}(\fS_n)$ gives a well defined action on the right (resp.\ left) of $R(t)$ (resp.\ $L(t)$) by definition.
 
 
 
