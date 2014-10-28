@@ -255,12 +255,13 @@ By the orbit-stabilizer theorem we get that the number of elements of the double
 
 
 \section{Action of the tree normalizers on tanglegrams}
-Recall that the \emph{normalizer} $N_H(G)$ of a subgroup $H$ in $G$ is the subgroup of elements $g \in G$ such that $gHg^{0} = H$.
+Recall that the \emph{normalizer} $N_H(G)$ of a subgroup $H$ in $G$ is the subgroup of elements $g \in G$ such that $gHg^{-1} = H$.
 For any tangle $y = (t_1, t_2, \pairing)$ and $\sigma \in N_{\aut(t_2)}(\fS_n)$ there is an element $\rho_\sigma(y) \in \tangle_n$ induced by right multiplication on $\pairing$.
 That is, for $\sigma \in \fS_n$ and $(t_1, t_2, \pairing) \in \tangle_n$,
-\[
+\begin{equation}
+\label{eq:action}
 \rho_\sigma (t_1, t_2, \pairing) := (t_1, t_2, \pairing \sigma).
-\]
+\end{equation}
 This is well defined by the definition of the normalizer.
 We can think about this as giving the leaf-to-leaf mapping obtained by reordering the \emph{image} of the pairing map, which are the leaves of $t_1$.
 
@@ -273,20 +274,20 @@ We also note that
 \]
 but that this is only well defined for $\sigma \in N_{\aut(t_2)}(\fS_n)$ as before.
 
-It is important to note that these do not give group actions of $\fS_n$ on the complete set of $n$-tangles $\tangle_n$.
-Indeed, let $t_1$ be the tree $((((1,2),3),4),5)$ and let $t_2$ be the tree $(1,(2,(3,(4,5))))$.
-Abbreviate $\aut(t_i)$ with $A_i$.
-Note that because $(4 5) \in A_2$, $A_1 e A_2$ and $A_1 (4 5) A_2$ are in the same coset yet they have different results upon application of $(3 4)$:
+These do not give group actions of $\fS_n$ on the complete set of $n$-tangles $\tangle_n$.
+For example, let $t_1$ be the tree $((((1,2),3),4),5)$ and let $t_2$ be the tree $(1,(2,(3,(4,5))))$.
+Abbreviating $\aut(t_i)$ with $A_i$, note that because $(4 5) \in A_2$, $A_1 e A_2$ and $A_1 (4 5) A_2$ are in the same coset yet they have different results upon application of $(3 4)$:
 \begin{align*}
 A_1 (3 4) A_2 & = \langle (1 2) \rangle \{(3 4), (3 5 4)\} \\
 A_1 (4 5) (3 4) A_2 & = \langle (1 2) \rangle \{(3 4), (3 4 5)\}.
 \end{align*}
+This sort of behavior is to be expected whenever a $g$ (here played by $(3 4)$) is not in the normalizer of $A_2$ in $\fS_n$, such that there is an $\alpha$ (here played by $(4 5)$) such that $g \alpha g^{-1}$ is not in $A_2$, and the effect of this conjugation is not absorbed by $A_1$.
 
-However, we can restrict the domain to obtain a group action as follows.
-Let $R(t)$ (resp.\ $L(t)$ be the set of tangles $(t_1, t_2, C)$ such that $t_2$ (resp.\ $t_1$) is (graph-theoretically) isomorphic to $t$.
+However, there is a well defined group action on a subset of the domain as follows.
+Let $R(t)$ (resp.\ $L(t)$) be the set of tangles $(t_1, t_2, C)$ such that $t_2$ (resp.\ $t_1$) is graph-theoretically isomorphic to $t$.
 Now $N_{\aut(t)}(\fS_n)$ gives a well defined action on the right (resp.\ left) of $R(t)$ (resp.\ $L(t)$) by definition.
-
-
+Indeed, we know that any such action on a $R(t)$ is going to result in another element of $R(t)$ by definition, and the action is well defined by the definition of the normalizer.
+The normalizer criterion is in fact quite sensible from the perspective of phylogenetics, in that it ensures that pairs of leaves that are ``equivalent'' (formalized as being in the same cycle under the tree automorphism group) get the same treatment under the group action \eqref{eq:action} or its left map equivalent.
 
 \section{Acknowledgements}
 This manuscript was substantially shaped by discussions with Michael Landis, Arnold Kas, and Chris Whidden.
