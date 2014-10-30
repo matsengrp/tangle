@@ -1,6 +1,5 @@
 #!/usr/bin/env sage
 
-import time
 from subprocess import check_output
 from sys import stdout
 from sage.all import *
@@ -34,3 +33,8 @@ for n in (int(a) for a in sys.argv[1:]):
             stdout.write("*")
             stdout.flush()
         print ""
+    # Print an enumeration of trees so we can make sense of the .idx file
+    trees = enumerate_rooted_trees(n)
+    with open("tree{}.tre".format(n), "w") as f:
+        for t in trees:
+            f.write(to_newick(t) + "\n")
