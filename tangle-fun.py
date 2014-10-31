@@ -27,6 +27,16 @@ end
 """)
 
 
+# Given UgV returns Vg^{-1}U.
+gap.eval("""
+DoubleCosetInverse := function(coset)
+      return DoubleCoset(RightActingGroup(coset),
+               Inverse(Representative(coset)),
+               LeftActingGroup(coset));;
+end
+""")
+
+
 def double_coset(U, g, V):
     return gap.function_call('DoubleCoset', [gap(U), gap(g), gap(V)])
 
@@ -66,6 +76,13 @@ def on_double_cosets(coset, g):
     although UagV need not be the same as UavgV.
     """
     return gap.function_call('OnDoubleCosets', [coset, gap(g)])
+
+
+def double_coset_inverse(coset):
+    """
+    Given UgV returns Vg^{-1}U.
+    """
+    return gap.function_call('DoubleCosetInverse', coset)
 
 
 def shortest_fewest_cycles_sorted(perm_list):
@@ -181,7 +198,14 @@ def make_tangles_extras(n, symmetric=True, verbose=True):
                 print newick_shapes[j]
                 print cosets
                 print ""
-
+            # If symmetric and we have identical tree shapes, then we can
+            # rotate the trees around, "inverting" the coset.
+            if symmetric and i == j:
+                deduped = []
+                for c in cosets:
+                    if double_coset_inverse(c) not in deduped:
+                        deduped.append(c)
+                cosets = deduped
             for c in cosets:
                 tangle = (shapes[i], shapes[j], c)
                 (s_t1, s_t2p) = to_newick_pair(*tangle).split("\t")
