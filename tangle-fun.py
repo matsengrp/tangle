@@ -17,6 +17,7 @@ def inverse(group_elt):
 
 
 # Group action on double cosets.
+# Note that this is not always a well defined group action as described below.
 gap.eval("""
 OnDoubleCosets := function(coset, g)
       return DoubleCoset(LeftActingGroup(coset),
@@ -60,7 +61,9 @@ def double_cosets(G, U, V):
 
 def on_double_cosets(coset, g):
     """
-    Act on a double coset.
+    Act on a double coset. Note that this does not always give a well-defined
+    group action. The double coset UaV is by definition the same as UavV,
+    although UagV need not be the same as UavgV.
     """
     return gap.function_call('OnDoubleCosets', [coset, gap(g)])
 
