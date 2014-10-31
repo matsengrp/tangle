@@ -127,9 +127,11 @@ We use the SAGE \cite{SteinJoyner2005} and GAP \cite{GAP4} mathematics software 
 We note that even if one was not interested in group-theoretic properties as such, and might instead just be interested in a unique list of tanglegrams, it would be worth using a group theoretic approach because comparing group cosets (defined below) is inherently faster than checking graph isomorphism.
 
 \section{Formalism}
-Define planar embedding of a phylogenetic tree.
-We will say that two embedded phylogenetic trees are identical if they are identical in the plane.
+Define an \emph{orientation} of edges contacting a node to be a choice of cyclic ordering of the edges.
+We define a \emph{planar embedding} of a phylogenetic tree as a choice of orientation for every node.
+This is equivalent to the intuitive definition because a collection of orientations can be used to define a map of the tree to the plane by respecting every choice of orientation in the mapping, and each map of the tree to the plane gives a collection of orientations by enumerating the edges around a node in a, for example, clockwise orientation.
 We will say that they are isomorphic if they are graph isomorphic, which doesn't take planar embedding into account.
+We will say that two embedded phylogenetic trees are identical if they are isomorphic and have the same orientations.
 
 We will start with a notion of a \emph{planar} tanglegram, which is a slight simplification of the notion of a \emph{drawing} used by previous authors \cite{Venkatachalam2010-zh} which will be convenient for our purposes.
 Let $\fS_n$ denote the symmetric group on $n$ items.
