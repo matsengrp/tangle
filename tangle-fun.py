@@ -157,7 +157,7 @@ def load_tangles(fname):
     return list(reanimate_tangle(*x) for x in load(fname))
 
 
-def make_tangles_extras(n, symmetric=True, verbose=True):
+def make_tangles_extras(n, symmetric=True):
     """
     Make all the tangles with n leaves, along with the number of labeled
     tangles isomorphic to that tangle, and the indices of the mu = id version
@@ -193,11 +193,6 @@ def make_tangles_extras(n, symmetric=True, verbose=True):
                 # representatives.
                 continue
             cosets = double_cosets(fS, shape_autos[i], shape_autos[j])
-            if verbose:
-                print newick_shapes[i]
-                print newick_shapes[j]
-                print cosets
-                print ""
             # If symmetric and we have identical tree shapes, then we can
             # rotate the trees around, "inverting" the coset.
             if symmetric and i == j:
