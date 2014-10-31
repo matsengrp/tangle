@@ -72,7 +72,7 @@
 
 
 \begin{document}
-\title{Symmetries of tanglegrams}
+\title{Symmetries of rooted tanglegrams}
 \author[Matsen]{Frederick A. Matsen IV}
 \address{Fred Hutchinson Cancer Research Center \\ Seattle, WA}
 \thanks{Research supported in part by National Science Foundation award 1223057 and National Institutes of Health grant R01 GM113246-01}
@@ -81,7 +81,7 @@
 \date{\today}
 
 \begin{abstract}
-Many interesting discrete mathematics problems concerning phylogenetic trees are defined in terms of the relative labeling of pairs of leaf-labeled trees.
+Many interesting discrete mathematics problems concerning phylogenetic trees are defined in terms of the relative labeling of pairs of rooted leaf-labeled trees.
 These relative labelings are naturally formalized as so-called ``tanglegrams.''
 Although there has been considerable work on planar embeddings of tanglegrams, many questions remain concerning their symmetries.
 Understanding symmetries of tanglegrams would give information on how many problems on relatively labeled pairs of trees there are, open up the possibility for amortized algorithms, and reveal natural symmetries of spaces associated with such problems.
@@ -160,6 +160,8 @@ Let $\tangle_n$ denote the set of $n$-tanglegrams.
 There is a graph realization of a tanglegram where every leaf of $t_1$ is connected via an edge to the corresponding leaf of $t_2$.
 There is a clear 1-to-1 correspondence between tanglegrams under relabeling and their graph realization (assuming they are considered up to graph isomorphism) by joining leaves of $t_1$ with their corresponding leaves in $t_2$ under $\pairing$.
 If the two trees are rooted, we assume that something is done to distinguish the root nodes from other nodes of the tree.
+As described in the section on future work, the case of unrooted tanglegrams does not follow directly from an understanding of rooted tanglegrams, and we will limit ourselves to rooted tanglegrams for the purposes of this paper.
+We note that this notion of tanglegram corresponds to that found previously in the literature.
 
 [Clarify what graph isomorphism means in this context.]
 
@@ -171,7 +173,7 @@ Let $\ltangle_n$ denote the set of labeled $n$-tanglegrams.
 This is perhaps the most natural definition in terms of phylogenetics.
 
 
-\section{Tanglegram symmetries}
+\section{Rooted tanglegram symmetries}
 We will describe the symmetries of tanglegrams in terms of symmetries of the trees from which they are built.
 We will use cycle notation for elements of the symmetric group, such as $(1\ 2) (3\ 4)$, which can be distinguished from phylogenetic trees in Newick format \cite{wiki:newick} such as $((1,2),(3,4));$, because symmetric group elements do not have commas or a trailing semicolon.
 In order to conform to the convention used in GAP \cite{GAP4} and hence by SAGE \cite{SteinJoyner2005}, \emph{we will use the leftmost first convention of writing products in the symmetric group.}
@@ -290,6 +292,24 @@ Let $R(t)$ (resp.\ $L(t)$) be the set of tangles $(t_1, t_2, C)$ such that $t_2$
 Now $N_{\aut(t)}(\fS_n)$ gives a well defined action on the right (resp.\ left) of $R(t)$ (resp.\ $L(t)$) by definition.
 Indeed, we know that any such action on a $R(t)$ is going to result in another element of $R(t)$ by definition, and the action is well defined by the definition of the normalizer.
 The normalizer criterion is in fact quite sensible from the perspective of phylogenetics, in that it ensures that pairs of leaves that are ``equivalent'' (formalized as being in the same cycle under the tree automorphism group) get the same treatment under the group action \eqref{eq:action} or its left map equivalent.
+
+
+\section{Future work}
+Effect of tree rearrangements such as SPR.
+
+Here we note that unrooted tanglegrams have further symmetries that do not follow directly from the considerations described here.
+Given a rooted tanglegram, it is easy to define an unrooted tanglegram by placing a leaf on each root node and mapping one of these leaves to the other.
+However, this is a many-to-one map because different rootings of the trees in the unrooted tanglegram may have different rooted tree topologies and thus will be distinct rooted tanglegrams.
+Even when two rootings have the same topology, the corresponding rooted tanglegrams may be different:
+the tanglegram
+$$((1,(2,(3,(4,(5,6))))), (1,(2,(3,(4,(5,6))))), (2\ 4\ 3))$$
+when rerooted at the edge leading to taxon 1 becomes
+$$((((((1,2),3),4),5),6), (((((1,2),3),4),5),6), (2\ 4\ 3));$$
+upon renumbering this becomes
+$$((1,(2,(3,(4,(5,6))))), (1,(2,(3,(4,(5,6))))), (2\ 3\ 4))$$
+which is not isomorphic to the original.
+Thus, unrooted tanglegrams can be thought of as equivalence classes of rooted tanglegrams, but this equivalence does not appear trivial.
+
 
 \section{Acknowledgements}
 This manuscript was substantially shaped by discussions with Michael Landis, Arnold Kas, and Chris Whidden.
