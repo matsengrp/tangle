@@ -1,4 +1,5 @@
 from collections import OrderedDict
+from multiprocessing import Pool
 from sage.all import gap
 # Depends on curvature/tree-fun.py
 
@@ -157,7 +158,38 @@ def load_tangles(fname):
     return list(reanimate_tangle(*x) for x in load(fname))
 
 
-def make_tangles_extras(n, symmetric=True):
+def _saveable_tangles_with_t1_being(bundle):
+    i, n, symmetric, shapes, dn_trees, dn_shapes = bundle
+    fS = SymmetricGroup(n)
+    shape_autos = [leaf_autom_group(s) for s in shapes]
+    print "Tree {} of {}".format(i+1, len(shapes))
+    tangles = []
+    newick_shapes = dn_shapes.keys()
+    n_with_same_shape = len(dn_shapes[newick_shapes[i]])
+    for j in range(0, len(shapes)):
+        if symmetric and i > j:
+            # If symmetric we only have to check unordered pairs of
+            # representatives.
+            continue
+        cosets = double_cosets(fS, shape_autos[i], shape_autos[j])
+        # If symmetric and we have identical tree shapes, then we can
+        # rotate the trees around, "inverting" the coset.
+        if symmetric and i == j:
+            deduped = []
+            for c in cosets:
+                if double_coset_inverse(c) not in deduped:
+                    deduped.append(c)
+            cosets = deduped
+        for c in cosets:
+            # We can't return GAP objects if we want to do multiprocessing.
+            tangle = saveable_tangle(shapes[i], shapes[j], c)
+            (s_t1, s_t2p) = to_newick_pair(*tangle).split("\t")
+            tangles.append((tangle, dn_trees[s_t1], dn_trees[s_t2p],
+                           n_with_same_shape))
+    return tangles
+
+
+def make_tangles_extras(n, symmetric=True, n_threads=2):
     """
     Make all the tangles with n leaves, along with the number of labeled
     tangles isomorphic to that tangle, and the indices of the mu = id version
@@ -165,7 +197,8 @@ def make_tangles_extras(n, symmetric=True):
     symmetric determines if we should consider all ordered or unordered pairs
     of trees.
     """
-    fS = SymmetricGroup(n)
+
+    p = Pool(processes=n_threads)
 
     trees = enumerate_rooted_trees(n)
     # So that we can recognize trees after acting on t2 by mu^{-1}.
@@ -180,30 +213,10 @@ def make_tangles_extras(n, symmetric=True):
         else:
             shapes.append(trees[i])
             dn_shapes[shape_i] = [i]
-    shape_autos = [leaf_autom_group(s) for s in shapes]
-    newick_shapes = dn_shapes.keys()
-    # Iterate over all pairs of tree shape representatives.
-    tangles = []
-    for i in range(len(shapes)):
-        n_with_same_shape = len(dn_shapes[newick_shapes[i]])
-        print "Tree {} of {}".format(i+1, len(shapes))
-        for j in range(0, len(shapes)):
-            if symmetric and i > j:
-                # If symmetric we only have to check unordered pairs of
-                # representatives.
-                continue
-            cosets = double_cosets(fS, shape_autos[i], shape_autos[j])
-            # If symmetric and we have identical tree shapes, then we can
-            # rotate the trees around, "inverting" the coset.
-            if symmetric and i == j:
-                deduped = []
-                for c in cosets:
-                    if double_coset_inverse(c) not in deduped:
-                        deduped.append(c)
-                cosets = deduped
-            for c in cosets:
-                tangle = (shapes[i], shapes[j], c)
-                (s_t1, s_t2p) = to_newick_pair(*tangle).split("\t")
-                tangles.append((tangle, dn_trees[s_t1], dn_trees[s_t2p],
-                               n_with_same_shape))
-    return tangles
+
+    tangle_lists = p.map(
+        _saveable_tangles_with_t1_being,
+        [(i, n, symmetric, shapes, dn_trees, dn_shapes)
+            for i in range(len(shapes))])
+    return [(reanimate_tangle(*x), dnt1, dnt2, isom_count)
+            for x, dnt1, dnt2, isom_count in sum(tangle_lists, [])]
