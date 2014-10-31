@@ -1,4 +1,5 @@
 from collections import OrderedDict
+from multiprocessing import Pool
 from sage.all import gap
 # Depends on curvature/tree-fun.py
 
@@ -157,7 +158,7 @@ def load_tangles(fname):
     return list(reanimate_tangle(*x) for x in load(fname))
 
 
-def make_tangles_extras(n, symmetric=True):
+def make_tangles_extras(n, symmetric=True, n_threads=2):
     """
     Make all the tangles with n leaves, along with the number of labeled
     tangles isomorphic to that tangle, and the indices of the mu = id version
@@ -182,11 +183,21 @@ def make_tangles_extras(n, symmetric=True):
             dn_shapes[shape_i] = [i]
     shape_autos = [leaf_autom_group(s) for s in shapes]
     newick_shapes = dn_shapes.keys()
-    # Iterate over all pairs of tree shape representatives.
-    tangles = []
-    for i in range(len(shapes)):
-        n_with_same_shape = len(dn_shapes[newick_shapes[i]])
+
+    @parallel
+    def _saveable_tangles_with_t1_being(i):
+        # Given UgV returns Vg^{-1}U.
+        gap.eval("""
+        DoubleCosetInverse := function(coset)
+              return DoubleCoset(RightActingGroup(coset),
+                       Inverse(Representative(coset)),
+                       LeftActingGroup(coset));;
+        end
+        """)
+        shape_autos = [leaf_autom_group(s) for s in shapes]
         print "Tree {} of {}".format(i+1, len(shapes))
+        tangles = []
+        n_with_same_shape = len(dn_shapes[newick_shapes[i]])
         for j in range(0, len(shapes)):
             if symmetric and i > j:
                 # If symmetric we only have to check unordered pairs of
@@ -202,8 +213,14 @@ def make_tangles_extras(n, symmetric=True):
                         deduped.append(c)
                 cosets = deduped
             for c in cosets:
-                tangle = (shapes[i], shapes[j], c)
+                # We can't return GAP objects if we want to do multiprocessing.
+                tangle = saveable_tangle(shapes[i], shapes[j], c)
                 (s_t1, s_t2p) = to_newick_pair(*tangle).split("\t")
                 tangles.append((tangle, dn_trees[s_t1], dn_trees[s_t2p],
                                n_with_same_shape))
-    return tangles
+        return tangles
+
+    tangles = list(_saveable_tangles_with_t1_being(range(len(shapes))))
+    print tangles
+    return [(reanimate_tangle(*x), dnt1, dnt2, isom_count)
+            for x, dnt1, dnt2, isom_count in sum(tangles, [])]
