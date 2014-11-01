@@ -236,12 +236,14 @@ Thus the triple $(s_{(1)}, s_{(2)}, \aut(s_{(1)}) \sigma_{(1)}^{-1} \, \sigma_{(
 Furthermore, one can take $\ell_1$ to be each of the standardized trees, so that $\sigma_1 = \id$, and $\ell_2$ to be all of the labeled trees such that $\sigma_2$ ranges over all of $\fS_n$.
 Furthermore, by moving relabeling into the element of the symmetric group, we can just limit ourselves to $[\ell_1, \ell_2, \pairing]$ where $\ell_2$ is also a standardized tree.
 
-In summary, we enumerate tanglegrams by taking triples $(s_i, s_j, C)$, where $C$ is a one of the double cosets $\aut(s_i) \pairing \aut(s_j)$ enumerated by GAP.
-There are lots of these (Figure~\ref{FIGcount}), but fewer than the number of pairs of distinct phylogenetic trees:
+Stanglegrams, i.e.\ symmetric tanglegrams as defined above, have further symmetries.
+For these one can start by ordering the tree shapes and only taking tangles where $t_1$ is smaller than or equal to $t_2$ in this ordering.
+In cases where $t_1 = t_2 = t$, we note that by exchanging the roles of $t_1$ and $t_2$ shows that $(t, t, \mu)$ is equivalent to $(t, t, \mu^{-1})$, meaning that we only need to take one of these for our enumeration.
+
+For this study, I enumerated tanglegrams by taking triples $(s_i, s_j, C)$, where $C$ is a one of the double cosets $\aut(s_i) \pairing \aut(s_j)$ enumerated by GAP.
+To take the extra symmetry induced by stanglegrams into account, I wrote some GAP code to look for tanglegrams that remained the same after inversion on the basis of representatives (which have an easily defined total order), which was necessary because a naive $O(n^2)$ search on double cosets (for which a total order is not available in GAP, but see \cite{Hulpke2003-em}) was too slow.
+There are lots of stanglegrams (Figure~\ref{FIGcount}), but significantly fewer than the number of pairs of distinct phylogenetic trees:
 \FIGcount
-
-
-[gh-3: stanglegram]
 
 As a final aside, we note that given a group $G$ with subgroups $H$ and $K$, it is straightforward to find the size of a given double coset $HgK$.
 In our case, this corresponds to the number of planar embeddings of a given tanglegram.
@@ -255,7 +257,6 @@ By the orbit-stabilizer theorem we get that the number of elements of the double
 |HgK| = \frac{|H| |K|}{|g^{-1} H g \cap K|}
 \end{equation}
 (this is problem number 40 in section 2.9 of \cite{herstein2006topics}).
-
 
 
 \section{Action of the tree normalizers on tanglegrams}
