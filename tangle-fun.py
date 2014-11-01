@@ -40,7 +40,8 @@ def right_acting_group(coset):
 def double_coset_as_list(coset):
     """
     Turn a double coset into a list of its elements.
-    Apparently AsList is not defined for them in GAP.
+    AsList is not defined for them in GAP because they don't have a canonical
+    order.
     """
     s = set()
     for l in as_list(left_acting_group(coset)):
@@ -110,16 +111,16 @@ def symmetric_group_dict(t1, t2, mu):
 
 def graph_of_tangle(t1, t2, coset, symmetric=True):
     """
-    Symmetric determines if we consider t1 and t2 in an ordered fashion.
+    Symmetric determines if we want to add a feature to t2 to differentiate it
+    from t1.
     """
-    n = n_leaves(t1) - 1
     mu_d = symmetric_group_dict(t1, t2, representative(coset))
     if symmetric:
         g = t1.disjoint_union(t2)
     else:
         # By duplicating root edge we can distinguish between t1 and t2.
         g = t1.disjoint_union(duplicate_zero_edge(t2))
-    for i in range(1, n+1):
+    for i in range(1, n_leaves(t1)):
         g.add_edge((0, i), (1, mu_d[i]), True)
     return g
 
@@ -170,6 +171,7 @@ def make_tangles_extras(n, symmetric=True):
     of trees.
     """
     fS = SymmetricGroup(n)
+    order_fS = order(fS)
 
     trees = enumerate_rooted_trees(n)
     # So that we can recognize trees after acting on t2 by mu^{-1}.
@@ -189,7 +191,6 @@ def make_tangles_extras(n, symmetric=True):
     # Iterate over all pairs of tree shape representatives.
     tangles = []
     for i in range(len(shapes)):
-        n_with_same_shape = len(dn_shapes[newick_shapes[i]])
         print "Tree {} of {}".format(i+1, len(shapes))
         for j in range(0, len(shapes)):
             if symmetric and i > j:
@@ -206,6 +207,28 @@ def make_tangles_extras(n, symmetric=True):
             for c in cosets:
                 tangle = (shapes[i], shapes[j], c)
                 (s_t1, s_t2p) = to_newick_pair(*tangle).split("\t")
+                gs = shape_autos[i].gens()
+                print shape_autos[i]
+                print(gs)
+                gs += shape_autos[j].conjugate(
+                    # The conjugate is defined as g^{-1}Ag; see
+                    # http://www.sagemath.org/doc/reference/groups/sage/groups/perm_gps/permgroup.html#sage.groups.perm_gps.permgroup.PermutationGroup_generic.conjugate
+                    # so we invert to get gAg^{-1} (recall we are acting on
+                    # right).
+                    inverse(representative(c))
+                    ).gens()
+                print(gs)
+                if symmetric and i == j:
+                    # If symmetric and we have identical tree shapes, then we
+                    # have additional symmetries brought on by flipping the
+                    # tanglegram over via a line going parallel to the leaves.
+                    # For me it's easiest to think of this flip being \mu^{-1},
+                    # but of course that's the same as just adding \mu to the
+                    # generator set.
+                    gs.append(representative(c))
+                print(gs)
+                n_labelings = order_fS / order(fS.subgroup(gs))
+                print s_t1, s_t2p, n_labelings, set(gs), str(c).replace("\n", "")
                 tangles.append((tangle, dn_trees[s_t1], dn_trees[s_t2p],
-                               n_with_same_shape))
+                               n_labelings))
     return tangles

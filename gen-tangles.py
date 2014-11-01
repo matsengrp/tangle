@@ -23,12 +23,13 @@ for n in (int(a) for a in sys.argv[1:]):
         assert(False)
     with open(tangle_base+".idx", "w") as f:
         print "-"*len(tangles)
-        for (x, t1_idx, t2p_idx, isom_count) in tangles_extras:
+        for (x, t1_idx, t2p_idx, n_labelings) in tangles_extras:
             f.write("\t".join([str(o) for o in [
                 t1_idx,
                 t2p_idx,
                 to_newick_pair(*x),
-                isom_count
+                n_labelings,
+                str(x[2]).replace("\n", " ")
                 ]])+"\n")
             stdout.write("*")
             stdout.flush()

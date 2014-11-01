@@ -201,8 +201,21 @@ This map is thus a bijection onto its image, and so we will use the two represen
 For example, we will refer often to the coset of a tanglegram.
 We note that the various planar embeddings of the tanglegram graph are equivalent to choices of representatives $\pairing'$ of the coset tanglegram (i.e.\ $\pairing'$ such that $\aut(t_1) \pairing' \aut(t_2) = C$) given a choice of numbering for $t_1$.
 
-Furthermore, given an arbitrary numbering of the leaves of $t_1$, we can actually realize each element of the coset as an element of the corresponding symmetric group.
-This provides another way of expressing a tanglegram: as a equivalence class $[\ell_1, \ell_2, \pairing]$, where two such are equivalent if they give the same unlabeled trees and the same coset $\aut(\ell_1) \pairing \aut(\ell_2)$.
+One can also specify a tanglegram by via a labeled tanglegram, i.e.\ a pair of labeled trees $\ell_1, \ell_2$ and an element of the symmetric group.
+These labeled tanglegrams give the same tanglegram if there is an element of the symmetric group exchanging labels such that one tanglegram becomes another.
+Assume a fixed planar embedding of a given $n$-tanglegram, and consider various labelings of it.
+The symmetric group acts by relabeling the leaves, and each such action defines a single tanglegram.
+Any stabilizer of a given labeling can be expressed as a product of automorphisms of $t_1$ and the conjugate of automorphisms of $t_2$ via $\pairing$, and any such product is certainly a stabilizer.
+Thus, by the orbit-stabilizer theorem, the number of labeled tanglegrams that correspond to a given tanglegram $(t_1, t_2, \pairing)$ is
+\[
+G / |\langle \aut(t_1), \pairing \aut(t_2) \pairing^{-1} \rangle|.
+\]
+For stanglegrams the number is slightly smaller due the additional symmetry of exchanging $t_1$ and $t_2$:
+\[
+G / |\langle \aut(t_1), \pairing \aut(t_2) \pairing^{-1}, \pairing^{-1} \aut(t_2) \pairing \rangle|.
+\]
+Each labeled tanglegram specifies a unique labeling for the leaves of $t_1$ and $t_2$, which is well defined because the automorphism groups of $t_1$ and $t_2$ sit inside the automorphism group of the tanglegram.
+Thus this number of labelings for tanglegrams (resp.\ stanglegrams) is equal to the number of labeled phylogenetic trees that can be used to make that tanglegram.
 
 Thus we have three ways of describing tanglegrams:
 first, the classical Definition~\ref{def:tanglegram} in terms of two non-leaf-labeled trees and a bijection $\phi$,
