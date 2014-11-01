@@ -3,8 +3,8 @@
 from subprocess import check_output
 from sys import stdout
 from sage.all import *
-load("../curvature/tree-fun.py")
-load("../tangle-fun.py")
+load("curvature/tree-fun.py")
+load("tangle-fun.py")
 
 for n in (int(a) for a in sys.argv[1:]):
     tangles_extras = make_tangles_extras(n, symmetric=True)

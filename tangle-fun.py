@@ -3,7 +3,7 @@ from sage.all import gap
 # Depends on curvature/tree-fun.py
 
 gap.eval("""
-Read("../tangle-fun.gap");
+Read("tangle-fun.gap");
 """)
 
 

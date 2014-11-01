@@ -4,14 +4,14 @@ import os
 from sage.all import *
 from itertools import combinations
 
-load("../curvature/tree-fun.py")
-load("../tangle-fun.py")
+load("curvature/tree-fun.py")
+load("tangle-fun.py")
 
 
 print "leaves\tclasses\ttotal"
 
-for i in range(4, 8):
-    fname = "tangle{}.sobj".format(i)
+for i in range(3, 8):
+    fname = "rooted-symmetric/tangle{}.sobj".format(i)
     if not os.path.exists(fname):
         print "Skipping", fname
         continue
