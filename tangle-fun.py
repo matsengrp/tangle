@@ -2,6 +2,11 @@ from collections import OrderedDict
 from sage.all import gap
 # Depends on curvature/tree-fun.py
 
+gap.eval("""
+Read("../tangle-fun.gap");
+""")
+
+
 # Groups and cosets
 
 def size(domain):
@@ -14,27 +19,6 @@ def as_list(domain):
 
 def inverse(group_elt):
     return gap.function_call('Inverse', group_elt)
-
-
-# Group action on double cosets.
-# Note that this is not always a well defined group action as described below.
-gap.eval("""
-OnDoubleCosets := function(coset, g)
-      return DoubleCoset(LeftActingGroup(coset),
-               OnRight(Representative(coset), g),
-               RightActingGroup(coset));;
-end
-""")
-
-
-# Given UgV returns Vg^{-1}U.
-gap.eval("""
-DoubleCosetInverse := function(coset)
-      return DoubleCoset(RightActingGroup(coset),
-               Inverse(Representative(coset)),
-               LeftActingGroup(coset));;
-end
-""")
 
 
 def double_coset(U, g, V):
@@ -69,6 +53,10 @@ def double_cosets(G, U, V):
     return gap.function_call('DoubleCosets', [gap(G), gap(U), gap(V)])
 
 
+def as_set(l):
+    return gap.function_call('AsSet', l)
+
+
 def on_double_cosets(coset, g):
     """
     Act on a double coset. Note that this does not always give a well-defined
@@ -83,6 +71,15 @@ def double_coset_inverse(coset):
     Given UgV returns Vg^{-1}U.
     """
     return gap.function_call('DoubleCosetInverse', coset)
+
+
+def inverse_unique_double_cosets(G, U):
+    """
+    This function returns a list of double cosets of the form UgU in G that are
+    unique under inversion. That is, a complete list of such double cosets
+    where we consider UgU and Ug^{-1}U to be the same.
+    """
+    return gap.function_call('InverseUniqueDoubleCosets', [gap(G), gap(U)])
 
 
 def shortest_fewest_cycles_sorted(perm_list):
@@ -189,18 +186,16 @@ def make_tangles_extras(n, symmetric=True):
         print "Tree {} of {}".format(i+1, len(shapes))
         for j in range(0, len(shapes)):
             if symmetric and i > j:
-                # If symmetric we only have to check unordered pairs of
+                # If symmetric we only have to generate unordered pairs of
                 # representatives.
                 continue
-            cosets = double_cosets(fS, shape_autos[i], shape_autos[j])
-            # If symmetric and we have identical tree shapes, then we can
-            # rotate the trees around, "inverting" the coset.
-            if symmetric and i == j:
-                deduped = []
-                for c in cosets:
-                    if double_coset_inverse(c) not in deduped:
-                        deduped.append(c)
-                cosets = deduped
+            elif symmetric and i == j:
+                # If symmetric and we have identical tree shapes, then we can
+                # rotate the trees around, "inverting" the coset.
+                cosets = inverse_unique_double_cosets(fS, shape_autos[i])
+            else:
+                # Enumerate all double cosets.
+                cosets = double_cosets(fS, shape_autos[i], shape_autos[j])
             for c in cosets:
                 tangle = (shapes[i], shapes[j], c)
                 (s_t1, s_t2p) = to_newick_pair(*tangle).split("\t")
