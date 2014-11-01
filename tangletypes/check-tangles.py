@@ -16,6 +16,7 @@ for i in range(4, 8):
         print "Skipping", fname
         continue
     tangles = load_tangles(fname)
+    # Note that these are _symmetric_ tangles.
     graphs = list(graph_of_tangle(*tangle) for tangle in tangles)
     dirty = False
 

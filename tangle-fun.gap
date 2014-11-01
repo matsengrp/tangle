@@ -1,5 +1,13 @@
+# This is [GAP](http://www.gap-system.org/) code.
+#
+# GAP is a fairly sane language that has a very good "error out" mode, which
+# can be used to get arguments of functions and other state when it has
+# problems. Use it.
+
+
 # Group action on double cosets.
-# Note that this is not always a well defined group action as described below.
+# Note that this is not always a well defined group action as described in the
+# corresponding SAGE document.
 OnDoubleCosets := function(coset, g)
       return DoubleCoset(LeftActingGroup(coset),
                OnRight(Representative(coset), g),
@@ -7,7 +15,7 @@ OnDoubleCosets := function(coset, g)
 end;;
 
 
-# Given UgV returns Vg^{-1}U.
+# Given UgV, returns Vg^{-1}U.
 DoubleCosetInverse := function(coset)
       return DoubleCoset(RightActingGroup(coset),
                Inverse(Representative(coset)),
@@ -29,21 +37,21 @@ InverseUniqueDoubleCosets := function(G, U)
     repi := List([1 .. Length(reps)]);
     for i in repi do
         if i in skips then
-            # We have encountered the inverse of this coset.
+            # We have already encountered the inverse of this coset.
             continue;
         fi;
         Add(uniques, i);
         x := reps[i];
         xinv := Inverse(x);
+        # The first criterion of this if statement is redundant given the
+        # second, but it's faster.
         if x <> xinv and not xinv in cosets[i] then
             # Inverse is distinct, so we need to add it to `skips`.
             if xinv in reps then
                 # We found it easily (and quickly).
-                Print("lucky!");
                 j := Position(reps, xinv);
             else
                 # Slow but sure way to find it.
-                Print("notlucky!");
                 j := First(repi, k -> xinv in cosets[k]);
             fi;
             if j = fail then
@@ -54,4 +62,3 @@ InverseUniqueDoubleCosets := function(G, U)
     od;
     return cosets{uniques};;
 end;;
-

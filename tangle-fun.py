@@ -108,10 +108,17 @@ def symmetric_group_dict(t1, t2, mu):
     return SymmetricGroup(n)(mu).dict()
 
 
-def graph_of_tangle(t1, t2, coset):
+def graph_of_tangle(t1, t2, coset, symmetric=True):
+    """
+    Symmetric determines if we consider t1 and t2 in an ordered fashion.
+    """
     n = n_leaves(t1) - 1
     mu_d = symmetric_group_dict(t1, t2, representative(coset))
-    g = t1.disjoint_union(duplicate_zero_edge(t2))
+    if symmetric:
+        g = t1.disjoint_union(t2)
+    else:
+        # By duplicating root edge we can distinguish between t1 and t2.
+        g = t1.disjoint_union(duplicate_zero_edge(t2))
     for i in range(1, n+1):
         g.add_edge((0, i), (1, mu_d[i]), True)
     return g
