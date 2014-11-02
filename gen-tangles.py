@@ -29,7 +29,7 @@ for n in (int(a) for a in sys.argv[1:]):
                 t2p_idx,
                 to_newick_pair(*x),
                 n_labelings,
-                str(x[2]).replace("\n", " ")
+                "".join(str(x[2]).split())  # Cosets with no whitespace.
                 ]])+"\n")
             stdout.write("*")
             stdout.flush()

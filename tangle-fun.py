@@ -207,17 +207,13 @@ def make_tangles_extras(n, symmetric=True):
             for c in cosets:
                 tangle = (shapes[i], shapes[j], c)
                 (s_t1, s_t2p) = to_newick_pair(*tangle).split("\t")
-                gs = shape_autos[i].gens()
-                print shape_autos[i]
-                print(gs)
-                gs += shape_autos[j].conjugate(
-                    # The conjugate is defined as g^{-1}Ag; see
-                    # http://www.sagemath.org/doc/reference/groups/sage/groups/perm_gps/permgroup.html#sage.groups.perm_gps.permgroup.PermutationGroup_generic.conjugate
-                    # so we invert to get gAg^{-1} (recall we are acting on
-                    # right).
-                    inverse(representative(c))
-                    ).gens()
-                print(gs)
+                # gs will collect the labeling automorphisms of the tangle.
+                # Start with t1's automorphisms. Use list to duplicate the
+                # collection generators: we don't want to change them!
+                gs = list(shape_autos[i].gens())
+                # The automorphisms A2 of t2 act on t1 via mu A2 mu^{-1}.
+                gs += [representative(c)*a*inverse(representative(c))
+                       for a in shape_autos[j]]
                 if symmetric and i == j:
                     # If symmetric and we have identical tree shapes, then we
                     # have additional symmetries brought on by flipping the
@@ -226,9 +222,7 @@ def make_tangles_extras(n, symmetric=True):
                     # but of course that's the same as just adding \mu to the
                     # generator set.
                     gs.append(representative(c))
-                print(gs)
                 n_labelings = order_fS / order(fS.subgroup(gs))
-                print s_t1, s_t2p, n_labelings, set(gs), str(c).replace("\n", "")
                 tangles.append((tangle, dn_trees[s_t1], dn_trees[s_t2p],
                                n_labelings))
     return tangles
