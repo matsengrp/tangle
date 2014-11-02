@@ -172,6 +172,10 @@ def make_tangles_extras(n, symmetric=True):
     """
     fS = SymmetricGroup(n)
     order_fS = order(fS)
+    # i1 is inclusion into the first component, i2 into the second.
+    # pr is for projection.
+    fS2, i1, i2, pr1, pr2 = fS.direct_product(fS)
+    order_fS2 = order(fS2)
 
     trees = enumerate_rooted_trees(n)
     # So that we can recognize trees after acting on t2 by mu^{-1}.
@@ -207,13 +211,18 @@ def make_tangles_extras(n, symmetric=True):
             for c in cosets:
                 tangle = (shapes[i], shapes[j], c)
                 (s_t1, s_t2p) = to_newick_pair(*tangle).split("\t")
+                cr = representative(c)
+                A1 = shape_autos[i]  # Automorphisms of t1.
+                A2 = shape_autos[j]  # Automorphisms of t2.
                 # gs will collect the labeling automorphisms of the tangle.
-                # Start with t1's automorphisms. Use list to duplicate the
-                # collection generators: we don't want to change them!
-                gs = list(shape_autos[i].gens())
+                # Start with t1's automorphisms acting on the first component.
+                gs = [i1(g) for g in A1.gens()]
                 # The automorphisms A2 of t2 act on t1 via mu A2 mu^{-1}.
-                gs += [representative(c)*a*inverse(representative(c))
-                       for a in shape_autos[j]]
+                gs += [i1(cr*a*inverse(cr)) for a in A2]
+                # Then have t2's automorphisms acting on the second component.
+                gs += [i2(g) for g in A2.gens()]
+                # The automorphisms A1 of t1 act on t2 via mu^{-1} A2 mu.
+                gs += [i2(inverse(cr)*a*cr) for a in A1]
                 if symmetric and i == j:
                     # If symmetric and we have identical tree shapes, then we
                     # have additional symmetries brought on by flipping the
@@ -221,8 +230,10 @@ def make_tangles_extras(n, symmetric=True):
                     # For me it's easiest to think of this flip being \mu^{-1},
                     # but of course that's the same as just adding \mu to the
                     # generator set.
-                    gs.append(representative(c))
-                n_labelings = order_fS / order(fS.subgroup(gs))
+                    gs.append(i1(cr) * i2(inverse(cr)))
+                n_labelings = order_fS2 / order(fS2.subgroup(gs))
+                # print ">>> "+to_newick_pair(*tangle)
+                # print((fS2.subgroup(gs)).gens())
                 tangles.append((tangle, dn_trees[s_t1], dn_trees[s_t2p],
                                n_labelings))
     return tangles
