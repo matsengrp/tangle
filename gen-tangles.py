@@ -13,14 +13,8 @@ for n in (int(a) for a in sys.argv[1:]):
     sage.structure.sage_object.save(
         [saveable_tangle(*x) for x in tangles],
         filename=tangle_base)
-    with open(tangle_base+".tre", "w") as f:
-        for x in tangles:
-            f.write(to_newick_pair(*x)+"\n")
-    dups = check_output("sort "+tangle_base+".tre | uniq -d", shell=True)
-    if dups != "":
-        print "Duplicates found:"
-        print dups
-        assert(False)
+    newick_set = set(to_newick_pair(*x) for x in tangles)
+    assert(len(tangles) == len(newick_set))
     with open(tangle_base+".idx", "w") as f:
         print "-"*len(tangles)
         for (x, t1_idx, t2p_idx, n_labelings) in tangles_extras:
