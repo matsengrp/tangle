@@ -207,22 +207,23 @@ def make_tangles_extras(n, symmetric=True):
             for c in cosets:
                 tangle = (shapes[i], shapes[j], c)
                 (s_t1, s_t2p) = to_newick_pair(*tangle).split("\t")
+                cr = representative(c)
+                A1 = shape_autos[i]  # Automorphisms of t1.
+                A2 = shape_autos[j]  # Automorphisms of t2.
                 # gs will collect the labeling automorphisms of the tangle.
-                # Start with t1's automorphisms. Use list to duplicate the
-                # collection generators: we don't want to change them!
+                # Start with t1's automorphisms acting on the first component.
                 gs = list(shape_autos[i].gens())
                 # The automorphisms A2 of t2 act on t1 via mu A2 mu^{-1}.
-                gs += [representative(c)*a*inverse(representative(c))
-                       for a in shape_autos[j]]
-                if symmetric and i == j:
+                gs += [cr*a*inverse(cr) for a in A2]
+                flip_factor=1
+                if symmetric and i == j and cr != inverse(cr):
                     # If symmetric and we have identical tree shapes, then we
                     # have additional symmetries brought on by flipping the
                     # tanglegram over via a line going parallel to the leaves.
-                    # For me it's easiest to think of this flip being \mu^{-1},
-                    # but of course that's the same as just adding \mu to the
-                    # generator set.
-                    gs.append(representative(c))
-                n_labelings = order_fS / order(fS.subgroup(gs))
+                    flip_factor=1/2
+                n_labelings = flip_factor * order_fS / order(fS.subgroup(gs))
+                # print ">>> "+to_newick_pair(*tangle)
+                # print((fS2.subgroup(gs)).gens())
                 tangles.append((tangle, dn_trees[s_t1], dn_trees[s_t2p],
                                n_labelings))
     return tangles
