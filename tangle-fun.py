@@ -174,9 +174,12 @@ def make_tangles_extras(n, symmetric=True):
     order_fS = order(fS)
     # i1 is inclusion into the first component, i2 into the second.
     # pr is for projection.
-    fS2, i1, i2, pr1, pr2 = fS.direct_product(fS)
+    fS = SymmetricGroup(n)
+    fS2 = SymmetricGroup(2*n)
+    dp, i1, i2, pr1, pr2 = fS.direct_product(fS)
     order_fS2 = order(fS2)
-
+    flip_symmetry = PermutationGroupElement(
+        [(i, n+i) for i in range(1, n+1)])
     trees = enumerate_rooted_trees(n)
     # So that we can recognize trees after acting on t2 by mu^{-1}.
     # `dn` is short for a dictionary keyed on Newick strings.
@@ -230,10 +233,15 @@ def make_tangles_extras(n, symmetric=True):
                     # For me it's easiest to think of this flip being \mu^{-1},
                     # but of course that's the same as just adding \mu to the
                     # generator set.
-                    gs.append(i1(cr) * i2(inverse(cr)))
+                    gs += [flip_symmetry]
                 n_labelings = order_fS2 / order(fS2.subgroup(gs))
-                # print ">>> "+to_newick_pair(*tangle)
-                # print((fS2.subgroup(gs)).gens())
+                print ">>> "+to_newick_pair(*tangle)
+                print((fS2.subgroup(gs)).gens())
                 tangles.append((tangle, dn_trees[s_t1], dn_trees[s_t2p],
                                n_labelings))
     return tangles
+
+
+                    # gs.append(i1(cr) * i2(inverse(cr)))
+                    #gs += [PermutationGroupElement(''.join([str((i, 3+i)) for i in range(1, 3+1)]))]
+                    #gs += [PermutationGroupElement([(1, 4), (2, 5), (3, 6)])]
