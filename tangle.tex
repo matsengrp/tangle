@@ -163,6 +163,8 @@ If the two trees are rooted, we assume that something is done to distinguish the
 As described in the section on future work, the case of unrooted tanglegrams does not follow directly from an understanding of rooted tanglegrams, and we will limit ourselves to rooted tanglegrams for the purposes of this paper.
 We note that this notion of tanglegram corresponds to that found previously in the literature.
 
+Birooted tanglegram?
+
 [Clarify what graph isomorphism means in this context.]
 
 Note that our definition respects the order of $t_1$ and $t_2$ by considering $(t_1, t_2, \pairing)$ to be different than the tanglegram $(t_2, t_1, \pairing^{-1})$ when $t_1$ and $t_2$ are different graph theoretically.
@@ -174,6 +176,8 @@ This is perhaps the most natural definition in terms of phylogenetics.
 
 
 \section{Rooted tanglegram symmetries}
+We can start with rooted tanglegrams
+
 We will describe the symmetries of tanglegrams in terms of symmetries of the trees from which they are built.
 We will use cycle notation for elements of the symmetric group, such as $(1\ 2) (3\ 4)$, which can be distinguished from phylogenetic trees in Newick format \cite{wiki:newick} such as $((1,2),(3,4));$, because symmetric group elements do not have commas or a trailing semicolon.
 In order to conform to the convention used in GAP \cite{GAP4} and hence by SAGE \cite{SteinJoyner2005}, \emph{we will use the leftmost first convention of writing products in the symmetric group.}
@@ -204,11 +208,15 @@ We note that the various planar embeddings of the tanglegram graph are equivalen
 One can also specify a tanglegram by via a labeled tanglegram, i.e.\ a pair of labeled trees $\ell_1, \ell_2$ and an element of the symmetric group.
 However, the extra symmetries of tanglegrams mean that connecting corresponding leaves gives a many-to-one map.
 This map is analogous to the many-to-one map of elements of the symmetric group and trees of a given unlabeled topology.
-We will next enumerate the unique labeled tanglegrams.
+We will next enumerate the unique labelings of a given tanglegram.
+
+We will start by enumerating the unique labelings for a given tree shape $g$ with $n$ leaves.
+Assume a planar embedding of that tree shape.
+Now every element of $\fS_n$ is a labeling of that tree shape, and in fact by the orbit-stabilizer theorem the number of distinct labelings is $|\fS_n| / |\aut(g)|$
 
 Assume a fixed planar embedding of a given $n$-tanglegram $(t_1, t_2, \pairing)$, and consider various labelings of it.
-First note that in principle, we should enumerate all pairs of leaf labelings for that tanglegram.
-However, we can get away with just enumerating the unique labelings of $t_1$, except for a small wrinkle described below for stanglegrams.
+First note that it is sufficient to think of pairs $(\ell_1, \ell_2, \id)$, where $\id$ is the identity element, thus the problem reduces to enumerating all pairs of leaf labelings for that tanglegram.
+However, we can get away with just enumerating the unique labelings $\ell_1$ of $t_1$.
 
 The symmetric group acts by relabeling the leaves, and each such action defines a single tanglegram.
 Any stabilizer of a given labeling can be expressed as a product of automorphisms of $t_1$ and the conjugate of automorphisms of $t_2$ via $\pairing$, and any such product is certainly a stabilizer.
@@ -217,8 +225,10 @@ Thus, by the orbit-stabilizer theorem, the number of labeled tanglegrams that co
 |\fS_n| / |\langle \aut(t_1), \pairing \aut(t_2) \pairing^{-1} \rangle|.
 \]
 
-For stanglegrams the number is smaller due the additional symmetry of exchanging $t_1$ and $t_2$.
-Indeed, if $\pairing \neq \pairing^{-1}$, then the number of stanglegrams is reduced by a factor of two.
+For stanglegrams with $t = t_1 = t_2$ the number can be smaller due the additional symmetry of exchanging $\ell_1$ and $\ell_2$.
+We can express this symmetry by its impact on the labeling of $t_1$, which gets the labeling $\ell_1.\pairing$.
+Indeed, then a complete enumeration will only have one of $(t, t.\mu, \id)$ and $(t, t.\mu^{-1}, \id)$.
+These will also be considered to be the same in a list of unordered pairs of phylogenetic trees.
 Each labeled tanglegram specifies a unique labeling for the leaves of $t_1$ and $t_2$, which is well defined because the automorphism groups of $t_1$ and $t_2$ sit inside the automorphism group of the tanglegram.
 
 Thus we have three ways of describing tanglegrams:
@@ -298,7 +308,7 @@ but that this is only well defined for $\sigma \in N_{\aut(t_2)}(\fS_n)$ as befo
 
 These do not give group actions of $\fS_n$ on the complete set of $n$-tangles $\tangle_n$.
 For example, let $t_1$ be the tree $((((1,2),3),4),5)$ and let $t_2$ be the tree $(1,(2,(3,(4,5))))$.
-Abbreviating $\aut(t_i)$ with $A_i$, note that because $(4 5) \in A_2$, $A_1 e A_2$ and $A_1 (4 5) A_2$ are in the same coset yet they have different results upon application of $(3 4)$:
+Abbreviating $\aut(t_i)$ with $A_i$, note that because $(4 5) \in A_2$, $A_1 \id A_2$ and $A_1 (4 5) A_2$ are in the same coset yet they have different results upon application of $(3 4)$:
 \begin{align*}
 A_1 (3 4) A_2 & = \langle (1 2) \rangle \{(3 4), (3 5 4)\} \\
 A_1 (4 5) (3 4) A_2 & = \langle (1 2) \rangle \{(3 4), (3 4 5)\}.
