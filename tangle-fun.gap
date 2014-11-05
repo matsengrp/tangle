@@ -5,15 +5,23 @@
 # problems. Use it.
 
 
-# Group action on double cosets.
+# Right group "action" on double cosets.
 # Note that this is not always a well defined group action as described in the
 # corresponding SAGE document.
-OnDoubleCosets := function(coset, g)
+RightOnDoubleCosets := function(coset, g)
       return DoubleCoset(LeftActingGroup(coset),
                OnRight(Representative(coset), g),
                RightActingGroup(coset));;
 end;;
 
+# Conjugation group action on double cosets.
+# Note that this is not always a well defined group action as described in the
+# corresponding SAGE document.
+ConjugationOnDoubleCosets := function(coset, g)
+      return DoubleCoset(LeftActingGroup(coset),
+               g * Representative(coset) * Inverse(g),
+               RightActingGroup(coset));;
+end;;
 
 # Given UgV, returns Vg^{-1}U.
 DoubleCosetInverse := function(coset)

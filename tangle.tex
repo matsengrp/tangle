@@ -163,7 +163,9 @@ If the two trees are rooted, we assume that something is done to distinguish the
 As described in the section on future work, the case of unrooted tanglegrams does not follow directly from an understanding of rooted tanglegrams, and we will limit ourselves to rooted tanglegrams for the purposes of this paper.
 We note that this notion of tanglegram corresponds to that found previously in the literature.
 
-Birooted tanglegram?
+Planar tanglegram.
+Define group action on planar trees.
+Note that $(p_1, p_2, \pairing)$ is equivalent to $(p_1, p_2 . \sigma, \pairing \sigma^{-1})$.
 
 [Clarify what graph isomorphism means in this context.]
 
@@ -176,7 +178,7 @@ This is perhaps the most natural definition in terms of phylogenetics.
 
 
 \section{Rooted tanglegram symmetries}
-We can start with rooted tanglegrams
+We can start with rooted tanglegrams.
 
 We will describe the symmetries of tanglegrams in terms of symmetries of the trees from which they are built.
 We will use cycle notation for elements of the symmetric group, such as $(1\ 2) (3\ 4)$, which can be distinguished from phylogenetic trees in Newick format \cite{wiki:newick} such as $((1,2),(3,4));$, because symmetric group elements do not have commas or a trailing semicolon.
@@ -210,13 +212,28 @@ However, the extra symmetries of tanglegrams mean that connecting corresponding 
 This map is analogous to the many-to-one map of elements of the symmetric group and trees of a given unlabeled topology.
 We will next enumerate the unique labelings of a given tanglegram.
 
-We will start by enumerating the unique labelings for a given tree shape $g$ with $n$ leaves.
+We will warm up by enumerating the unique labelings for a given tree shape $s$ with $n$ leaves.
 Assume a planar embedding of that tree shape.
-Now every element of $\fS_n$ is a labeling of that tree shape, and in fact by the orbit-stabilizer theorem the number of distinct labelings is $|\fS_n| / |\aut(g)|$
+Now every element of $\fS_n$ is a labeling of that tree shape, and in fact by the orbit-stabilizer theorem the number of distinct labelings is $|\fS_n| / |\aut(s)|$
 
-Assume a fixed planar embedding of a given $n$-tanglegram $(t_1, t_2, \pairing)$, and consider various labelings of it.
-First note that it is sufficient to think of pairs $(\ell_1, \ell_2, \id)$, where $\id$ is the identity element, thus the problem reduces to enumerating all pairs of leaf labelings for that tanglegram.
-However, we can get away with just enumerating the unique labelings $\ell_1$ of $t_1$.
+The labelings of an $n$-tanglegram will follow a similar pattern.
+Assume a fixed planar embedding of two tree shapes $s_1$ and $s_2$ with $n$ leaves, and assume that the leaves are labeled arbitrarily to give planar phylogenetic trees $p_1$ and $p_2$.
+We will define a bijective mapping of the direct product $\fS_n \times \fS_n$ to planar labeled tanglegrams in which
+\[
+(\sigma, \pairing) \mapsto (p_1.\sigma, p_2, \pairing)
+\]
+and will thus consider the enumeration problem on $\fS_n \times \fS_n$.
+We are interested in the labelings of a given (non-planar) tanglegram, and assume that $(\sigma, \tau)$ is an exemplar of such a tanglegram.
+Define a right action of $\aut(p_1) \times \aut(p_2)$ on $\fS_n \times \fS_n$ by
+\[
+(\sigma, \pairing). (\tau_1, \tau_2) := (\sigma \tau_1, \pairing \tau_2).
+% (\sigma, \pairing). (\tau_1, \tau_2) := (\sigma \tau_1, \tau_1^{-1} \pairing \tau_2).
+\]
+This action corresponds to relabeling $p_1$ by $\tau_1$ and $p_2$ by $\tau_2$, and results in the same tanglegram by the definition of $\aut$.
+Now consider equivalence classes of labeled (non-planar) tanglegrams.
+We still have this action, and what we end up with is the orbit of cosets $A_1 \tau_1$ on the right.
+
+[here]
 
 The symmetric group acts by relabeling the leaves, and each such action defines a single tanglegram.
 Any stabilizer of a given labeling can be expressed as a product of automorphisms of $t_1$ and the conjugate of automorphisms of $t_2$ via $\pairing$, and any such product is certainly a stabilizer.
