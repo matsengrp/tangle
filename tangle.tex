@@ -214,39 +214,22 @@ We will next enumerate the unique labelings of a given tanglegram.
 
 We will warm up by enumerating the unique labelings for a given tree shape $s$ with $n$ leaves.
 Assume a planar embedding of that tree shape.
-Now every element of $\fS_n$ is a labeling of that tree shape, and in fact by the orbit-stabilizer theorem the number of distinct labelings is $|\fS_n| / |\aut(s)|$
+Now every element of $\fS_n$ is a labeling of that tree shape, and in fact by the orbit-stabilizer theorem the number of distinct labelings is $|\fS_n| / |\aut(s)|$.
 
-The labelings of an $n$-tanglegram will follow a similar pattern.
-Assume a fixed planar embedding of two tree shapes $s_1$ and $s_2$ with $n$ leaves, and assume that the leaves are labeled arbitrarily to give planar phylogenetic trees $p_1$ and $p_2$.
-We will define a bijective mapping of the direct product $\fS_n \times \fS_n$ to planar labeled tanglegrams in which
+The labelings of an $n$-tanglegram follow a similar pattern.
+Assume we wish to understand the number of labeled tanglegrams that correspond to a given tanglegram $x$.
+We will start by enumerating the planar labeled tanglegrams that correspond to $x = (t_1, t_2, \pairing)$.
+Like with the tree case, the number of labelings of $t_1$'s planar embedding is $|\fS_n|$.
+The labelings for the embedded $t_2$ giving planar embeddings of $x$ are then in one to one correspondence with the elements of the double coset $\aut(t_1) \pairing \aut(t_2)$.
+By another application of the orbit-stabilizer theorem, we get that the number of of labeled tanglegrams is
 \[
-(\sigma, \pairing) \mapsto (p_1.\sigma, p_2, \pairing)
+\frac{|\fS_n| |\aut(t_1) \pairing \aut(t_2)|}{|\aut(t_1)||\aut(t_2)|}.
 \]
-and will thus consider the enumeration problem on $\fS_n \times \fS_n$.
-We are interested in the labelings of a given (non-planar) tanglegram, and assume that $(\sigma, \tau)$ is an exemplar of such a tanglegram.
-Define a right action of $\aut(p_1) \times \aut(p_2)$ on $\fS_n \times \fS_n$ by
+Now, to enumerate stanglegrams, note that two distinct tanglegrams will map onto a single stanglegram exactly when $\aut(t_1) \pairing \aut(t_2)$ is distinct from $\aut(t_1) \pairing^{-1} \aut(t_2)$.
+Recalling that such cosets are either identical or disjoint, we have that the number of labeled stanglegrams corresponding to $x$ is
 \[
-(\sigma, \pairing). (\tau_1, \tau_2) := (\sigma \tau_1, \pairing \tau_2).
-% (\sigma, \pairing). (\tau_1, \tau_2) := (\sigma \tau_1, \tau_1^{-1} \pairing \tau_2).
+\frac{|\fS_n| |\aut(t_1) \pairing \aut(t_2) \cup \aut(t_1) \pairing^{-1} \aut(t_2)|}{|\aut(t_1)||\aut(t_2)|}.
 \]
-This action corresponds to relabeling $p_1$ by $\tau_1$ and $p_2$ by $\tau_2$, and results in the same tanglegram by the definition of $\aut$.
-Now consider equivalence classes of labeled (non-planar) tanglegrams.
-We still have this action, and what we end up with is the orbit of cosets $A_1 \tau_1$ on the right.
-
-[here]
-
-The symmetric group acts by relabeling the leaves, and each such action defines a single tanglegram.
-Any stabilizer of a given labeling can be expressed as a product of automorphisms of $t_1$ and the conjugate of automorphisms of $t_2$ via $\pairing$, and any such product is certainly a stabilizer.
-Thus, by the orbit-stabilizer theorem, the number of labeled tanglegrams that correspond to a given tanglegram $(t_1, t_2, \pairing)$ is
-\[
-|\fS_n| / |\langle \aut(t_1), \pairing \aut(t_2) \pairing^{-1} \rangle|.
-\]
-
-For stanglegrams with $t = t_1 = t_2$ the number can be smaller due the additional symmetry of exchanging $\ell_1$ and $\ell_2$.
-We can express this symmetry by its impact on the labeling of $t_1$, which gets the labeling $\ell_1.\pairing$.
-Indeed, then a complete enumeration will only have one of $(t, t.\mu, \id)$ and $(t, t.\mu^{-1}, \id)$.
-These will also be considered to be the same in a list of unordered pairs of phylogenetic trees.
-Each labeled tanglegram specifies a unique labeling for the leaves of $t_1$ and $t_2$, which is well defined because the automorphism groups of $t_1$ and $t_2$ sit inside the automorphism group of the tanglegram.
 
 Thus we have three ways of describing tanglegrams:
 first, the classical Definition~\ref{def:tanglegram} in terms of two non-leaf-labeled trees and a bijection $\phi$,
