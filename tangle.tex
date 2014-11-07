@@ -33,7 +33,6 @@
 \definecolor{violet}{rgb}{0.730,0.555,0.769}
 \definecolor{purple}{rgb}{0.459,0.109,0.538}
 \definecolor{grey}{rgb}{0.4,0.4,0.4}
-\newcommand{\LB}[1]{\colorbox{yellow}{Lola: #1}} % feel free to customize!
 \newcommand{\EM}[1]{\colorbox{violet}{\textcolor{white}{Erick: #1}}}
 
 \newcommand{\FIGspr}{\
@@ -225,7 +224,13 @@ By another application of the orbit-stabilizer theorem, we get that the number o
 \[
 \frac{|\fS_n| |\aut(t_1) \pairing \aut(t_2)|}{|\aut(t_1)||\aut(t_2)|}.
 \]
-Now, to enumerate stanglegrams, note that two distinct tanglegrams will map onto a single stanglegram exactly when $\aut(t_1) \pairing \aut(t_2)$ is distinct from $\aut(t_1) \pairing^{-1} \aut(t_2)$.
+
+To enumerate stanglegrams, we will start by enumerating every unordered pair of planar labeled tanglegrams twice.
+If the two planar labeled trees in a tanglegram are distinct, they are already enumerated twice from their two orderings.
+If, on the other hand, they are the same, we need to ``double'' them artificially.
+Two planar rooted trees are the same exactly when their pairing map $\pairing$ is the identity.
+
+Two distinct tanglegrams will map onto a single stanglegram exactly when $\aut(t_1) \pairing \aut(t_2)$ is distinct from $\aut(t_1) \pairing^{-1} \aut(t_2)$.
 Recalling that such cosets are either identical or disjoint, we have that the number of labeled stanglegrams corresponding to $x$ is
 \[
 \frac{|\fS_n| |\aut(t_1) \pairing \aut(t_2) \cup \aut(t_1) \pairing^{-1} \aut(t_2)|}{|\aut(t_1)||\aut(t_2)|}.

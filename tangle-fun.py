@@ -226,37 +226,50 @@ def make_tangles_extras(n, symmetric=True):
             for c in cosets:
                 tangle = (shapes[i], shapes[j], c)
                 (s_t1, s_t2p) = to_newick_pair(*tangle).split("\t")
-                # From here down we work on the number of labeled tanglegrams
-                # for this given tanglegram. We do this by looking at the
-                # number of unique labelings of t1 for this tanglegram, but
-                # also including the symmetries brought about by its joining to
-                # t2.
-                cr = representative(c)
                 A1 = shape_autos[i]  # Automorphisms of t1.
                 A2 = shape_autos[j]  # Automorphisms of t2.
-                # gs will collect the labeling automorphisms of the tangle.
-                # Start with t1's automorphisms acting on the first component.
-                gs = list(A2.gens())
-                # The automorphisms A2 of t2 act on t1 via mu A2 mu^{-1}.
-                gs += [inverse(cr)*a*cr for a in A1]
-                flip_factor=1
+                coset_size = size(c)
+                n_planar_ordered_labelings = order_fS * coset_size
                 if symmetric and i == j:
-                     # If symmetric and we have identical tree shapes, then we
-                     # have an additional symmetry coming from exchanging t1
-                     # and t2.
-                     flip_factor=2
-                n_labelings =  (order_fS / order(A1)) * (order_fS / order(fS.subgroup(gs))) / flip_factor
+                    if fS.identity() in c:
+                        print "identity", order_fS, "before", n_planar_ordered_labelings
+                        # Artificially "double" the identity tangles:
+                        n_planar_ordered_labelings_with_repetition = n_planar_ordered_labelings + order_fS
+                        print "wr", n_planar_ordered_labelings_with_repetition
+                    elif not inverse(representative(c)) in c:
+                        # We have enumerated inverse-unique double cosets, so
+                        # if we are interested in counting all elements in a
+                        # double coset then we need to double here.
+                        # This is mutually exclusive with the above because if
+                        # the identity is in a coset then it must have some
+                        # overlap with its inverse, and thus must be identical
+                        # to its inverse.
+                        print "also inverse so double", n_planar_ordered_labelings
+                        n_planar_ordered_labelings_with_repetition = 2*n_planar_ordered_labelings
+                    else:
+                        n_planar_ordered_labelings_with_repetition = n_planar_ordered_labelings
+                    # With that, we have doubles of everything:
+                    n_planar_labelings = n_planar_ordered_labelings_with_repetition/2
+                else:
+                    # We don't have to worry the symmetry of exchanging t1 and t2.
+                    n_planar_labelings = n_planar_ordered_labelings / 2
+                n_labelings = n_planar_labelings / (order(A1) * order(A2))
                 print ">>> "+to_newick_pair(*tangle)
-                print((fS.subgroup(gs)).gens())
+                print(c)
                 print n_labelings
-                # print orbit(fS, c, action='ConjugationOnDoubleCosets')
                 total_n_labelings += n_labelings
                 tangles.append((tangle, d_trees[s_t1], d_trees[s_t2p],
                                n_labelings))
             print "tot", total_n_labelings
             if symmetric and i == j:
-                print binomial(len(d_shapes.values()[i])+1, 2)
+                # d_shapes_values()[i] is the number of phylogenetic trees with
+                # shape i. Recall that binomial(q+1, 2) gives the number of
+                # unordered pairs of q items allowing repetition.
+                print "eqn", binomial(len(d_shapes.values()[i])+1, 2)
             else:
-                print len(d_shapes.values()[i])*len(d_shapes.values()[j])
+                assert(True)
+                # assert(
+                #     total_n_labelings ==
+                #     len(d_shapes.values()[i])*len(d_shapes.values()[j]))
             print ""
     return tangles
