@@ -223,7 +223,7 @@ def make_tangles_extras(n, symmetric=True):
                 gs += [i2(g) for g in A2.gens()]
                 # The automorphisms A1 of t1 act on t2 via mu^{-1} A2 mu.
                 # gs += [i2(inverse(mu) * mup) for mup in c]
-                gs += [i2(inverse(mu)*a*mu) for a in A1]
+                # gs += [i2(inverse(mu)*a*mu) for a in A1]
                 if symmetric and i == j:
                     # If symmetric and we have identical tree shapes, then we
                     # have additional symmetries brought on by flipping the
@@ -233,9 +233,11 @@ def make_tangles_extras(n, symmetric=True):
                     # generator set.
                     # gs.append(i1(mu)*i2(inverse(mu)))
                     print "nothing"
+                s = as_set(c)
                 # Problem here is that dp.subgroup(gs) may have a broader action than c.
-                n_labelings = order_fS * size(c) / order(dp.subgroup(gs))
+                n_labelings = order(fS) * size(s) / order(dp.subgroup(gs))
                 print ">>> "+to_newick_pair(*tangle)
+                print s
                 print((dp.subgroup(gs)).gens())
                 print n_labelings
                 total_n_labelings += n_labelings
