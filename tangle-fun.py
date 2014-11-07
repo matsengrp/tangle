@@ -175,11 +175,8 @@ def make_tangles_extras(n, symmetric=True):
     # i1 is inclusion into the first component, i2 into the second.
     # pr is for projection.
     fS = SymmetricGroup(n)
-    fS2 = SymmetricGroup(2*n)
+    order_fS = order(fS)
     dp, i1, i2, pr1, pr2 = fS.direct_product(fS)
-    order_fS2 = order(fS2)
-    flip_symmetry = PermutationGroupElement(
-        [(i, n+i) for i in range(1, n+1)])
     trees = enumerate_rooted_trees(n)
     # So that we can recognize trees after acting on t2 by mu^{-1}.
     # `dn` is short for a dictionary keyed on Newick strings.
@@ -200,6 +197,7 @@ def make_tangles_extras(n, symmetric=True):
     for i in range(len(shapes)):
         print "Tree {} of {}".format(i+1, len(shapes))
         for j in range(0, len(shapes)):
+            total_n_labelings = 0
             if symmetric and i > j:
                 # If symmetric we only have to generate unordered pairs of
                 # representatives.
@@ -213,19 +211,19 @@ def make_tangles_extras(n, symmetric=True):
                 cosets = double_cosets(fS, shape_autos[i], shape_autos[j])
             for c in cosets:
                 tangle = (shapes[i], shapes[j], c)
+                print c
                 (s_t1, s_t2p) = to_newick_pair(*tangle).split("\t")
-                cr = representative(c)
+                mu = representative(c)
                 A1 = shape_autos[i]  # Automorphisms of t1.
                 A2 = shape_autos[j]  # Automorphisms of t2.
-                # gs will collect the labeling automorphisms of the tangle.
+                # gs will collect the automorphisms of the tangle.
                 # Start with t1's automorphisms acting on the first component.
                 gs = [i1(g) for g in A1.gens()]
                 # The automorphisms A2 of t2 act on t1 via mu A2 mu^{-1}.
-                gs += [i1(cr*a*inverse(cr)) for a in A2]
-                # Then have t2's automorphisms acting on the second component.
                 gs += [i2(g) for g in A2.gens()]
                 # The automorphisms A1 of t1 act on t2 via mu^{-1} A2 mu.
-                gs += [i2(inverse(cr)*a*cr) for a in A1]
+                # gs += [i2(inverse(mu) * mup) for mup in c]
+                gs += [i2(inverse(mu)*a*mu) for a in A1]
                 if symmetric and i == j:
                     # If symmetric and we have identical tree shapes, then we
                     # have additional symmetries brought on by flipping the
@@ -233,12 +231,29 @@ def make_tangles_extras(n, symmetric=True):
                     # For me it's easiest to think of this flip being \mu^{-1},
                     # but of course that's the same as just adding \mu to the
                     # generator set.
-                    gs += [flip_symmetry]
-                n_labelings = order_fS2 / order(fS2.subgroup(gs))
+                    # gs.append(i1(mu)*i2(inverse(mu)))
+                    print "nothing"
+                # Problem here is that dp.subgroup(gs) may have a broader action than c.
+                n_labelings = order_fS * size(c) / order(dp.subgroup(gs))
                 print ">>> "+to_newick_pair(*tangle)
-                print((fS2.subgroup(gs)).gens())
+                print((dp.subgroup(gs)).gens())
+                print n_labelings
+                total_n_labelings += n_labelings
                 tangles.append((tangle, dn_trees[s_t1], dn_trees[s_t2p],
                                n_labelings))
+            print "tot", total_n_labelings
+            if symmetric and i == j:
+                # d_shapes_values()[i] is the number of phylogenetic trees with
+                # shape i. Recall that binomial(q+1, 2) gives the number of
+                # unordered pairs of q items allowing repetition.
+                print "eqn", binomial(len(d_shapes.values()[i])+1, 2)
+            else:
+                print "eqn", (len(dn_shapes.values()[i])*len(dn_shapes.values()[j]))
+                assert(True)
+                # assert(
+                #     total_n_labelings ==
+                #     len(d_shapes.values()[i])*len(d_shapes.values()[j]))
+            print ""
     return tangles
 
 
