@@ -22,12 +22,28 @@ def inverse(group_elt):
     return gap.function_call('Inverse', group_elt)
 
 
+def generators_of_group(G):
+    return gap.function_call('GeneratorsOfGroup', G)
+
+
+def right_coset(U, g):
+    return gap.function_call('RightCoset', [gap(U), gap(g)])
+
+
+def right_cosets(G, U):
+    return gap.function_call('RightCosets', [gap(G), gap(U)])
+
+
 def double_coset(U, g, V):
     return gap.function_call('DoubleCoset', [gap(U), gap(g), gap(V)])
 
 
 def representative(coset):
     return gap.function_call('Representative', coset)
+
+
+def acting_domain(coset):
+    return gap.function_call('ActingDomain', coset)
 
 
 def left_acting_group(coset):
@@ -176,6 +192,58 @@ def load_tangles(fname):
     return list(reanimate_tangle(*x) for x in load(fname))
 
 
+# ltangles
+
+class SymmetricGroupSquared:
+    def __init__(self, n):
+        self.n = n
+        self.fS = SymmetricGroup(n)
+        self.dp, self.i1, self.i2, self.pr1, self.pr2 = self.fS.direct_product(self.fS)
+
+    def element(self, g):
+        return self.dp(g)
+
+    def subgroup(self, gl):
+        return self.dp.subgroup(gl)
+
+    def ie1(self, g):
+        return self.i1(self.element(g))
+
+    def ie2(self, g):
+        return self.i2(self.element(g))
+
+    def isubgroups(self, U1, U2):
+        return self.subgroup(
+            [self.i1(u) for u in U1] + [self.i2(u) for u in U2])
+
+    def estr(self, g):
+        """
+        Make a string of an element.
+        """
+        def to_str(h):
+            d = h.dict()
+            return ''.join([str(d[i]) for i in range(1, self.n+1)])
+        return "\t".join([to_str(self.pr1(g)), to_str(self.pr2(g))])
+
+    def right_coset(self, U1, U2, g):
+        return right_coset(self.isubgroups(U1, U2), g)
+
+    def right_cosets(self, U1, U2):
+        return right_cosets(self.dp, self.isubgroups(U1, U2))
+
+    def mu(self, g):
+        """
+        mu is the mapping between the two trees.
+        """
+        return inverse(self.pr1(g))*self.pr2(g)
+
+    def double_coset_of_right_coset(self, U):
+        gens = generators_of_group(acting_domain(U))
+        U1 = self.fS.subgroup(self.pr1(g) for g in gens)
+        U2 = self.fS.subgroup(self.pr2(g) for g in gens)
+        return double_coset(U1, self.mu(representative(U)), U2)
+
+
 def make_tangles_extras(n, symmetric=True):
     """
     Make all the tangles with n leaves, along with the number of labeled
@@ -184,13 +252,7 @@ def make_tangles_extras(n, symmetric=True):
     symmetric determines if we should consider all ordered or unordered pairs
     of trees.
     """
-    fS = SymmetricGroup(n)
-    order_fS = order(fS)
-    # i1 is inclusion into the first component, i2 into the second.
-    # pr is for projection.
-    fS = SymmetricGroup(n)
-    order_fS = order(fS)
-    dp, i1, i2, pr1, pr2 = fS.direct_product(fS)
+    fS2 = SymmetricGroupSquared(n)
     trees = enumerate_rooted_trees(n)
     # So that we can recognize trees after acting on t2 by mu^{-1}.
     # `dn` is short for a dictionary keyed on Newick strings.
@@ -211,49 +273,30 @@ def make_tangles_extras(n, symmetric=True):
     for i in range(len(shapes)):
         print "Tree {} of {}".format(i+1, len(shapes))
         for j in range(0, len(shapes)):
-            total_n_labelings = 0
-            if symmetric and i > j:
-                # If symmetric we only have to generate unordered pairs of
-                # representatives.
-                continue
-            elif symmetric and i == j:
-                # If symmetric and we have identical tree shapes, then we can
-                # rotate the trees around, "inverting" the coset.
-                cosets = inverse_unique_double_cosets(fS, shape_autos[i])
-            else:
-                # Enumerate all double cosets.
-                cosets = double_cosets(fS, shape_autos[i], shape_autos[j])
-            A1 = shape_autos[i]  # Automorphisms of t1.
-            A2 = shape_autos[j]  # Automorphisms of t2.
+            # if symmetric and i > j:
+            #    # If symmetric we only have to generate unordered pairs of
+            #    # representatives.
+            #    continue
+            # elif symmetric and i == j:
+            #     # If symmetric and we have identical tree shapes, then we can
+            #     # rotate the trees around, "inverting" the coset.
+            #     cosets = inverse_unique_double_cosets(fS, shape_autos[i])
+            # else:
+            # Enumerate all double cosets.
+            A1 = shape_autos[i]
+            A2 = shape_autos[j]
+
+
+            # Now these are _labeled_ tangles.
+            cosets = fS2.right_cosets(A1, A2)
             for c in cosets:
-                tangle = (shapes[i], shapes[j], c)
-                print c
+                tangle = (shapes[i], shapes[j],
+                          fS2.double_coset_of_right_coset(c))
                 (s_t1, s_t2p) = to_newick_pair(*tangle).split("\t")
-                mu = representative(c)
-                # gs will collect the automorphisms of the tangle.
-                # Start with t1's automorphisms acting on the first component.
-                gs = [i1(a) for a in A1.gens()]
-                # The automorphisms A2 of t2 act on t1 via mu A2 mu^{-1}.
-                gs += [inverse(mu)*i2(a)*mu for a in A2.gens()]
-                gq = [i1(g)*i2(g*mu*a) for (g, a) in product(fS, A2)]
-                # The automorphisms A1 of t1 act on t2 via mu^{-1} A2 mu.
-                orbs = orbits(dp.subgroup(gs), gq, 'OnRight')
-                if symmetric and i == j:
-                    if inverse(mu) in c:
-                        n_labelings = size(orbs)
-                    else:
-                        n_labelings = size(orbs)/2
-                else:
-                    n_labelings = size(orbs)
                 print ">>> "+to_newick_pair(*tangle)
-                #print gq
-                #print gs
-                print orbs
-                print n_labelings
-                total_n_labelings += n_labelings
                 tangles.append((tangle, dn_trees[s_t1], dn_trees[s_t2p],
-                               n_labelings))
-            print "tot", total_n_labelings
+                               0))
+            print "tot", size(cosets)
             if symmetric and i == j:
                 # d_shapes_values()[i] is the number of phylogenetic trees with
                 # shape i. Recall that binomial(q+1, 2) gives the number of
@@ -266,8 +309,3 @@ def make_tangles_extras(n, symmetric=True):
                 #     len(d_shapes.values()[i])*len(d_shapes.values()[j]))
             print ""
     return tangles
-
-
-                    # gs.append(i1(cr) * i2(inverse(cr)))
-                    #gs += [PermutationGroupElement(''.join([str((i, 3+i)) for i in range(1, 3+1)]))]
-                    #gs += [PermutationGroupElement([(1, 4), (2, 5), (3, 6)])]
