@@ -237,21 +237,19 @@ def make_tangles_extras(n, symmetric=True):
                 gs += [inverse(mu)*i2(a)*mu for a in A2.gens()]
                 gq = [i1(g)*i2(g*mu*a) for (g, a) in product(fS, A2)]
                 # The automorphisms A1 of t1 act on t2 via mu^{-1} A2 mu.
-                #if symmetric and i == j:
-                    # If symmetric and we have identical tree shapes, then we
-                    # have additional symmetries brought on by flipping the
-                    # tanglegram over via a line going parallel to the leaves.
-                    # For me it's easiest to think of this flip being \mu^{-1},
-                    # but of course that's the same as just adding \mu to the
-                    # generator set.
-                #    gs.append(i1(mu)*i2(inverse(mu)))
+                orbs = orbits(dp.subgroup(gs), gq, 'OnRight')
+                if symmetric and i == j:
+                    if inverse(mu) in c:
+                        n_labelings = size(orbs)
+                    else:
+                        n_labelings = size(orbs)/2
+                else:
+                    n_labelings = size(orbs)
                 print ">>> "+to_newick_pair(*tangle)
                 #print gq
                 #print gs
-                orbs = orbits(dp.subgroup(gs), gq, 'OnRight')
-                n_labelings = size(orbs)
-                #print orbs
-                #print n_labelings
+                print orbs
+                print n_labelings
                 total_n_labelings += n_labelings
                 tangles.append((tangle, dn_trees[s_t1], dn_trees[s_t2p],
                                n_labelings))
