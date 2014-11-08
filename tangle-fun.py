@@ -1,4 +1,5 @@
 from collections import OrderedDict
+from itertools import product
 from sage.all import gap
 # Depends on curvature/tree-fun.py
 
@@ -35,6 +36,19 @@ def left_acting_group(coset):
 
 def right_acting_group(coset):
     return gap.function_call('RightActingGroup', coset)
+
+
+# Described in SAGE manual, but not yet implemented?
+def orbit(G, x, action):
+    return gap.function_call('Orbit', [G, x, action])
+
+
+def orbits(G, seeds, action):
+    return gap.function_call('Orbits', [G, seeds, action])
+
+
+def stabilizer(G, x, action):
+    return gap.function_call('Stabilizer', [G, x, action])
 
 
 def double_coset_as_list(coset):
@@ -209,37 +223,35 @@ def make_tangles_extras(n, symmetric=True):
             else:
                 # Enumerate all double cosets.
                 cosets = double_cosets(fS, shape_autos[i], shape_autos[j])
+            A1 = shape_autos[i]  # Automorphisms of t1.
+            A2 = shape_autos[j]  # Automorphisms of t2.
             for c in cosets:
                 tangle = (shapes[i], shapes[j], c)
                 print c
                 (s_t1, s_t2p) = to_newick_pair(*tangle).split("\t")
                 mu = representative(c)
-                A1 = shape_autos[i]  # Automorphisms of t1.
-                A2 = shape_autos[j]  # Automorphisms of t2.
                 # gs will collect the automorphisms of the tangle.
                 # Start with t1's automorphisms acting on the first component.
-                gs = [i1(g) for g in A1.gens()]
+                gs = [i1(a) for a in A1.gens()]
                 # The automorphisms A2 of t2 act on t1 via mu A2 mu^{-1}.
-                gs += [i2(g) for g in A2.gens()]
+                gs += [inverse(mu)*i2(a)*mu for a in A2.gens()]
+                gq = [i1(g)*i2(g*mu*a) for (g, a) in product(fS, A2)]
                 # The automorphisms A1 of t1 act on t2 via mu^{-1} A2 mu.
-                # gs += [i2(inverse(mu) * mup) for mup in c]
-                # gs += [i2(inverse(mu)*a*mu) for a in A1]
-                if symmetric and i == j:
+                #if symmetric and i == j:
                     # If symmetric and we have identical tree shapes, then we
                     # have additional symmetries brought on by flipping the
                     # tanglegram over via a line going parallel to the leaves.
                     # For me it's easiest to think of this flip being \mu^{-1},
                     # but of course that's the same as just adding \mu to the
                     # generator set.
-                    # gs.append(i1(mu)*i2(inverse(mu)))
-                    print "nothing"
-                s = as_set(c)
-                # Problem here is that dp.subgroup(gs) may have a broader action than c.
-                n_labelings = order(fS) * size(s) / order(dp.subgroup(gs))
+                #    gs.append(i1(mu)*i2(inverse(mu)))
                 print ">>> "+to_newick_pair(*tangle)
-                print s
-                print((dp.subgroup(gs)).gens())
-                print n_labelings
+                #print gq
+                #print gs
+                orbs = orbits(dp.subgroup(gs), gq, 'OnRight')
+                n_labelings = size(orbs)
+                #print orbs
+                #print n_labelings
                 total_n_labelings += n_labelings
                 tangles.append((tangle, dn_trees[s_t1], dn_trees[s_t2p],
                                n_labelings))
@@ -248,10 +260,9 @@ def make_tangles_extras(n, symmetric=True):
                 # d_shapes_values()[i] is the number of phylogenetic trees with
                 # shape i. Recall that binomial(q+1, 2) gives the number of
                 # unordered pairs of q items allowing repetition.
-                print "eqn", binomial(len(d_shapes.values()[i])+1, 2)
+                print "eqn", binomial(len(dn_shapes.values()[i])+1, 2)
             else:
                 print "eqn", (len(dn_shapes.values()[i])*len(dn_shapes.values()[j]))
-                assert(True)
                 # assert(
                 #     total_n_labelings ==
                 #     len(d_shapes.values()[i])*len(d_shapes.values()[j]))
