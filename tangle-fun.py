@@ -192,6 +192,17 @@ def load_tangles(fname):
     return list(reanimate_tangle(*x) for x in load(fname))
 
 
+def my_wreath(self, other):
+    G = self._gap_().WreathProduct(other)
+    D = PermutationGroup(gap_group=G)
+    from sage.groups.perm_gps.permgroup_morphism import PermutationGroupMorphism_from_gap
+    iota1 = PermutationGroupMorphism_from_gap(self,  D, G.Embedding(1))
+    iota2 = PermutationGroupMorphism_from_gap(other, D, G.Embedding(2))
+    return D, iota1, iota2
+
+
+
+
 # ltangles
 
 class SymmetricGroupSquared:
@@ -273,19 +284,9 @@ def make_tangles_extras(n, symmetric=True):
     for i in range(len(shapes)):
         print "Tree {} of {}".format(i+1, len(shapes))
         for j in range(0, len(shapes)):
-            # if symmetric and i > j:
-            #    # If symmetric we only have to generate unordered pairs of
-            #    # representatives.
-            #    continue
-            # elif symmetric and i == j:
-            #     # If symmetric and we have identical tree shapes, then we can
-            #     # rotate the trees around, "inverting" the coset.
-            #     cosets = inverse_unique_double_cosets(fS, shape_autos[i])
-            # else:
             # Enumerate all double cosets.
             A1 = shape_autos[i]
             A2 = shape_autos[j]
-
 
             # Now these are _labeled_ tangles.
             cosets = fS2.right_cosets(A1, A2)
@@ -293,7 +294,6 @@ def make_tangles_extras(n, symmetric=True):
                 tangle = (shapes[i], shapes[j],
                           fS2.double_coset_of_right_coset(c))
                 (s_t1, s_t2p) = to_newick_pair(*tangle).split("\t")
-                print ">>> "+to_newick_pair(*tangle)
                 tangles.append((tangle, dn_trees[s_t1], dn_trees[s_t2p],
                                0))
             print "tot", size(cosets)

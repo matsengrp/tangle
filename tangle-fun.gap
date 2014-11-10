@@ -62,3 +62,16 @@ InverseUniqueDoubleCosets := function(G, U)
     od;
     return cosets{uniques};;
 end;;
+
+
+g:=Group((1,2,3,4),(1,2));;n:=Subgroup(g,[(1,2)(3,4),(1,3)(2,4)]);;
+hom:=NaturalHomomorphismByNormalSubgroup(g,n);
+
+
+g:=Group((1,2,3),(1,2));
+p:=SymmetricGroup(2);
+w:=WreathProduct(g,p);
+
+
+
+Size(ImagesSource(hom));
