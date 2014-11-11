@@ -4,7 +4,7 @@ from sage.all import gap
 # Depends on curvature/tree-fun.py
 
 gap.eval("""
-Read("tangle-fun.gap");
+Read("tangle-fun.g");
 """)
 
 
@@ -290,7 +290,10 @@ def make_tangles_extras(n, symmetric=True):
 
             # Now these are _labeled_ tangles.
             cosets = fS2.right_cosets(A1, A2)
+            print(gap(A1))
+            print(gap(A2))
             for c in cosets:
+                print(c)
                 tangle = (shapes[i], shapes[j],
                           fS2.double_coset_of_right_coset(c))
                 (s_t1, s_t2p) = to_newick_pair(*tangle).split("\t")
