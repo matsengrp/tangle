@@ -1,5 +1,4 @@
 from collections import OrderedDict
-from itertools import product
 from sage.all import gap
 # Depends on curvature/tree-fun.py
 
@@ -73,6 +72,15 @@ def wreath_square(G):
 
 def embedded_wreath_square_symmetries(G, A1, A2):
     return gap.function_call('EmbeddedWreathSquareSymmetries', [G, A1, A2])
+
+
+def perm_pair_of_wreath_elt(n, g):
+    return [p.sage() for p in gap.function_call('PermPairOfWreathElt', [n, g])]
+
+
+def str_of_wreath_elt(n, g):
+    return "\t".join(
+        [''.join([str(i) for i in l]) for l in perm_pair_of_wreath_elt(n, g)])
 
 
 def double_coset_as_list(coset):
@@ -200,70 +208,7 @@ def load_tangles(fname):
     return list(reanimate_tangle(*x) for x in load(fname))
 
 
-def my_wreath(self, other):
-    G = self._gap_().WreathProduct(other)
-    D = PermutationGroup(gap_group=G)
-    from sage.groups.perm_gps.permgroup_morphism import PermutationGroupMorphism_from_gap
-    iota1 = PermutationGroupMorphism_from_gap(self,  D, G.Embedding(1))
-    iota2 = PermutationGroupMorphism_from_gap(other, D, G.Embedding(2))
-    return D, iota1, iota2
-
-
-
-
-# ltangles
-
-class SymmetricGroupSquared:
-    def __init__(self, n):
-        self.n = n
-        self.fS = SymmetricGroup(n)
-        self.dp, self.i1, self.i2, self.pr1, self.pr2 = self.fS.direct_product(self.fS)
-
-    def element(self, g):
-        return self.dp(g)
-
-    def subgroup(self, gl):
-        return self.dp.subgroup(gl)
-
-    def ie1(self, g):
-        return self.i1(self.element(g))
-
-    def ie2(self, g):
-        return self.i2(self.element(g))
-
-    def isubgroups(self, U1, U2):
-        return self.subgroup(
-            [self.i1(u) for u in U1] + [self.i2(u) for u in U2])
-
-    def estr(self, g):
-        """
-        Make a string of an element.
-        """
-        def to_str(h):
-            d = h.dict()
-            return ''.join([str(d[i]) for i in range(1, self.n+1)])
-        return "\t".join([to_str(self.pr1(g)), to_str(self.pr2(g))])
-
-    def right_coset(self, U1, U2, g):
-        return right_coset(self.isubgroups(U1, U2), g)
-
-    def right_cosets(self, U1, U2):
-        return right_cosets(self.dp, self.isubgroups(U1, U2))
-
-    def mu(self, g):
-        """
-        mu is the mapping between the two trees.
-        """
-        return inverse(self.pr1(g))*self.pr2(g)
-
-    def double_coset_of_right_coset(self, U):
-        gens = generators_of_group(acting_domain(U))
-        U1 = self.fS.subgroup(self.pr1(g) for g in gens)
-        U2 = self.fS.subgroup(self.pr2(g) for g in gens)
-        return double_coset(U1, self.mu(representative(U)), U2)
-
-
-def make_tangles_extras(n, symmetric=True, labeled=False):
+def make_tangles_extras(n, symmetric=True):
     """
     Make all the tangles with n leaves, along with the number of labeled
     tangles isomorphic to that tangle, and the indices of the mu = id version
@@ -271,7 +216,8 @@ def make_tangles_extras(n, symmetric=True, labeled=False):
     symmetric determines if we should consider all ordered or unordered pairs
     of trees.
     """
-    fS2 = SymmetricGroupSquared(n)
+    fS = SymmetricGroup(n)
+
     trees = enumerate_rooted_trees(n)
     # So that we can recognize trees after acting on t2 by mu^{-1}.
     # `dn` is short for a dictionary keyed on Newick strings.
@@ -286,7 +232,6 @@ def make_tangles_extras(n, symmetric=True, labeled=False):
             shapes.append(trees[i])
             dn_shapes[shape_i] = [i]
     shape_autos = [leaf_autom_group(s) for s in shapes]
-    newick_shapes = dn_shapes.keys()
     # Iterate over all pairs of tree shape representatives.
     tangles = []
     for i in range(len(shapes)):
@@ -295,28 +240,41 @@ def make_tangles_extras(n, symmetric=True, labeled=False):
             # Enumerate all double cosets.
             A1 = shape_autos[i]
             A2 = shape_autos[j]
-
-            # Now these are _labeled_ tangles.
-            cosets = fS2.right_cosets(A1, A2)
-            print(gap(A1))
-            print(gap(A2))
+            if symmetric and i > j:
+                # If symmetric we only have to generate unordered pairs of
+                # representatives.
+                continue
+            elif symmetric and i == j:
+                # If symmetric and we have identical tree shapes, then we can
+                # rotate the trees around, "inverting" the coset.
+                cosets = inverse_unique_double_cosets(fS, A1)
+            else:
+                # Enumerate all double cosets.
+                cosets = double_cosets(fS, A1, A2)
+            print to_newick(shapes[i]) + '\t' + to_newick(shapes[j])
             for c in cosets:
-                print(c)
-                tangle = (shapes[i], shapes[j],
-                          fS2.double_coset_of_right_coset(c))
+                tangle = (shapes[i], shapes[j], c)
                 (s_t1, s_t2p) = to_newick_pair(*tangle).split("\t")
                 tangles.append((tangle, dn_trees[s_t1], dn_trees[s_t2p],
                                0))
-            print "tot", size(cosets)
-            if symmetric and i == j:
-                # d_shapes_values()[i] is the number of phylogenetic trees with
-                # shape i. Recall that binomial(q+1, 2) gives the number of
-                # unordered pairs of q items allowing repetition.
-                print "eqn", binomial(len(dn_shapes.values()[i])+1, 2)
-            else:
-                print "eqn", (len(dn_shapes.values()[i])*len(dn_shapes.values()[j]))
-                # assert(
-                #     total_n_labelings ==
-                #     len(d_shapes.values()[i])*len(d_shapes.values()[j]))
-            print ""
+            count_labeled_tangles(n, A1, A2, symmetric and (i == j))
     return tangles
+
+
+def count_labeled_tangles(n, A1, A2, really_symmetric):
+    fS = SymmetricGroup(n)
+    W = wreath_square(fS)
+    E = embedded_wreath_square_symmetries(W, A1, A2)
+
+    if really_symmetric:
+        cosets = double_cosets(W, E, E)
+        for c in cosets:
+            print str_of_wreath_elt(n, representative(c))
+        print "tot", size(cosets)
+    else:
+        cosets = right_cosets(W, E)
+        for c in cosets:
+            print str_of_wreath_elt(n, representative(c))
+        print "totx", size(cosets)
+    print ""
+    return size(cosets)

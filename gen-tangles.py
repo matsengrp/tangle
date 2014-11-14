@@ -7,7 +7,7 @@ load("curvature/tree-fun.py")
 load("tangle-fun.py")
 
 for n in (int(a) for a in sys.argv[1:]):
-    tangles_extras = make_tangles_extras(n, symmetric=False)
+    tangles_extras = make_tangles_extras(n, symmetric=True)
     tangles = [extra[0] for extra in tangles_extras]
     tangle_base = "tangle{}".format(n)
     sage.structure.sage_object.save(

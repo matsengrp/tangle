@@ -13,8 +13,19 @@ EmbeddedWreathSymmetries := function(W, A1, A2)
            Image(Embedding(W,3))
            ]);
 end;;
-embed:=EmbeddedWreathSymmetries(W, Subgroup(g,[(1,2)]), Subgroup(g,[(1,2)]));
+embed:=EmbeddedWreathSymmetries(W, Subgroup(W,[(1,2)]), Subgroup(W,[(1,2)]));
 
+x:=Subgroup(W,[(5,6)]);
+
+(5,6) = GeneratorsOfGroup(x)[1];
+
+
+PermOfWreathElt := function(n, g)
+    local t;
+    t := OnTuples([1..(2*n)], g);
+    return [t{[1..n]}, t{[(n+1)..(2*n)]} - n];
+end;;
+PermOfWreathElt(3,(5,6));
 
 i1 := Embedding(w,1);
 i2 := Embedding(w,2);
