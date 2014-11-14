@@ -67,6 +67,14 @@ def stabilizer(G, x, action):
     return gap.function_call('Stabilizer', [G, x, action])
 
 
+def wreath_square(G):
+    return gap.function_call('WreathSquare', G)
+
+
+def embedded_wreath_square_symmetries(G, A1, A2):
+    return gap.function_call('EmbeddedWreathSquareSymmetries', [G, A1, A2])
+
+
 def double_coset_as_list(coset):
     """
     Turn a double coset into a list of its elements.
@@ -255,7 +263,7 @@ class SymmetricGroupSquared:
         return double_coset(U1, self.mu(representative(U)), U2)
 
 
-def make_tangles_extras(n, symmetric=True):
+def make_tangles_extras(n, symmetric=True, labeled=False):
     """
     Make all the tangles with n leaves, along with the number of labeled
     tangles isomorphic to that tangle, and the indices of the mu = id version

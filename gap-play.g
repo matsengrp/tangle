@@ -5,15 +5,16 @@
 http://en.wikipedia.org/wiki/Wreath_product
 
 
-g:=SymmetricGroup(3);
-p:=SymmetricGroup(2);
-w:=WreathProduct(g,p);
+fS:=SymmetricGroup(3);
+W:=WreathProduct(fS,SymmetricGroup(2));
+EmbeddedWreathSymmetries := function(W, A1, A2)
+      return Union([Image(Embedding(W,1), A1),
+           Image(Embedding(W,2), A2),
+           Image(Embedding(W,3))
+           ]);
+end;;
+embed:=EmbeddedWreathSymmetries(W, Subgroup(g,[(1,2)]), Subgroup(g,[(1,2)]));
 
-dp:=DirectProduct(g,g);
-
-RightCoset(Group( [ (), (4,5), (1,2) ] ),(5,6));
-a:=Subgroup(w, [ (), (4,5), (1,2) ] );
-RightCosets(w,a);
 
 i1 := Embedding(w,1);
 i2 := Embedding(w,2);
@@ -28,11 +29,15 @@ Union([Image(i1, Subgroup(g,[(1,2)])),
 c := DoubleCosets(w, a, a);
 Size(c);
 
-
 c := RightCosets(w, a);
 Size(c);
 
+RightCoset(a,(1,2)) = RightCoset(a,(4,5));
 
+(1,2,3) * tau;
+
+tauL := GeneratorsOfGroup(Image(Embedding(w,3)));
+tau := tauL[1];
 
 b :=
 Subgroup(w,
