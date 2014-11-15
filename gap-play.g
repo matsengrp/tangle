@@ -5,20 +5,18 @@
 http://en.wikipedia.org/wiki/Wreath_product
 
 
-fS:=SymmetricGroup(3);
-W:=WreathProduct(fS,SymmetricGroup(2));
-EmbeddedWreathSymmetries := function(W, A1, A2)
-      return Union([Image(Embedding(W,1), A1),
-           Image(Embedding(W,2), A2),
-           Image(Embedding(W,3))
-           ]);
+EmbeddedWreathSquareSymmetries := function(W, A1, A2)
+    local A1tilde, A2tilde, tau;
+    A1tilde := Image(Embedding(W,1), A1);
+    A2tilde := Image(Embedding(W,2), A2);
+    tau := Image(Embedding(W,3));
+    return [Group(Union([A1tilde, A2tilde, tau])), [tau]];
 end;;
-embed:=EmbeddedWreathSymmetries(W, Subgroup(W,[(1,2)]), Subgroup(W,[(1,2)]));
+fs:=SymmetricGroup(3);
+w:=WreathProduct(fs,SymmetricGroup(2));
+e:=EmbeddedWreathSymmetries(w, Subgroup(w,[(1,2)]), Subgroup(w,[(1,2)]));
 
 x:=Subgroup(W,[(5,6)]);
-
-(5,6) = GeneratorsOfGroup(x)[1];
-
 
 PermOfWreathElt := function(n, g)
     local t;
