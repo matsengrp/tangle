@@ -23,7 +23,8 @@
 \newcommand{\ptangle}{\mathsf{X}}
 \newcommand{\tangle}{\mathsf{Y}}
 \newcommand{\ltangle}{\mathsf{L}}
-\newcommand{\id}{()}
+\newcommand{\id}{\iota}
+\newcommand{\wrtwo}{\wr C_2}
 
 % arxivness
 \newcommand{\arxiv}[1]{#1}
@@ -170,10 +171,10 @@ We can also consider an symmetric tanglegram, or \emph{stanglegram}, by identify
 
 One might also consider a notion of \emph{labeled $n$-tanglegram} $(l_1, l_2, \pairing)$ in which $l_1$ and $l_2$ are phylogenetic (leaf-labeled) trees on the leaf set $\{1, \ldots, n\}$, and $\pairing \in \fS_n$ as before.
 Let $\ltangle_n$ denote the set of labeled $n$-tanglegrams.
-This is perhaps the most natural definition in terms of phylogenetics.
+We will sometimes call labeled tanglegrams ``ltanglegrams.''
 
 
-\section{Rooted tanglegram symmetries}
+\section{Tanglegram symmetries}
 We will describe the symmetries of tanglegrams in terms of symmetries of the trees from which they are built.
 We will use cycle notation for elements of the symmetric group, such as $(1\ 2) (3\ 4)$, which can be distinguished from phylogenetic trees in Newick format \cite{wiki:newick} such as $((1,2),(3,4));$, because symmetric group elements do not have commas or a trailing semicolon.
 In order to conform to the convention used in GAP \cite{GAP4} and hence by SAGE \cite{SteinJoyner2005}, \emph{we will use the leftmost first convention of writing products in the symmetric group.}
@@ -201,30 +202,46 @@ This map is thus a bijection onto its image, and so we will use the two represen
 For example, we will refer often to the coset of a tanglegram.
 We note that the various planar embeddings of the tanglegram graph are equivalent to choices of representatives $\pairing'$ of the coset tanglegram (i.e.\ $\pairing'$ such that $\aut(t_1) \pairing' \aut(t_2) = C$) given a choice of numbering for $t_1$.
 
-One can also specify a tanglegram by via a labeled tanglegram, i.e.\ a pair of labeled trees $\ell_1, \ell_2$ and an element of the symmetric group.
-However, the extra symmetries of tanglegrams mean that connecting corresponding leaves gives a many-to-one map.
-This map is analogous to the many-to-one map of elements of the symmetric group and trees of a given unlabeled topology.
-We will next enumerate the unique labeled tanglegrams.
+define stanglegram.
 
-Assume a fixed planar embedding of a given $n$-tanglegram, and consider various labelings of it.
-The symmetric group acts by relabeling the leaves, and each such action defines a single tanglegram.
-Any stabilizer of a given labeling can be expressed as a product of automorphisms of $t_1$ and the conjugate of automorphisms of $t_2$ via $\pairing$, and any such product is certainly a stabilizer.
-Thus, by the orbit-stabilizer theorem, the number of labeled tanglegrams that correspond to a given tanglegram $(t_1, t_2, \pairing)$ is
-\[
-|\fS_n| / |\langle \aut(t_1), \pairing \aut(t_2) \pairing^{-1} \rangle|.
-\]
-For stanglegrams the number is smaller due the additional symmetry of exchanging $t_1$ and $t_2$:
-\[
-|\fS_n| / |\langle \aut(t_1), \pairing \aut(t_2) \pairing^{-1}, \pairing \rangle|.
-\]
-Each labeled tanglegram specifies a unique labeling for the leaves of $t_1$ and $t_2$, which is well defined because the automorphism groups of $t_1$ and $t_2$ sit inside the automorphism group of the tanglegram.
-However, again,
+[What about flipping/rotating symmetry?]
+
+\section{Labeled tanglegram symmetries}
+We are also interested in symmetries of labeled tanglegrams, and follow a similar path through planar tanglegrams to describe them.
+Labeled planar $n$-tanglegrams with a given pair of tree shapes are in one to one correspondence with pairs of permutations.
+
+Let us begin by assuming a planar tree shape $t_1$ on $n$.
+The labelings of this planar tree shape are equivalent to permutations $\fS_n$, and the group composition law can be thought of as doing relabeling.
+The automorphisms of this planar tree shape giving the same (non-planar) labeled phylogenetic tree can then be thought of as a subgroup $\aut(t_1)$ of $\fS_n$ as above which acts on the left of $\fS_n$.
+In this way the (non-planar) labeled phylogenetic trees with the given shape are equivalent to the right cosets $A(t_1) \sigma$ for $\sigma \in \fS_n$.
+
+Similarly, given two tree shapes, the planar labeled tangles with those tree shapes are given by elements of the direct product $\fS_n \times \fS_n$.
+Then the (non-planar) tangles are again equivalent to the right cosets $(\aut(t_1), \aut(t_2)) (\sigma_1, \sigma_2)$ for $\sigma_1, \sigma_2 \in \fS_n$.
+
+Enumerating labeled stanglegrams takes a little more work.
+In order to enumerate these objects it is convenient to use the notion of a \emph{wreath product} with the two-element group $C_2$.
+Because we will only need this wreath product, I will just define this special case.
 
 Thus we have three ways of describing tanglegrams:
 first, the classical Definition~\ref{def:tanglegram} in terms of two non-leaf-labeled trees and a bijection $\phi$,
 second, the Observation~\ref{obs:cosetMap} definition in terms of two non-leaf-labeled trees and a coset $C$,
 third, equivalence classes of two phylogenetic (leaf-labeled) trees and an element of the symmetric group.
 This last definition will be useful for concreteness.
+
+Given a group $G$, the wreath product of $G$ with $C_2$, denoted $G \wrtwo$, can be described as the direct product $G \times G \times C_2$ with the following ``twisted'' multiplication table, where $\tau$ is the non-identity element of $C_2$:
+\begin{align*}
+(a, b, \id) (c, d, \id) & = (ac, bd, \id) \\
+(a, b, \id) (c, d, \tau) & = (ac, bd, \tau) \\
+(a, b, \tau) (c, d, \id) & = (ad, bc, \tau) \\
+(a, b, \tau) (c, d, \tau) & = (ad, bc, \id).
+\end{align*}
+
+We will use this concept to enumerate labeled stanglegrams up to automorphism when the tree shapes are identical.
+However, first we note that $G \wrtwo$ is equivalent to the planar tanglegrams which have identifying colors for the edges of the tree, but which we can flip upside down.
+This flipping comes from $\tau$, and to be clear, the edge coloring allows us to see the difference between $(\rho_1, \rho_2, \tau)$ and $(\rho_2, \rho_1, \id)$.
+Because flipping the tree before relabeling doesn't do anything, the collection of edge colored tanglegrams is equivalent to the right cosets $<(\aut_1, \aut_2), \tau> \, (\sigma_1, \sigma_2)$ for $\sigma_1, \sigma_2 \in \fS_n$.
+Now, if we remove the color, that is equivalent to double cosets
+$\langle(\aut_1, \aut_2), \tau \rangle \, (\sigma_1, \sigma_2) \, \langle \tau \rangle$ for $\sigma_1, \sigma_2 \in \fS_n$.
 
 
 \section{Enumeration}
