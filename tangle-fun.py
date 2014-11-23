@@ -266,15 +266,12 @@ def count_labeled_tangles(n, symmetric=True, verbose=False):
     fS = SymmetricGroup(n)
     W = wreath_square(fS)
     (trees, shapes, shape_autos, dn_trees) = trees_shapes_autos_dn(n)
+    right_fS_cosets = [right_cosets(fS, a) for a in shape_autos]
 
     total_count = 0
     for i in range(len(shapes)):
         print "Tree {} of {}".format(i+1, len(shapes))
         for j in range(0, len(shapes)):
-            A1 = shape_autos[i]
-            A2 = shape_autos[j]
-            E, F = embedded_wreath_square_symmetries(W, A1, A2)
-            print to_newick(shapes[i]) + '\t' + to_newick(shapes[j])
             if symmetric and i > j:
                 # If symmetric we only have to generate unordered pairs of
                 # representatives.
@@ -282,20 +279,16 @@ def count_labeled_tangles(n, symmetric=True, verbose=False):
             elif symmetric and i == j:
                 # If symmetric and we have identical tree shapes, then we can
                 # rotate the trees around, "inverting" the coset.
-                cosets = double_cosets(W, E, F)
-                print size(cosets)
+                E, F = embedded_wreath_square_symmetries(W, shape_autos[i], shape_autos[j])
+                total_count += size(double_cosets(W, E, F))
+                if verbose:
+                    print to_newick(shapes[i]) + '\t' + to_newick(shapes[j])
+                    print "has {} cosets".format(size(cosets))
+                    for c in double_cosets(W, E, F):
+                        print str_of_wreath_elt(n, representative(c))
             else:
-                # Enumerate all double cosets.
-                cosets = right_cosets(W, E)
-                print size(cosets)
-                print size(right_cosets(fS, A1)) * size(right_cosets(fS, A2))
-                print ""
-            total_count += size(cosets)
-
-            if verbose:
-                print to_newick(shapes[i]) + '\t' + to_newick(shapes[j])
-                print "has {} cosets".format(size(cosets))
-                for c in cosets:
-                    print str_of_wreath_elt(n, representative(c))
+                # This is the number of right cosets of the inclusion of A1 and
+                # A2 into the direct product of fS with itself.
+                total_count += size(right_fS_cosets[i]) * size(right_fS_cosets[j])
 
     return total_count

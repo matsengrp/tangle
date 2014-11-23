@@ -206,6 +206,13 @@ define stanglegram.
 
 [What about flipping/rotating symmetry?]
 
+Thus we have three ways of describing tanglegrams:
+first, the classical Definition~\ref{def:tanglegram} in terms of two non-leaf-labeled trees and a bijection $\phi$,
+second, the Observation~\ref{obs:cosetMap} definition in terms of two non-leaf-labeled trees and a coset $C$,
+third, equivalence classes of two phylogenetic (leaf-labeled) trees and an element of the symmetric group.
+This last definition will be useful for concreteness, and we investigate it next.
+
+
 \section{Labeled tanglegram symmetries}
 We are also interested in symmetries of labeled tanglegrams, and follow a similar path through planar tanglegrams to describe them.
 Labeled planar $n$-tanglegrams with a given pair of tree shapes are in one to one correspondence with pairs of permutations.
@@ -217,16 +224,11 @@ In this way the (non-planar) labeled phylogenetic trees with the given shape are
 
 Similarly, given two tree shapes, the planar labeled tangles with those tree shapes are given by elements of the direct product $\fS_n \times \fS_n$.
 Then the (non-planar) tangles are again equivalent to the right cosets $(\aut(t_1), \aut(t_2)) (\sigma_1, \sigma_2)$ for $\sigma_1, \sigma_2 \in \fS_n$.
+Indeed, each pair of labeled phylogenetic trees defines a labeled tangle just by connecting leaves with the same label.
 
 Enumerating labeled stanglegrams takes a little more work.
 In order to enumerate these objects it is convenient to use the notion of a \emph{wreath product} with the two-element group $C_2$.
-Because we will only need this wreath product, I will just define this special case.
-
-Thus we have three ways of describing tanglegrams:
-first, the classical Definition~\ref{def:tanglegram} in terms of two non-leaf-labeled trees and a bijection $\phi$,
-second, the Observation~\ref{obs:cosetMap} definition in terms of two non-leaf-labeled trees and a coset $C$,
-third, equivalence classes of two phylogenetic (leaf-labeled) trees and an element of the symmetric group.
-This last definition will be useful for concreteness.
+Because we will only need this particular wreath product, I will just define this special case.
 
 Given a group $G$, the wreath product of $G$ with $C_2$, denoted $G \wrtwo$, can be described as the direct product $G \times G \times C_2$ with the following ``twisted'' multiplication table, where $\tau$ is the non-identity element of $C_2$:
 \begin{align*}
@@ -277,6 +279,19 @@ For this study, I enumerated tanglegrams by taking triples $(s_i, s_j, C)$, wher
 To take the extra symmetry induced by stanglegrams into account, I wrote some GAP code to look for tanglegrams that remained the same after inversion on the basis of representatives (which have an easily defined total order), which was necessary because a naive $O(n^2)$ search on double cosets (for which a total order is not available in GAP, but see \cite{Hulpke2003-em}) was too slow.
 There are lots of stanglegrams (Figure~\ref{FIGcount}), but significantly fewer than the number of pairs of distinct phylogenetic trees:
 \FIGcount
+
+In order to enumerate the labeled tanglegrams in terms of the tanglegrams as thus defined, it is easy to define a map that corresponds to de-labeling a map.
+Indeed, the map
+\[
+(\aut(t_1), \aut(t_2)) (\sigma_1, \sigma_2) \mapsto \aut(t_1) \sigma_1, \sigma_2^{-1} \aut(t_2)
+\]
+from right cosets of $\fS_n \times \fS_n$ to double cosets of $\fS_n$ is well defined.
+These double cosets of $\fS_n$ give exactly the mappings $\pairing$ defining the possible tangles.
+Thus, the pre-image of this map for a given tangle gives the possible labelings of that tangle.
+
+In the case of stanglegrams when the trees have identical shapes, these objects are identified as elements of the wreath product $\fS_n \wrtwo$.
+There is still a well-defined map of these objects to the collection of double cosets $\aut(t) \pairing \aut(t)$ which are unique up to inversion of $\pairing$.
+As in the previous case, the pre-image of this map for a given stangle gives the possible labelings of that tangle.
 
 
 \section{Action of the tree normalizers on tanglegrams}
