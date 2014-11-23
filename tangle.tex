@@ -278,19 +278,6 @@ To take the extra symmetry induced by stanglegrams into account, I wrote some GA
 There are lots of stanglegrams (Figure~\ref{FIGcount}), but significantly fewer than the number of pairs of distinct phylogenetic trees:
 \FIGcount
 
-As a final aside, we note that given a group $G$ with subgroups $H$ and $K$, it is straightforward to find the size of a given double coset $HgK$.
-In our case, this corresponds to the number of planar embeddings of a given tanglegram.
-First observe that each of the elements of the right coset $Hg$ is distinct by definition, and then consider the right group action of $K$ on right cosets $Hg$.
-It is straightforward to check that the stabilizer of this action are exactly the elements of $K$ in $g^{-1} H g$.
-Take $\bar K$ to be a set of orbit representatives of the quotient of the coset action of $K$ (note that because $g^{-1} H g$ may or may not be normal in $K$, $\bar K$ may or may not be a group).
-By the definition of quotient, there is a one-to-one correspondence between elements of the double coset $HgK$ and elements of the form $hgk$ for $h \in H$ and $k \in \bar K$.
-By the orbit-stabilizer theorem we get that the number of elements of the double coset $HgK$ is
-\begin{equation}
-\label{eq:doubleCosetOrder}
-|HgK| = \frac{|H| |K|}{|g^{-1} H g \cap K|}
-\end{equation}
-(this is problem number 40 in section 2.9 of \cite{herstein2006topics}).
-
 
 \section{Action of the tree normalizers on tanglegrams}
 Recall that the \emph{normalizer} $N_H(G)$ of a subgroup $H$ in $G$ is the subgroup of elements $g \in G$ such that $gHg^{-1} = H$.
