@@ -52,8 +52,7 @@
 \begin{figure}
   \arxiv{\includegraphics[width=5in]{figures/relabeling-example}}
 \caption{\
-  Two equivalent representations of the same tanglegrams.
-  These two representations can be thought of as two planar embeddings of the same graph.
+  Two equivalent planar embeddings of the same tanglegram.
   Alternatively, they can be thought of as two permutations that are equivalent after taking symmetries of $\ell_2$ into account, or more formally two elements of the symmetric group which are equivalent under the action of the leaf automorphism group of $\ell_2$.
 }
 \end{figure}
@@ -82,7 +81,7 @@
 \date{\today}
 
 \begin{abstract}
-Many interesting discrete mathematics problems concerning phylogenetic trees are defined in terms of the relative labeling of pairs of rooted leaf-labeled trees.
+Many interesting problems in the discrete mathematics of phylogenetic trees are defined in terms of the relative labeling of pairs of rooted leaf-labeled trees.
 These relative labelings are naturally formalized as so-called ``tanglegrams.''
 Although there has been considerable work on planar embeddings of tanglegrams, many questions remain concerning their symmetries.
 Understanding symmetries of tanglegrams would give information on how many problems on relatively labeled pairs of trees there are, open up the possibility for amortized algorithms, and reveal natural symmetries of spaces associated with such problems.
@@ -128,11 +127,8 @@ We use the SAGE \cite{SteinJoyner2005} and GAP \cite{GAP4} mathematics software 
 We note that even if one was not interested in group-theoretic properties as such, and might instead just be interested in a unique list of tanglegrams, it would be worth using a group theoretic approach because comparing group cosets (defined below) is inherently faster than checking graph isomorphism.
 
 \section{Formalism}
-Define an \emph{orientation} of edges contacting a node to be a choice of cyclic ordering of the edges.
-We define a \emph{planar embedding} of a phylogenetic tree as a choice of orientation for every node.
-This is equivalent to the intuitive definition because a collection of orientations can be used to define a map of the tree to the plane by respecting every choice of orientation in the mapping, and each map of the tree to the plane gives a collection of orientations by enumerating the edges around a node in a, for example, clockwise orientation.
-We will say that they are isomorphic if they are graph isomorphic, which doesn't take planar embedding into account.
-We will say that two embedded phylogenetic trees are identical if they are isomorphic and have the same orientations.
+We use the term \emph{planar embedding} as it is used in graph theory.
+If not otherwise specified, ``isomorphic'' applied to trees refers to usual graph isomorphism rather than an isomorphism of embedded trees.
 
 We will start with a notion of a \emph{planar} tanglegram, which is a slight simplification of the notion of a \emph{drawing} used by previous authors \cite{Venkatachalam2010-zh} which will be convenient for our purposes.
 Let $\fS_n$ denote the symmetric group on $n$ items.
@@ -142,16 +138,6 @@ A rooted (resp. unrooted) \emph{planar $n$-tanglegram} is an ordered triple $(p_
 Let $\ptangle_n$ denote the set of planar $n$-tanglegrams.
 \end{definition}
 
-In order to be able to uniquely describe elements of the symmetric group, we will use the convention that the first tree in planar tanglegrams is labeled counter-clockwise, and the second tree is labeled clockwise, so that they end up looking like so
-
-\begin{verbatim}
-     /-- 3        3 --\
-p1   \            2 --/\   p2
-      \/-- 2            \
-       \-- 1        1 --/
-\end{verbatim}
-
-[Perhaps we always want to draw them in a vertical orientation?]
 
 \begin{definition}
 \label{def:tanglegram}
@@ -202,15 +188,13 @@ This map is thus a bijection onto its image, and so we will use the two represen
 For example, we will refer often to the coset of a tanglegram.
 We note that the various planar embeddings of the tanglegram graph are equivalent to choices of representatives $\pairing'$ of the coset tanglegram (i.e.\ $\pairing'$ such that $\aut(t_1) \pairing' \aut(t_2) = C$) given a choice of numbering for $t_1$.
 
-define stanglegram.
-
-[What about flipping/rotating symmetry?]
-
 Thus we have three ways of describing tanglegrams:
 first, the classical Definition~\ref{def:tanglegram} in terms of two non-leaf-labeled trees and a bijection $\phi$,
 second, the Observation~\ref{obs:cosetMap} definition in terms of two non-leaf-labeled trees and a coset $C$,
 third, equivalence classes of two phylogenetic (leaf-labeled) trees and an element of the symmetric group.
-This last definition will be useful for concreteness, and we investigate it next.
+This last definition will be useful for concreteness, and we investigate it in the next section.
+
+For stanglegrams, there is an additional symmetry coming from inverting $\pairing$.
 
 
 \section{Labeled tanglegram symmetries}
@@ -283,7 +267,7 @@ There are lots of stanglegrams (Figure~\ref{FIGcount}), but significantly fewer 
 In order to enumerate the labeled tanglegrams in terms of the tanglegrams as thus defined, it is easy to define a map that corresponds to de-labeling a map.
 Indeed, the map
 \[
-(\aut(t_1), \aut(t_2)) (\sigma_1, \sigma_2) \mapsto \aut(t_1) \sigma_1, \sigma_2^{-1} \aut(t_2)
+(\aut(t_1), \aut(t_2)) (\sigma_1, \sigma_2) \mapsto \aut(t_1) \sigma_1 \sigma_2^{-1} \aut(t_2)
 \]
 from right cosets of $\fS_n \times \fS_n$ to double cosets of $\fS_n$ is well defined.
 These double cosets of $\fS_n$ give exactly the mappings $\pairing$ defining the possible tangles.
