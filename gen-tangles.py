@@ -3,7 +3,7 @@
 import argparse
 from sys import stdout
 from sage.all import *
-load("curvature/tree-fun.py")
+load("all-hail-sage/tree-fun.py")
 load("tangle-fun.py")
 
 parser = argparse.ArgumentParser(description='Generate tangles',

@@ -4,7 +4,7 @@ import os
 from sage.all import *
 from itertools import combinations
 
-load("curvature/tree-fun.py")
+load("all-hail-sage/tree-fun.py")
 load("tangle-fun.py")
 
 

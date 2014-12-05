@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-from ggplot import ggplot, ggsave, aes, geom_line, scale_y_log10
+import ggplot as gg
 from pandas import DataFrame, melt
 
 
@@ -18,7 +18,7 @@ n_tangles = []
 n_trees = [n_trees_f(i) for i in sizes]
 
 for i in sizes:
-    with open('../tangletypes/tangle{}.tre'.format(i), 'r') as trees:
+    with open('../rooted-symmetric/tangle{}.idx'.format(i), 'r') as trees:
         n_tangles.append(len(list(trees)))
 
 df = DataFrame({'sizes': sizes, 'n_tangles': n_tangles, 'n_trees': n_trees})
@@ -26,7 +26,13 @@ df = DataFrame({'sizes': sizes, 'n_tangles': n_tangles, 'n_trees': n_trees})
 molten = melt(df, id_vars=['sizes'])
 print(molten)
 
-p = ggplot(aes(x='sizes', y='value', color='variable'), data=molten)
-p = p + geom_line() + scale_y_log10()
 
-ggsave(p, "count.svg")
+theme = gg.theme_seaborn()
+theme._rcParams['axes.labelsize'] = 'x-large'
+theme._rcParams['legend.fancybox'] = 'False'
+theme._rcParams['xtick.labelsize'] = 'x-large'
+theme._rcParams['ytick.labelsize'] = 'x-large'
+p = gg.ggplot(gg.aes(x='sizes', y='value', color='variable'), data=molten)
+p = p + gg.geom_line() + gg.scale_y_log10() + theme
+
+gg.ggsave(p, 'count.svg')

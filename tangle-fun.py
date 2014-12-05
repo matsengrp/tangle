@@ -1,6 +1,6 @@
 from collections import OrderedDict
 from sage.all import gap
-# Depends on curvature/tree-fun.py
+# Depends on all-hail-sage/tree-fun.py
 
 gap.eval("""
 Read("tangle-fun.g");
