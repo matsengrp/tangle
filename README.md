@@ -1,5 +1,7 @@
 # tangle
 
+PDF version: <a href="https://www.sharelatex.com/github/repos/matsengrp/tangle"> <img src=https://www.sharelatex.com/github/repos/matsengrp/tangle/builds/latest/badge.svg> </a>
+
 Compile LaTeX using [SCons](http://scons.org/) using the `scons` command.
 The [todonotes](http://www.ctan.org/pkg/todonotes) package is required.
 
