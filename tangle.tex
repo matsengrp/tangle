@@ -208,8 +208,8 @@ For stanglegrams, there is an additional symmetry coming from inverting $\pairin
 
 
 \subsection{Tanglegram enumeration}
-In order to obtain a complete enumeration of tanglegrams, one can then collect all triples $(t_1, t_2, C)$ where $t_1$ and $t_2$ are tree shapes and $C$ enumerates double cosets of the form $\aut(t_1) \pairing \aut(t_2)$.
-The set of such double cosets does not appear to follow easily from any general theory, but double cosets can be enumerated efficiently by an algorithm in GAP \cite{GAP4}.
+In order to obtain a complete enumeration of tanglegrams, one can then collect all triples $(t_1, t_2, C)$ where $t_1$ and $t_2$ are tree shapes and $C$ ranges across double cosets of the form $\aut(t_1) \pairing \aut(t_2)$.
+The set of such double cosets does not appear to follow easily from any general theory, but double cosets can be enumerated efficiently by GAP \cite{GAP4}.
 One can also enumerate trees (with repetition) by finding a labeled representative phylogenetic tree for every tree shape, then for every phylogenetic tree using the bijection defined by leaves with the same label.
 This implies:
 \begin{observation}
@@ -221,17 +221,15 @@ Stanglegrams, i.e.\ symmetric tanglegrams as defined above, have further symmetr
 For these one can start by ordering the tree shapes and only taking tanglegrams where $t_1$ is smaller than or equal to $t_2$ in this ordering.
 In cases where $t_1 = t_2 = t$, we note that by exchanging the roles of $t_1$ and $t_2$ shows that $(t, t, \mu)$ is equivalent to $(t, t, \mu^{-1})$, meaning that we only need to take one of these for our enumeration.
 
-For this study, I enumerated tanglegrams by taking triples $(s_i, s_j, C)$, where $C$ is a one of the double cosets $\aut(s_i) \pairing \aut(s_j)$ enumerated by GAP.
-To take the extra symmetry induced by stanglegrams into account, I wrote some GAP code to look for tanglegrams that remained the same after inversion on the basis of representatives (which have an easily defined total order), which was necessary because a naive $O(n^2)$ search on double cosets (for which a total order is not available in GAP, but see \cite{Hulpke2003-em}) was too slow.
+To take the extra symmetry induced by stanglegrams into account, I wrote some GAP code to look for tanglegrams that remained the same after inversion on the basis of representatives (which have an easily defined total order), which was necessary because a na\"ive $O(n^2)$ search on double cosets (for which a total order is not available in GAP, but see \cite{Hulpke2003-em}) was too slow.
 There are lots of stanglegrams (Figure~\ref{FIGcount}), but significantly fewer than the number of pairs of distinct phylogenetic trees:
 \FIGcount
 
 
-
 \section{Labeled tanglegram symmetries}
-We are also interested in symmetries of labeled tanglegrams, and follow a similar path through planar tanglegrams to describe them.
+We are also interested in properties of labeled tanglegrams, and follow a similar path through planar labeled tanglegrams to describe them.
 Labeled planar $n$-tanglegrams with a given pair of tree shapes (i.e.\ elements of $\pi_\shape^{-1}(s_1, s_2)$ for some $s_1$ and $s_2$) are in one to one correspondence with pairs of permutations, in which we connect taxa with the same label to form a tanglegram.
-\emph{Note that this focus on labels is different from that in the previous section, in which the focus was on the bijection between the leaves.}
+\emph{Note that this focus on labels is different from that in the previous section, in which the focus was on the bijection between the leaves, and it will lead to a different set up in terms of group actions.}
 
 Let us begin by assuming a planar tree shape $t_1$ on $n$ taxa.
 The labelings of this planar tree shape are equivalent to permutations $\fS_n$, and the group composition law can be thought of as doing relabeling.
@@ -262,18 +260,18 @@ Each triple $(\sigma_1, \sigma_2, \id)$ relabels $t_1$ and $t_2$ via $\sigma_1$ 
 Flipping before relabeling with a pair of group elements effectively exchanges the order of the pair, which corresponds to the ``twisted'' product law in the wreath product.
 These represent all of the symmetries of such a labeled tanglegram.
 
-Because flipping the tree before labeling doesn't do anything (recall that tree shapes are identical), the collection of edge colored tanglegrams is equivalent to the right cosets $\langle \aut(t_1) \times \aut(t_2) \times \ZZ_2 \rangle \, (\sigma_1, \sigma_2)$ for $\sigma_1, \sigma_2 \in \fS_n$.
-Now, if we forget the difference between $t_1$ and $t_2$, say by removing colors from the edges, the set of tanglegrams is equivalent to double cosets
-$\langle \aut(t_1) \times \aut(t_2) \times \ZZ_2 \rangle \, (\sigma_1, \sigma_2) \, \langle {\id} \times {\id} \times \ZZ_2 \rangle$ for $\sigma_1, \sigma_2 \in \fS_n$.
+Because flipping the tree before relabeling doesn't do anything (recall that tree shapes are identical), the collection of edge colored tanglegrams is equivalent to the right cosets $\aut(t_1) \times \aut(t_2) \times \ZZ_2 \, (\sigma_1, \sigma_2, \id)$ for $\sigma_1, \sigma_2 \in \fS_n$.
+Now, if we forget the difference between $t_1$ and $t_2$, in our analogy by removing colors from the edges, the set of tanglegrams is equivalent to double cosets
+$\aut(t_1) \times \aut(t_2) \times \ZZ_2 \, (\sigma_1, \sigma_2, \id) \, {\id} \times {\id} \times \ZZ_2$ for $\sigma_1, \sigma_2 \in \fS_n$.
 
 
 \subsection{Labeled tanglegram enumeration}
 In order to enumerate the labeled tanglegrams in terms of the tanglegrams as thus defined, it is easy to define a map that corresponds to de-labeling a map.
 Indeed, the map
 \[
-(\aut(t_1), \aut(t_2)) (\sigma_1, \sigma_2) \mapsto \aut(t_1) \sigma_1 \sigma_2^{-1} \aut(t_2)
+\aut(t_1) \times \aut(t_2) \times \ZZ_2 \, (\sigma_1, \sigma_2, \id) \mapsto \aut(t_1) \sigma_1 \sigma_2^{-1} \aut(t_2)
 \]
-from right cosets of $\fS_n \times \fS_n$ to double cosets of $\fS_n$ is well defined.
+from right cosets of $\fS_n \times \fS_n \times \id$ to double cosets of $\fS_n$ is well defined.
 These double cosets of $\fS_n$ give exactly the mappings $\pairing$ defining the possible tanglegrams.
 Thus, the pre-image of this map for a given tangle gives the possible labelings of that tangle.
 
