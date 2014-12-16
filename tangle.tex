@@ -103,9 +103,9 @@ The SPR distance between two (phylogenetic, meaning leaf-labeled) trees $\ell_1$
 [We will use different letters to distinguish between the various tree concepts: $t$ for a graph-theoretic tree, $p$ for a tree embedded in the plane, and $\ell$ for a phylogenetic (i.e.\ leaf-labeled) tree.]
 \FIGspr
 
-Clearly the distance between two such trees does not depend on the actual labels of $\ell_1$ and $\ell_2$.
-For example, one could exchange numbers labeling the two trees with their corresponding taxonomic names.
-Or one could simply permute the numerical labels of the leaf nodes, which would result in the same distance if the permutation was applied identically on both the starting and ending trees (and trees on the shortest SPR path between the two).
+Let's say that we wanted to calculate the SPR distance between every pair of trees.
+Na\"ively this would require the binomial coefficient given by the number of phylogenetic trees choose two.
+However, the distance between two such trees does not depend on the actual labels of $\ell_1$ and $\ell_2$, so one can permute the numerical labels of the leaf nodes, which would result in the same distance if the permutation was applied identically on both the starting and ending trees (and trees on the shortest SPR path between the two).
 Furthermore, a path made by SPR moves made by intermediate trees between the two trees could also have its labels permuted in order to give a path between the trees with permuted leaf labels.
 Thus, problems like SPR distance do not concern the actual leaf labels as such, but rather use the leaf labels as markers that can be used to map leaves of one phylogenetic tree on to another.
 The problem and its solutions are actually defined in terms of a \emph{relative} leaf labeling.
@@ -124,44 +124,43 @@ There has been extensive work on the problem of drawing tanglegrams minimizing c
 \FIGtanglegram
 
 However, there has been almost no work enumerating or finding other properties of this fundamental object which formalizes the notion of a relative leaf labeling of a pair of phylogenetic trees.
-Described slightly more formally, one can consider the projections
+Described slightly more formally, one can consider the projections starting with ordered pairs of phylogenetic trees
 \begin{equation}
 \label{eq:projChain}
 \tree_n \times \tree_n \xrightarrow{\pi_\tangle} \tangle_n \xrightarrow{\pi_\shape} \shape_n \times \shape_n
 \end{equation}
 where $\tree_n$ is the set of $n$-taxon phylogenetic trees, $\tangle_n$ is the set of tangles, and $\shape_n$ is the set of phylogenetic tree shapes (i.e.\ trees without leaf labels).
-Using this notation, we describe above how many problems (such as SPR calculation) phrased in terms of $\tree_n \times \tree_n$ are constant on pre-images of elements of $\tangle_n$ and thus factor to a problem on $\tangle_n$.
+Rephrasing the above, many problems (such as SPR calculation) which are commonly phrased in terms of $\tree_n \times \tree_n$ are actually constant on pre-images of elements of $\tangle_n$ and thus factor to a problem on $\tangle_n$.
 
-In this paper we develop a mathematical formalism and provide a partial answer for the question of how many tanglegrams there are, and how many labeled phylogenetic trees map to a given tanglegram.
+In this paper we develop a mathematical formalism and show that the question of enumerating tanglegrams is equivalent to enumerating certain single and double cosets in the symmetric group, both for labeled and non-labeled tangles.
+There are efficient algorithms coded in GAP \cite{GAP4} for such enumeration, which we use and extend via the SAGE \cite{SteinJoyner2005} interface to GAP.
+These algorithms are quite fast compared to simpler approaches such as checking graph isomorphism.
 We explore the mapping of pairs of plane-embedded trees into the set of tanglegrams and explore the action of the symmetric group on tanglegrams by considering pre-images $\pi_\shape^{-1}(s_1, s_2)$ of each element of $(s_1, s_2) \in \shape_n \times \shape_n$ under $\pi_\shape$.
 We can characterize the isomorphism classes in terms of the symmetries of the two phylogenetic trees they contain.
-Furthermore, tanglegrams are equipped with a natural action of the symmetric group on the leaf set, which we describe.
+Furthermore, tanglegrams are equipped with a natural action of subgroups of the symmetric group on the leaf set, which we describe.
 We will also be interested in symmetric tanglegrams, or \emph{stanglegrams}, in which the order of the two trees (or tree shapes) is forgotten.
-This is formalized by replacing the Cartesian products in \eqref{eq:projChain} with symmetric products.
-
-We use the SAGE \cite{SteinJoyner2005} and GAP \cite{GAP4} mathematics software to further explore these symmetries, resulting in tables of representatives of tanglegrams and their multiplicities, as well as the irreducible representations of the symmetric group defined by the action on tanglegrams.
-We note that even if one was not interested in group-theoretic properties as such, and might instead just be interested in a unique list of tanglegrams, it would be worth using a group theoretic approach because comparing group cosets (defined below) is inherently faster than checking graph isomorphism.
+This is formalized by replacing the Cartesian products in \eqref{eq:projChain} with symmetric products, and can be analyzed using extensions to the non-symmetric case.
 
 
 \section{Tanglegrams}
+\begin{definition}
+\label{def:tanglegram}
+A rooted (resp. unrooted) $n$-\emph{tanglegram} is an ordered triple $(t_1, t_2, \phi)$ consisting of two non-leaf-labeled rooted (resp.\ unrooted) trees $t_1$ and $t_2$ and a bijection $\phi$ from the leaves of $t_1$ to the leaves of $t_2$.
+Let $\tangle_n$ denote the set of $n$-tanglegrams.
+\end{definition}
+
+It is easier to describe mappings between trees embedded in the plane than trees in the abstract, and thus we introduce the notion of a \emph{planar} tanglegram.
+This notion is a slight simplification of the notion of a \emph{drawing} used by previous authors \cite{Venkatachalam2010-zh} which will be convenient for our purposes.
 We use the term \emph{planar embedding} as it is used in graph theory.
 If not otherwise specified, ``isomorphic'' applied to trees refers to usual graph isomorphism rather than an isomorphism of embedded trees.
 
-We will start with a notion of a \emph{planar} tanglegram, which is a slight simplification of the notion of a \emph{drawing} used by previous authors \cite{Venkatachalam2010-zh} which will be convenient for our purposes.
 Let $\fS_n$ denote the symmetric group on $n$ items.
-\EM{how do tanglegrams work}
 \begin{definition}
 \label{def:ptanglegram}
-A rooted (resp.\ unrooted) \emph{planar $n$-tanglegram} is an ordered triple $(p_1, p_2, \pairing)$ where $p_1$ and $p_2$ are rooted (resp.\ unrooted) trees with $n$ leaves embedded in the plane, and $\pairing \in \fS_n$.
+A rooted (resp.\ unrooted) \emph{planar $n$-tanglegram} is an ordered triple $(p_1, p_2, \pairing)$ where $p_1$ and $p_2$ are rooted (resp.\ unrooted) trees with $n$ leaves embedded in the plane, and $\pairing \in \fS_n$ giving the bijection between the leaves.
 Let $\ptangle_n$ denote the set of planar $n$-tanglegrams.
 \end{definition}
 
-
-\begin{definition}
-\label{def:tanglegram}
-A rooted (resp. unrooted) $n$-\emph{tanglegram} is an ordered triple $(t_1, t_2, \phi)$ consisting of two non-leaf-labeled rooted (resp.\ unrooted) trees $t_1$ and $t_2$ and a bijection $\phi$ between the leaves of $t_1$ and the leaves of $t_2$.
-Let $\tangle_n$ denote the set of $n$-tanglegrams.
-\end{definition}
 There is a graph realization of a tanglegram where every leaf of $t_1$ is connected via an edge to the corresponding leaf of $t_2$.
 There is a clear 1-to-1 correspondence between tanglegrams under relabeling and their graph realization (assuming they are considered up to graph isomorphism) by joining leaves of $t_1$ with their corresponding leaves in $t_2$ under $\pairing$.
 If the two trees are rooted, we assume that something is done to distinguish the root nodes from other nodes of the tree.
@@ -184,7 +183,7 @@ We will correspondingly consider groups as acting on the right, such that the ac
 \begin{definition}
 Given a (rooted) phylogenetic tree $p$ on $n$ leaves embedded in the plane, let $\aut(p) \subset \fS_n$ be its leaf automorphism group: given a leaf labeling of $p$, $\aut(p)$ are the elements $\alpha$ of $\fS_n$ such that relabeling $p$ according to $\alpha$ results in an isomorphic leaf labeled tree.
 \end{definition}
-Because every tree has at least one cherry (a subtree of size 2), the automorphism group of every tree has at least the symmetry of exchanging the two leaves of that cherry.
+Because every tree has at least one subtree of size two, the automorphism group of every tree has at least the symmetry of exchanging the two leaves of that subtree.
 These elements of $\fS_n$ can be thought of as providing relabelings for the leaves of a standard leaf labeling, as the group multiplication of two elements of $\fS_n$ is equivalent to the composition of the two relabelings.
 Given two subgroups $J$ and $K$ of a group $G$, a \emph{double coset} $JgK$ for some $g \in G$ is the set of elements $\{jgk \mid j \in J, k \in K\}$.
 Tree symmetries induce symmetries of planar tanglegrams via double cosets:
@@ -358,7 +357,7 @@ Thus, unrooted tanglegrams can be thought of as equivalence classes of rooted ta
 
 
 \section{Acknowledgements}
-This manuscript was substantially shaped by discussions with Michael Landis, Arnold Kas, and Chris Whidden.
+This manuscript was substantially shaped by discussions with Michael Landis, Arnold Kas, Chris Whidden, and Bianca Viray.
 
 \bibliographystyle{unsrt}
 \bibliography{tangle}
