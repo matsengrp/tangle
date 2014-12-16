@@ -208,29 +208,14 @@ For stanglegrams, there is an additional symmetry coming from inverting $\pairin
 
 
 \subsection{Tanglegram enumeration}
-Tanglegram enumeration is implemented in terms of \emph{standardized} phylogenetic trees.
-These standardized phylogenetic trees are simply a choice of representative from the set of pre-images $\pi_\shape(s)$: one (leaf-labeled) phylogenetic tree $\{s_i\}_{i=1,\ldots,k}$ for each isomorphism class of phylogenetic trees on $n$ leaves under graph-theoretic isomorphism (as unlabeled tree shapes).
-For any $t$ the \emph{standard permutation} is the permutation $\sigma \in \fS_n$ mapping the leaf labels of its standardized tree $s_i$ to those of $t$.
-We will call this $\sigma$ the \emph{standard permutation} of $t$.
-Note that all standard permutations are fixed for all trees on $n$ taxa once we choose a set of standardized trees.
-
-By simply standardizing the first tree of the $n$-tanglegrams, we note:
+In order to obtain a complete enumeration of tanglegrams, one can then collect all triples $(t_1, t_2, C)$ where $t_1$ and $t_2$ are tree shapes and $C$ enumerates double cosets of the form $\aut(t_1) \pairing \aut(t_2)$.
+The set of such double cosets does not appear to follow easily from any general theory, but double cosets can be enumerated efficiently by an algorithm in GAP \cite{GAP4}.
+One can also enumerate trees (with repetition) by finding a labeled representative phylogenetic tree for every tree shape, then for every phylogenetic tree using the bijection defined by leaves with the same label.
+This implies:
 \begin{observation}
 \label{obs:count}
 The number of binary rooted $n$-tanglegrams is bounded above by the number of rooted binary phylogenetic tree shapes on $n$ leaves times the number of phylogenetic trees on $n$ leaves, and thus is asymptotically smaller than the number of pairs of rooted binary phylogenetic trees.
 \end{observation}
-
-It is now straightforward to enumerate tanglegrams on $n$ leaves.
-To start, one might obtain all of the possible $n$-tanglegrams as the set of all triples $(t_1, t_2, C)$ as per Observation~\ref{obs:cosetMap}.
-Consider two phylogenetic trees $\ell_1, \ell_2$ with representatives $s_{(1)}, s_{(2)}$ and standard permutations $\sigma_{(1)}$ and $\sigma_{(2)}$.
-The group element $\sigma_{(1)}^{-1} \, \sigma_{(2)}$ maps the leaves of $s_{(1)}$ to the leaves of $s_{(2)}$ that they correspond as in the $[\ell_1, \ell_2, \id]$ tanglegram, where $\id$ is the identity element of the symmetric group.
-Indeed, $\sigma_{(1)}^{-1}$ maps the leaves of $\ell_1$ to the corresponding leaves of $s_{(1)}$ and $\sigma_{(2)}$ maps the leaves of $\ell_2$ to the corresponding leaves of $s_{(2)}$.
-Thus the triple $(s_{(1)}, s_{(2)}, \aut(s_{(1)}) \sigma_{(1)}^{-1} \, \sigma_{(2)} \aut(s_{(1)}))$ is an alternate way of writing the tanglegram $[\ell_1, \ell_2, \id]$.
-Furthermore, one can take $\ell_1$ to be each of the standardized trees, so that $\sigma_1 = \id$, and $\ell_2$ to be all of the labeled trees such that $\sigma_2$ ranges over all of $\fS_n$.
-Furthermore, by moving relabeling into the element of the symmetric group, we can just limit ourselves to $[\ell_1, \ell_2, \pairing]$ where $\ell_2$ is also a standardized tree.
-
-Thus in order to obtain a complete enumeration of tanglegrams, one can enumerate double cosets of the form $\aut(t_1) \pairing \aut(t_2)$ for a given $t_1$ and $t_2$.
-The set of such double cosets does not appear to follow easily from any general theory, but double cosets can be enumerated efficiently by an algorithm in GAP \cite{GAP4}.
 
 Stanglegrams, i.e.\ symmetric tanglegrams as defined above, have further symmetries.
 For these one can start by ordering the tree shapes and only taking tanglegrams where $t_1$ is smaller than or equal to $t_2$ in this ordering.
