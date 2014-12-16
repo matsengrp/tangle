@@ -19,6 +19,7 @@
 \newtheorem{observation}{Observation}
 
 \newcommand{\RR}{\mathbb R}
+\newcommand{\ZZ}{\mathbb Z}
 \newcommand{\fS}{\mathfrak S}
 
 \newcommand{\aut}{\mathcal A}
@@ -29,7 +30,7 @@
 \newcommand{\tangle}{\mathsf{Y}}
 \newcommand{\ltangle}{\mathsf{L}}
 \newcommand{\id}{\iota}
-\newcommand{\wrtwo}{\wr C_2}
+\newcommand{\wrtwo}{\wr \ZZ_2}
 
 % arxivness
 \newcommand{\arxiv}[1]{#1}
@@ -142,7 +143,7 @@ We use the SAGE \cite{SteinJoyner2005} and GAP \cite{GAP4} mathematics software 
 We note that even if one was not interested in group-theoretic properties as such, and might instead just be interested in a unique list of tanglegrams, it would be worth using a group theoretic approach because comparing group cosets (defined below) is inherently faster than checking graph isomorphism.
 
 
-\section{Formalism}
+\section{Tanglegrams}
 We use the term \emph{planar embedding} as it is used in graph theory.
 If not otherwise specified, ``isomorphic'' applied to trees refers to usual graph isomorphism rather than an isomorphism of embedded trees.
 
@@ -172,13 +173,8 @@ This notion of tanglegram corresponds to that found previously in the literature
 Note that our definition respects the order of $t_1$ and $t_2$ by considering $(t_1, t_2, \pairing)$ to be different than the tanglegram $(t_2, t_1, \pairing^{-1})$ when $t_1$ and $t_2$ are different graph theoretically.
 We can also consider an symmetric tanglegram, or \emph{stanglegram}, by identifying them.
 
-\EM{}
-One might also consider a notion of \emph{labeled $n$-tanglegram} $(l_1, l_2, \pairing)$ in which $l_1$ and $l_2$ are phylogenetic (leaf-labeled) trees on the leaf set $\{1, \ldots, n\}$, and $\pairing \in \fS_n$ as before.
-Let $\ltangle_n$ denote the set of labeled $n$-tanglegrams.
-We will sometimes call labeled tanglegrams ``ltanglegrams.''
 
-
-\section{Tanglegram symmetries}
+\subsection{Symmetries}
 We will describe the symmetries of tanglegrams in terms of symmetries of the trees from which they are built.
 We will use cycle notation for elements of the symmetric group, such as $(1\ 2) (3\ 4)$, which can be distinguished from phylogenetic trees in Newick format \cite{wiki:newick} such as $((1,2),(3,4));$, because symmetric group elements do not have commas or a trailing semicolon.
 In order to conform to the convention used in GAP \cite{GAP4} and hence by SAGE \cite{SteinJoyner2005}, \emph{we will use the leftmost first convention of writing products in the symmetric group.}
@@ -194,32 +190,62 @@ Given two subgroups $J$ and $K$ of a group $G$, a \emph{double coset} $JgK$ for 
 Tree symmetries induce symmetries of planar tanglegrams via double cosets:
 \begin{observation}
 \label{obs:cosetMap}
-There is a well-defined injective map from $n$-tanglegrams $(t_1, t_2, \pairing)$ to ordered triples $(t_1, t_2, C)$, where $C$ is a double coset of $\fS_n$ defined by taking an arbitrary planar embedding $(\tilde t_1, \tilde t_2, \pairing_\phi)$ of the tanglegram and mapping
+There is a well-defined injective map from the set of distinct $n$-tanglegrams $(t_1, t_2, \pairing)$ to ordered triples $(t_1, t_2, C)$, where $C$ is a double coset of $\fS_n$ defined by taking an arbitrary planar embedding $(\tilde t_1, \tilde t_2, \pairing_\phi)$ of the tanglegram and mapping
 \begin{equation}
 \label{eq:cosetMap}
 (t_1, t_2, \phi) \mapsto (t_1, t_2, \aut(t_1) \pairing_\phi \aut(t_2)).
 \end{equation}
 \end{observation}
 This map is well defined because any $\pairing$ defined by an alternate planar embedding of the tanglegram only differs from the arbitrary embedding by elements of $\aut(t_1)$ and $\aut(t_2)$.
-It is injective because any if any pair of planar tanglegrams $(\tilde t_1, \tilde t_2, \tilde \pairing)$ and $(\hat t_1, \hat t_2, \hat \pairing)$ map to the same element, it means that the trees are (graph theoretically) isomorphic, defining $\alpha_i \in \fS_n$ mapping the leaves of $\tilde t_i$ to those of $\hat t_i$; then $\tilde \pairing = \alpha_1 \hat \pairing \alpha_2^{-1}$ and so they have the same double coset image under the mapping \eqref{eq:cosetMap}.
+It is injective because any if any pair of planar tanglegrams $(\tilde t_1, \tilde t_2, \tilde \pairing)$ and $(\hat t_1, \hat t_2, \hat \pairing)$ map to the same element, it means that the trees are isomorphic in shape, defining $\alpha_i \in \fS_n$ mapping the leaves of $\tilde t_i$ to those of $\hat t_i$; then $\tilde \pairing = \alpha_1 \hat \pairing \alpha_2^{-1}$ and so they have the same double coset image under the mapping \eqref{eq:cosetMap}.
 
 This map is thus a bijection onto its image, and so we will use the two representations interchangeably.
 For example, we will refer often to the coset of a tanglegram.
 We note that the various planar embeddings of the tanglegram graph are equivalent to choices of representatives $\pairing'$ of the coset tanglegram (i.e.\ $\pairing'$ such that $\aut(t_1) \pairing' \aut(t_2) = C$) given a choice of numbering for $t_1$.
 
-Thus we have three ways of describing tanglegrams:
-first, the classical Definition~\ref{def:tanglegram} in terms of two non-leaf-labeled trees and a bijection $\phi$,
-second, the Observation~\ref{obs:cosetMap} definition in terms of two non-leaf-labeled trees and a coset $C$,
-\EM{recheck}
-third, equivalence classes of two phylogenetic (leaf-labeled) trees and an element of the symmetric group.
-This last definition will be useful for concreteness, and we investigate it in the next section.
+For stanglegrams, there is an additional symmetry coming from inverting $\pairing$ when the two trees in the tanglegram have the same shape.
 
-For stanglegrams, there is an additional symmetry coming from inverting $\pairing$.
+
+\subsection{Tanglegram enumeration}
+The implementation of the enumeration of tanglegrams is in terms of \emph{standardized} phylogenetic trees.
+These standardized phylogenetic trees are simply a choice of representative from the set of pre-images $\pi_\shape(s)$: one (leaf-labeled) phylogenetic tree $\{s_i\}_{i=1,\ldots,k}$ for each isomorphism class of phylogenetic trees on $n$ leaves under graph-theoretic isomorphism (as unlabeled tree topologies).
+Any tree $\ell$ has a representative $s_i$ of its equivalence class, and there is a corresponding $\sigma \in \fS_n$ that maps the leaf labels of $s_i$ to those of $\ell$.
+We will call this $\sigma$ the \emph{standard permutation} of $\ell$.
+Note that all standard permutations are fixed for all trees on $n$ taxa once we choose a set of standardizations.
+
+By simply standardizing the first tree of the $n$-tanglegrams, we note:
+\begin{observation}
+\label{obs:count}
+The number of binary rooted $n$-tanglegrams is bounded above by the number of phylogenetic tree shapes on $n$ leaves times the number of phylogenetic trees on $n$ leaves, and thus is asymptotically smaller than the number of pairs of phylogenetic trees when the class of trees contains more than just the ``star tree'' with a single internal node.
+\end{observation}
+
+It is now straightforward to enumerate tanglegrams on $n$ leaves.
+To start, one might to obtain all of the possible $n$-tanglegrams as the set of all triples $(t_1, t_2, C)$ as per Observation~\ref{obs:cosetMap}.
+Consider two phylogenetic trees $\ell_1, \ell_2$ with representatives $s_{(1)}, s_{(2)}$ and standard permutations $\sigma_{(1)}$ and $\sigma_{(2)}$.
+The group element $\sigma_{(1)}^{-1} \, \sigma_{(2)}$ maps the leaves of $s_{(1)}$ to the leaves of $s_{(2)}$ that they correspond as in the $[\ell_1, \ell_2, \id]$ tanglegram, where $\id$ is the identity element of the symmetric group.
+Indeed, $\sigma_{(1)}^{-1}$ maps the leaves of $\ell_1$ to the corresponding leaves of $s_{(1)}$ and $\sigma_{(2)}$ maps the leaves of $\ell_2$ to the corresponding leaves of $s_{(2)}$.
+Thus the triple $(s_{(1)}, s_{(2)}, \aut(s_{(1)}) \sigma_{(1)}^{-1} \, \sigma_{(2)} \aut(s_{(1)}))$ is an alternate way of writing the tanglegram $[\ell_1, \ell_2, \id]$.
+Furthermore, one can take $\ell_1$ to be each of the standardized trees, so that $\sigma_1 = \id$, and $\ell_2$ to be all of the labeled trees such that $\sigma_2$ ranges over all of $\fS_n$.
+Furthermore, by moving relabeling into the element of the symmetric group, we can just limit ourselves to $[\ell_1, \ell_2, \pairing]$ where $\ell_2$ is also a standardized tree.
+
+Thus in order to obtain a complete enumeration of tanglegrams, one can enumerate double cosets of the form $\aut(t_1) \pairing \aut(t_2)$ for a given $t_1$ and $t_2$.
+The set of such double cosets does not appear to follow easily from any general theory, but double cosets can be enumerated efficiently by an algorithm in GAP \cite{GAP4}.
+
+Stanglegrams, i.e.\ symmetric tanglegrams as defined above, have further symmetries.
+For these one can start by ordering the tree shapes and only taking tangles where $t_1$ is smaller than or equal to $t_2$ in this ordering.
+In cases where $t_1 = t_2 = t$, we note that by exchanging the roles of $t_1$ and $t_2$ shows that $(t, t, \mu)$ is equivalent to $(t, t, \mu^{-1})$, meaning that we only need to take one of these for our enumeration.
+
+For this study, I enumerated tanglegrams by taking triples $(s_i, s_j, C)$, where $C$ is a one of the double cosets $\aut(s_i) \pairing \aut(s_j)$ enumerated by GAP.
+To take the extra symmetry induced by stanglegrams into account, I wrote some GAP code to look for tanglegrams that remained the same after inversion on the basis of representatives (which have an easily defined total order), which was necessary because a naive $O(n^2)$ search on double cosets (for which a total order is not available in GAP, but see \cite{Hulpke2003-em}) was too slow.
+There are lots of stanglegrams (Figure~\ref{FIGcount}), but significantly fewer than the number of pairs of distinct phylogenetic trees:
+\FIGcount
+
 
 
 \section{Labeled tanglegram symmetries}
 We are also interested in symmetries of labeled tanglegrams, and follow a similar path through planar tanglegrams to describe them.
-Labeled planar $n$-tanglegrams with a given pair of tree shapes (i.e.\ elements of $\pi_\shape^{-1}(s_1, s_2)$ for some $s_1$ and $s_2$) are in one to one correspondence with pairs of permutations.
+Labeled planar $n$-tanglegrams with a given pair of tree shapes (i.e.\ elements of $\pi_\shape^{-1}(s_1, s_2)$ for some $s_1$ and $s_2$) are in one to one correspondence with pairs of permutations, in which we connect taxa with the same label to form a tanglegram.
+\emph{Note that this focus on labels is different from that in the previous section, in which the focus was on the bijection between the leaves.}
 
 Let us begin by assuming a planar tree shape $t_1$ on $n$ taxa.
 The labelings of this planar tree shape are equivalent to permutations $\fS_n$, and the group composition law can be thought of as doing relabeling.
@@ -230,10 +256,10 @@ Similarly, given two tree shapes, the planar labeled tangles with those tree sha
 Then the (non-planar) tangles are again equivalent to the right cosets $(\aut(t_1), \aut(t_2)) (\sigma_1, \sigma_2)$ for $\sigma_1, \sigma_2 \in \fS_n$.
 Indeed, each pair of labeled phylogenetic trees defines a labeled tangle just by connecting leaves with the same label.
 
-In order to enumerate these objects it is convenient to use the notion of a \emph{wreath product} with the two-element group $C_2$.
+In order to enumerate these objects it is convenient to use the notion of a \emph{wreath product} with the two-element group $\ZZ_2$.
 Because we will only need this particular wreath product, I will just remind the reader of the definition in this special case.
 
-Given a group $G$, the wreath product of $G$ with $C_2$, denoted $G \wrtwo$, can be described as the direct product $G \times G \times C_2$ with the following ``twisted'' multiplication table, where $\tau$ is the non-identity element of $C_2$:
+Given a group $G$, the wreath product of $G$ with $\ZZ_2$, denoted $G \wrtwo$, can be described as the direct product $G \times G \times \ZZ_2$ with the following ``twisted'' multiplication table, where $\tau$ is the non-identity element of $\ZZ_2$:
 \begin{align*}
 (a, b, \id) (c, d, \id) & = (ac, bd, \id) \\
 (a, b, \id) (c, d, \tau) & = (ac, bd, \tau) \\
@@ -250,48 +276,12 @@ Each triple $(\sigma_1, \sigma_2, \id)$ relabels $t_1$ and $t_2$ via $\sigma_1$ 
 Flipping before relabeling with a pair of group elements effectively exchanges the order of the pair, which corresponds to the ``twisted'' product law in the wreath product.
 These represent all of the symmetries of such a labeled tanglegram.
 
-Because flipping the tree before labeling doesn't do anything (recall that tree shapes are identical), the collection of edge colored tanglegrams is equivalent to the right cosets $\langle \aut(t_1) \times \aut(t_2) \times C_2 \rangle \, (\sigma_1, \sigma_2)$ for $\sigma_1, \sigma_2 \in \fS_n$.
+Because flipping the tree before labeling doesn't do anything (recall that tree shapes are identical), the collection of edge colored tanglegrams is equivalent to the right cosets $\langle \aut(t_1) \times \aut(t_2) \times \ZZ_2 \rangle \, (\sigma_1, \sigma_2)$ for $\sigma_1, \sigma_2 \in \fS_n$.
 Now, if we forget the difference between $t_1$ and $t_2$, say by removing colors from the edges, the set of tanglegrams is equivalent to double cosets
-\[
-\langle \aut(t_1) \times \aut(t_2) \times C_2 \rangle \, (\sigma_1, \sigma_2) \, \langle {\id} \times {\id} \times C_2 \rangle$ for $\sigma_1, \sigma_2 \in \fS_n.
-\]
+$\langle \aut(t_1) \times \aut(t_2) \times \ZZ_2 \rangle \, (\sigma_1, \sigma_2) \, \langle {\id} \times {\id} \times \ZZ_2 \rangle$ for $\sigma_1, \sigma_2 \in \fS_n$.
 
 
-\section{Enumeration}
-\EM{plow this paragraph into the above?}
-It is now straightforward to enumerate tanglegrams on $n$ leaves.
-In order to obtain all of the possible $n$-tanglegrams, we can take all triples $(t_1, t_2, C)$ as per Observation~\ref{obs:cosetMap}.
-Thus in order to obtain a complete enumeration of tanglegrams, we would like to enumerate double cosets of the form $\aut(t_1) \pairing \aut(t_2)$ for a given $t_1$ and $t_2$.
-The set of such double cosets does not appear to follow directly from any general theory, but double cosets can be enumerated efficiently by an algorithm in GAP \cite{GAP4}.
-
-Given this algorithm, the implementation of the enumeration of tanglegrams is in terms of \emph{standardized} phylogenetic trees.
-These standardized phylogenetic trees are simply a choice of one (leaf-labeled) phylogenetic tree $\{s_i\}_{i=1,\ldots,k}$ for each isomorphism class of phylogenetic trees on $n$ leaves under graph-theoretic isomorphism (as unlabeled tree topologies).
-Any tree $\ell$ has a representative $s_i$ of its equivalence class, and there is a corresponding $\sigma \in \fS_n$ that maps the leaf labels of $s_i$ to those of $\ell$.
-We will call this $\sigma$ the \emph{standard permutation} of $\ell$.
-Note that all standard permutations are fixed for all trees on $n$ taxa once we choose a set of standardizations.
-
-By simply standardizing the first tree of the $n$-tanglegrams, we note:
-\begin{observation}
-\label{obs:count}
-The number of binary rooted $n$-tanglegrams is bounded above by the number of phylogenetic tree shapes on $n$ leaves times the number of phylogenetic trees on $n$ leaves, and thus is asymptotically smaller than the number of pairs of phylogenetic trees.
-\end{observation}
-
-Consider two phylogenetic trees $\ell_1, \ell_2$ with representatives $s_{(1)}, s_{(2)}$ and standard permutations $\sigma_{(1)}$ and $\sigma_{(2)}$.
-The group element $\sigma_{(1)}^{-1} \, \sigma_{(2)}$ maps the leaves of $s_{(1)}$ to the leaves of $s_{(2)}$ that they correspond as in the $[\ell_1, \ell_2, \id]$ tanglegram, where $\id$ is the identity element of the symmetric group in cycle notation.
-Indeed, $\sigma_{(1)}$ maps the leaves of $s_{(1)}$ to the corresponding leaves of $\ell_1$, $\ell_1$ and $\ell_2$ have identical leaf labels for leaves connected in the tanglegram, and $\sigma_{(2)}^{-1}$ maps the leaves of $\ell_2$ to the corresponding leaves of $s_{(2)}$.
-Thus the triple $(s_{(1)}, s_{(2)}, \aut(s_{(1)}) \sigma_{(1)}^{-1} \, \sigma_{(2)} \aut(s_{(1)}))$ is an alternate way of writing the tanglegram $[\ell_1, \ell_2, \id]$.
-Furthermore, one can take $\ell_1$ to be each of the standardized trees, so that $\sigma_1 = \id$, and $\ell_2$ to be all of the labeled trees such that $\sigma_2$ ranges over all of $\fS_n$.
-Furthermore, by moving relabeling into the element of the symmetric group, we can just limit ourselves to $[\ell_1, \ell_2, \pairing]$ where $\ell_2$ is also a standardized tree.
-
-Stanglegrams, i.e.\ symmetric tanglegrams as defined above, have further symmetries.
-For these one can start by ordering the tree shapes and only taking tangles where $t_1$ is smaller than or equal to $t_2$ in this ordering.
-In cases where $t_1 = t_2 = t$, we note that by exchanging the roles of $t_1$ and $t_2$ shows that $(t, t, \mu)$ is equivalent to $(t, t, \mu^{-1})$, meaning that we only need to take one of these for our enumeration.
-
-For this study, I enumerated tanglegrams by taking triples $(s_i, s_j, C)$, where $C$ is a one of the double cosets $\aut(s_i) \pairing \aut(s_j)$ enumerated by GAP.
-To take the extra symmetry induced by stanglegrams into account, I wrote some GAP code to look for tanglegrams that remained the same after inversion on the basis of representatives (which have an easily defined total order), which was necessary because a naive $O(n^2)$ search on double cosets (for which a total order is not available in GAP, but see \cite{Hulpke2003-em}) was too slow.
-There are lots of stanglegrams (Figure~\ref{FIGcount}), but significantly fewer than the number of pairs of distinct phylogenetic trees:
-\FIGcount
-
+\subsection{Labeled tanglegram enumeration}
 In order to enumerate the labeled tanglegrams in terms of the tanglegrams as thus defined, it is easy to define a map that corresponds to de-labeling a map.
 Indeed, the map
 \[
