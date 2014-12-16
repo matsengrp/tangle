@@ -129,11 +129,11 @@ Described slightly more formally, one can consider the projections starting with
 \label{eq:projChain}
 \tree_n \times \tree_n \xrightarrow{\pi_\tangle} \tangle_n \xrightarrow{\pi_\shape} \shape_n \times \shape_n
 \end{equation}
-where $\tree_n$ is the set of $n$-taxon phylogenetic trees, $\tangle_n$ is the set of tangles, and $\shape_n$ is the set of phylogenetic tree shapes (i.e.\ trees without leaf labels).
+where $\tree_n$ is the set of $n$-taxon phylogenetic trees, $\tangle_n$ is the set of tanglegrams, and $\shape_n$ is the set of phylogenetic tree shapes (i.e.\ trees without leaf labels).
 Rephrasing the above, many problems (such as SPR calculation) which are commonly phrased in terms of $\tree_n \times \tree_n$ are actually constant on pre-images of elements of $\tangle_n$ and thus factor to a problem on $\tangle_n$.
 
-In this paper we develop a mathematical formalism and show that the question of enumerating tanglegrams is equivalent to enumerating certain single and double cosets in the symmetric group, both for labeled and non-labeled tangles.
-There are efficient algorithms coded in GAP \cite{GAP4} for such enumeration, which we use and extend via the SAGE \cite{SteinJoyner2005} interface to GAP.
+In this paper we show that tanglegrams are in one to one correspondence with certain single and double cosets of the symmetric group, both for labeled and non-labeled tangles.
+There are efficient algorithms coded in GAP \cite{GAP4} to enumerate such cosets, which we use and extend via the SAGE \cite{SteinJoyner2005} interface to GAP.
 These algorithms are quite fast compared to simpler approaches such as checking graph isomorphism.
 We explore the mapping of pairs of plane-embedded trees into the set of tanglegrams and explore the action of the symmetric group on tanglegrams by considering pre-images $\pi_\shape^{-1}(s_1, s_2)$ of each element of $(s_1, s_2) \in \shape_n \times \shape_n$ under $\pi_\shape$.
 We can characterize the isomorphism classes in terms of the symmetries of the two phylogenetic trees they contain.
@@ -161,13 +161,12 @@ A rooted (resp.\ unrooted) \emph{planar $n$-tanglegram} is an ordered triple $(p
 Let $\ptangle_n$ denote the set of planar $n$-tanglegrams.
 \end{definition}
 
-There is a graph realization of a tanglegram where every leaf of $t_1$ is connected via an edge to the corresponding leaf of $t_2$.
-There is a clear 1-to-1 correspondence between tanglegrams under relabeling and their graph realization (assuming they are considered up to graph isomorphism) by joining leaves of $t_1$ with their corresponding leaves in $t_2$ under $\pairing$.
+There is a graph realization of a tanglegram where every leaf of $t_1$ is connected via an edge to the corresponding leaf of $t_2$ under the bijection $\phi$.
+Of course, there is also a well-defined planar graph realization for planar tanglegrams obtained by connecting leaves under $\pairing \in \fS_n$.
+There is a clear 1-to-1 correspondence between tanglegrams under relabeling and their graph realization.
 If the two trees are rooted, we assume that something is done to distinguish the root nodes from other nodes of the tree.
 As described in the section on future work, the case of unrooted tanglegrams does not follow directly from an understanding of rooted tanglegrams, and we will limit ourselves to rooted tanglegrams for the purposes of this paper.
 This notion of tanglegram corresponds to that found previously in the literature.
-
-[Clarify what graph isomorphism means in this context.]
 
 Note that our definition respects the order of $t_1$ and $t_2$ by considering $(t_1, t_2, \pairing)$ to be different than the tanglegram $(t_2, t_1, \pairing^{-1})$ when $t_1$ and $t_2$ are different graph theoretically.
 We can also consider an symmetric tanglegram, or \emph{stanglegram}, by identifying them.
@@ -231,7 +230,7 @@ Thus in order to obtain a complete enumeration of tanglegrams, one can enumerate
 The set of such double cosets does not appear to follow easily from any general theory, but double cosets can be enumerated efficiently by an algorithm in GAP \cite{GAP4}.
 
 Stanglegrams, i.e.\ symmetric tanglegrams as defined above, have further symmetries.
-For these one can start by ordering the tree shapes and only taking tangles where $t_1$ is smaller than or equal to $t_2$ in this ordering.
+For these one can start by ordering the tree shapes and only taking tanglegrams where $t_1$ is smaller than or equal to $t_2$ in this ordering.
 In cases where $t_1 = t_2 = t$, we note that by exchanging the roles of $t_1$ and $t_2$ shows that $(t, t, \mu)$ is equivalent to $(t, t, \mu^{-1})$, meaning that we only need to take one of these for our enumeration.
 
 For this study, I enumerated tanglegrams by taking triples $(s_i, s_j, C)$, where $C$ is a one of the double cosets $\aut(s_i) \pairing \aut(s_j)$ enumerated by GAP.
@@ -251,8 +250,8 @@ The labelings of this planar tree shape are equivalent to permutations $\fS_n$, 
 The automorphisms of this planar tree shape giving the same (non-planar) labeled phylogenetic tree can then be thought of as a subgroup $\aut(t_1)$ of $\fS_n$ as above which acts on the left of $\fS_n$.
 In this way the (non-planar) labeled phylogenetic trees with the given shape are equivalent to the right cosets $A(t_1) \sigma$ for $\sigma \in \fS_n$.
 
-Similarly, given two tree shapes, the planar labeled tangles with those tree shapes are given by elements of the direct product $\fS_n \times \fS_n$.
-Then the (non-planar) tangles are again equivalent to the right cosets $(\aut(t_1), \aut(t_2)) (\sigma_1, \sigma_2)$ for $\sigma_1, \sigma_2 \in \fS_n$.
+Similarly, given two tree shapes, the planar labeled tanglegrams with those tree shapes are given by elements of the direct product $\fS_n \times \fS_n$.
+Then the (non-planar) tanglegrams are again equivalent to the right cosets $(\aut(t_1), \aut(t_2)) (\sigma_1, \sigma_2)$ for $\sigma_1, \sigma_2 \in \fS_n$.
 Indeed, each pair of labeled phylogenetic trees defines a labeled tangle just by connecting leaves with the same label.
 
 In order to enumerate these objects it is convenient to use the notion of a \emph{wreath product} with the two-element group $\ZZ_2$.
@@ -287,7 +286,7 @@ Indeed, the map
 (\aut(t_1), \aut(t_2)) (\sigma_1, \sigma_2) \mapsto \aut(t_1) \sigma_1 \sigma_2^{-1} \aut(t_2)
 \]
 from right cosets of $\fS_n \times \fS_n$ to double cosets of $\fS_n$ is well defined.
-These double cosets of $\fS_n$ give exactly the mappings $\pairing$ defining the possible tangles.
+These double cosets of $\fS_n$ give exactly the mappings $\pairing$ defining the possible tanglegrams.
 Thus, the pre-image of this map for a given tangle gives the possible labelings of that tangle.
 
 In the case of stanglegrams when the trees have identical shapes, these objects are identified as elements of the wreath product $\fS_n \wrtwo$.
@@ -315,7 +314,7 @@ We also note that
 \]
 but that this is only well defined for $\sigma \in N_{\aut(t_2)}(\fS_n)$ as before.
 
-These do not give group actions of $\fS_n$ on the complete set of $n$-tangles $\tangle_n$.
+These do not give group actions of $\fS_n$ on the complete set of $n$-tanglegrams $\tangle_n$.
 For example, let $t_1$ be the tree $((((1,2),3),4),5)$ and let $t_2$ be the tree $(1,(2,(3,(4,5))))$.
 Abbreviating $\aut(t_i)$ with $A_i$, note that because $(4 5) \in A_2$, $A_1 e A_2$ and $A_1 (4 5) A_2$ are in the same coset yet they have different results upon application of $(3 4)$:
 \begin{align*}
@@ -325,7 +324,7 @@ A_1 (4 5) (3 4) A_2 & = \langle (1 2) \rangle \{(3 4), (3 4 5)\}.
 This sort of behavior is to be expected whenever a $g$ (here played by $(3 4)$) is not in the normalizer of $A_2$ in $\fS_n$, such that there is an $\alpha$ (here played by $(4 5)$) such that $g \alpha g^{-1}$ is not in $A_2$, and the effect of this conjugation is not absorbed by $A_1$.
 
 However, there is a well defined group action on a subset of the domain as follows.
-Let $R(t)$ (resp.\ $L(t)$) be the set of tangles $(t_1, t_2, C)$ such that $t_2$ (resp.\ $t_1$) is graph-theoretically isomorphic to $t$.
+Let $R(t)$ (resp.\ $L(t)$) be the set of tanglegrams $(t_1, t_2, C)$ such that $t_2$ (resp.\ $t_1$) is graph-theoretically isomorphic to $t$.
 Now $N_{\aut(t)}(\fS_n)$ gives a well defined action on the right (resp.\ left) of $R(t)$ (resp.\ $L(t)$) by definition.
 Indeed, we know that any such action on a $R(t)$ is going to result in another element of $R(t)$ by definition, and the action is well defined by the definition of the normalizer.
 The normalizer criterion is in fact quite sensible from the perspective of phylogenetics, in that it ensures that pairs of leaves that are ``equivalent'' (formalized as being in the same cycle under the tree automorphism group) get the same treatment under the group action \eqref{eq:action} or its left map equivalent.
