@@ -191,7 +191,7 @@ given two subgroups $J$ and $K$ of $G$, the \emph{double coset} $JgK$ for some $
 Tree symmetries induce symmetries of planar tanglegrams via double cosets:
 \begin{observation}
 \label{obs:cosetMap}
-There is a well-defined injective map from the set of distinct $n$-tanglegrams $(t_1, t_2, \pairing)$ to ordered triples $(t_1, t_2, C)$, where $C$ is a double coset of $\fS_n$ defined by taking an arbitrary planar embedding $(\tilde t_1, \tilde t_2, \pairing_\phi)$ of the tanglegram and mapping
+There is a well-defined injective map from the set of distinct $n$-tanglegrams $(t_1, t_2, \phi)$ to ordered triples $(t_1, t_2, C)$, where $C$ is a double coset of $\fS_n$ defined by taking an arbitrary planar embedding $(\tilde t_1, \tilde t_2, \pairing_\phi)$ of the tanglegram and mapping
 \begin{equation}
 \label{eq:cosetMap}
 (t_1, t_2, \phi) \mapsto (t_1, t_2, \aut(t_1) \pairing_\phi \aut(t_2)).
@@ -208,21 +208,23 @@ For stanglegrams, there is an additional symmetry coming from inverting $\pairin
 
 
 \subsection{Tanglegram enumeration}
-In order to obtain a complete enumeration of tanglegrams, one can then collect all triples $(t_1, t_2, C)$ where $t_1$ and $t_2$ are tree shapes and $C$ ranges across double cosets of the form $\aut(t_1) \pairing \aut(t_2)$.
+In order to obtain a complete enumeration of tanglegrams, one can then collect all triples $(t_1, t_2, C)$ where $t_1$ and $t_2$ are tree shapes and $C$ is a double coset of the form $\aut(t_1) \pairing \aut(t_2)$.
 The set of such double cosets does not appear to follow easily from any general theory, but double cosets can be enumerated efficiently by GAP \cite{GAP4}.
-One can also enumerate trees (with repetition) by finding a labeled representative phylogenetic tree for every tree shape, then for every phylogenetic tree using the bijection defined by leaves with the same label.
+
+Alternatively, one could enumerate trees (with repetition) by finding a labeled representative phylogenetic tree for every tree shape, then for every phylogenetic tree using the bijection defined by leaves with the same label.
 This implies:
 \begin{observation}
 \label{obs:count}
 The number of binary rooted $n$-tanglegrams is bounded above by the number of rooted binary phylogenetic tree shapes on $n$ leaves times the number of phylogenetic trees on $n$ leaves, and thus is asymptotically smaller than the number of pairs of rooted binary phylogenetic trees.
 \end{observation}
+Indeed, the number of tanglegrams is closer to the number of trees than the number of pairs of trees (Fig.~\ref{FIGcount}).
 
 Stanglegrams, i.e.\ symmetric tanglegrams as defined above, have further symmetries.
 For these one can start by ordering the tree shapes and only taking tanglegrams where $t_1$ is smaller than or equal to $t_2$ in this ordering.
-In cases where $t_1 = t_2 = t$, we note that by exchanging the roles of $t_1$ and $t_2$ shows that $(t, t, \mu)$ is equivalent to $(t, t, \mu^{-1})$, meaning that we only need to take one of these for our enumeration.
+In cases where $t_1 = t_2 = t$, exchanging the roles of $t_1$ and $t_2$ shows that $(t, t, \mu)$ is equivalent to $(t, t, \mu^{-1})$, meaning that we only need to take one of these for our enumeration.
 
 To take the extra symmetry induced by stanglegrams into account, I wrote some GAP code to look for tanglegrams that remained the same after inversion on the basis of representatives (which have an easily defined total order), which was necessary because a na\"ive $O(n^2)$ search on double cosets (for which a total order is not available in GAP, but see \cite{Hulpke2003-em}) was too slow.
-There are lots of stanglegrams (Figure~\ref{FIGcount}), but significantly fewer than the number of pairs of distinct phylogenetic trees:
+There are lots of stanglegrams (Figure~\ref{FIGcount}), but significantly fewer than the number of pairs of distinct phylogenetic trees.
 \FIGcount
 
 \subsection{Action of the tree normalizers on tanglegrams; This subsection is not yet fixed up.}
