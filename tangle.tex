@@ -148,10 +148,44 @@ This is formalized by replacing the Cartesian products in \eqref{eq:projChain} w
 
 \section{Tanglegrams}
 \begin{definition}
-\label{def:tanglegram}
-A rooted (resp. unrooted) $n$-\emph{tanglegram} is an ordered triple $(t_1, t_2, \phi)$ consisting of two non-leaf-labeled rooted (resp.\ unrooted) trees $t_1$ and $t_2$ and a bijection $\phi$ from the leaves of $t_1$ to the leaves of $t_2$.
+\label{def:abstractTanglegram}
+A rooted (resp. unrooted) $n$-\emph{tanglegram} is an ordered triple $(s_1, s_2, \phi)$ consisting of two non-leaf-labeled rooted (resp.\ unrooted) trees $s_1$ and $s_2$ and a bijection $\phi$ from the leaves of $s_1$ to the leaves of $s_2$.
 Let $\tangle_n$ denote the set of $n$-tanglegrams.
 \end{definition}
+
+It is more helpful to give labels to the leaves of these tree shapes in order to discuss bijections between them.
+We will call these \emph{standardized} phylogenetic trees: a choice of representative from the set of pre-images $\pi_\shape(s)$: one (leaf-labeled) phylogenetic tree $\{t_{(i)}\}_{i=1,\ldots,k}$ for each tree shape $s_i$.
+For any phylogenetic tree $t$ the \emph{standard permutation} is the permutation $\sigma \in \fS_n$ mapping the leaf labels of its standardized tree $s_i$ to those of $t$.
+Note that all standard permutations are fixed for all trees on $n$ taxa once we choose a set of standardized trees.
+We will assume that a standardization has been fixed for the rest of the paper, such that for any tree shape $s_i$ we use $t_{(i)}$ to describe its standardization.
+Using these notions we have an alternate definition of a tanglegram:
+
+\begin{definition}
+\label{def:tanglegram}
+A rooted (resp. unrooted) $n$-\emph{tanglegram} is an ordered triple $(s_1, s_2, \pairing)$ consisting of two non-leaf-labeled rooted (resp.\ unrooted) trees $s_1$ and $s_2$ and an element of the symmetric group $\pairing \in \fS_n$.
+\end{definition}
+Given a standardization, this definition is the same as that in Definition~\ref{def:abstractTanglegram}, where the bijection $\phi$ in the first definition results from a $\pairing$ by applying the $\pairing$ action to the standardized leaf set.
+To avoid confusion, we emphasize that the action of the symmetric group is by relabeling items, not by moving them about in a planar representation.
+For example, the action of the element $(1\ 3)$ on the list of numbers $2, 1, 3$ is the list $2, 3, 1$, not $3, 1, 2$.
+
+We now note that because of tree symmetries, many such $\pairing$s give the same tanglegram.
+
+** Now describe how the conjugate of any sigma gives the same tanglegram.
+
+
+In order to obtain a complete enumeration of tanglegrams, one can then collect all triples $(t_1, t_2, C)$ where $t_1$ and $t_2$ are tree shapes and $C$ enumerates double cosets of the form $\aut(t_1) \pairing \aut(t_2)$.
+
+% It is now straightforward to enumerate tanglegrams on $n$ leaves.
+% To start, one might obtain all of the possible $n$-tanglegrams as the set of all triples $(t_1, t_2, C)$ as per Observation~\ref{obs:cosetMap}.
+% Consider two phylogenetic trees $\ell_1, \ell_2$ with representatives $s_{(1)}, s_{(2)}$ and standard permutations $\sigma_{(1)}$ and $\sigma_{(2)}$.
+% The group element $\sigma_{(1)}^{-1} \, \sigma_{(2)}$ maps the leaves of $s_{(1)}$ to the leaves of $s_{(2)}$ that they correspond as in the $[\ell_1, \ell_2, \id]$ tanglegram, where $\id$ is the identity element
+% Indeed, $\sigma_{(1)}^{-1}$ maps the leaves of $\ell_1$ to the corresponding leaves of $s_{(1)}$ and $\sigma_{(2)}$ maps the leaves of $\ell_2$ to the corresponding leaves of $s_{(2)}$.
+% Thus the triple $(s_{(1)}, s_{(2)}, \aut(s_{(1)}) \sigma_{(1)}^{-1} \, \sigma_{(2)} \aut(s_{(1)}))$ is an alternate way of writing the tanglegram $[\ell_1, \ell_2, \id]$.
+% Furthermore, one can take $\ell_1$ to be each of the standardized trees, so that $\sigma_1 = \id$, and $\ell_2$ to be all of the labeled trees such that $\sigma_2$ ranges over all of $\fS_n$.
+% Furthermore, by moving relabeling into the element of the symmetric group, we can just limit ourselves to $[\ell_1, \ell_2, \pairing]$ where $\ell_2$ is also a standardized tree.
+%
+% Thus in order to obtain a complete enumeration of tanglegrams, one can enumerate double cosets of the form $\aut(t_1) \pairing \aut(t_2)$ for a given $t_1$ and $t_2$.
+% The set of such double cosets does not appear to follow easily from any general theory, but double cosets can be enumerated efficiently by an algorithm in GAP \cite{GAP4}.
 
 It is easier to describe mappings between trees embedded in the plane than trees in the abstract, and thus we introduce the notion of a \emph{planar} tanglegram.
 This notion is a slight simplification of the notion of a \emph{drawing} used by previous authors \cite{Venkatachalam2010-zh} which will be convenient for our purposes.
