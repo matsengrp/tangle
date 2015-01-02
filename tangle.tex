@@ -148,6 +148,11 @@ This is formalized by replacing the Cartesian products in \eqref{eq:projChain} w
 
 \section{Preliminaries}
 
+\subsection{Algebraic preliminaries}
+Given a subgroup $J$ of a group $G$, the \emph{right coset} $Jg$ of $G$ is the set of elements of the form $\{jg \mid j \in J\}$;
+given two subgroups $J$ and $K$ of $G$, the \emph{double coset} $JgK$ for some $g \in G$ is the set of elements $\{jgk \mid j \in J, k \in K\}$.
+
+
 \subsection{Phylogenetic trees}
 
 Trees and Newick format.
@@ -172,17 +177,6 @@ Assume $t$ has subtrees $a$ and $b$.
 If $a$ and $b$ are isomorphic as unlabeled trees (and thus have isomorphic automorphism groups), the automorphism group of $t$ is the wreath product $\aut(a) \wr \aut(b) \cong \aut(a) \wr \aut(a)$.
 If $a$ and $b$ are not isomorphic in this way, then $\aut(t)$ is the direct product $\aut(a) \times \aut(b)$.
 Thus, the automorphism group for a complete binary tree of depth $d$ is the $d$-fold wreath product of the two element group $\ZZ_2$ of itself, and the automorphism group of non-complete binary trees are subgroups of this iterated wreath product.
-
-We can think about the forgetful map
-\[
-f_T: planar_n \rightarrow \tree_n
-\]
-mapping each (labeled) planar tree to its corresponding phylogenetic tree.
-Thus $f_T^{-1}(t)$ are the planar embeddings of a tree, which are in one-to-one correspondence with the automorphism group $\aut(t)$.
-
-\[
-0 \rightarrow \aut(t) \rightarrow planar_n \rightarrow \tree_n \rightarrow \shape_n \rightarrow 0
-\]
 
 
 \section{Tanglegrams}
@@ -230,20 +224,7 @@ In order to obtain a complete enumeration of tanglegrams, one can then collect a
 % Thus in order to obtain a complete enumeration of tanglegrams, one can enumerate double cosets of the form $\aut(t_1) \pairing \aut(t_2)$ for a given $t_1$ and $t_2$.
 % The set of such double cosets does not appear to follow easily from any general theory, but double cosets can be enumerated efficiently by an algorithm in GAP \cite{GAP4}.
 
-It is easier to describe mappings between trees embedded in the plane than trees in the abstract, and thus we introduce the notion of a \emph{planar} tanglegram.
-This notion is a slight simplification of the notion of a \emph{drawing} used by previous authors \cite{Venkatachalam2010-zh} which will be convenient for our purposes.
-We use the term \emph{planar embedding} as it is used in graph theory.
-If not otherwise specified, ``isomorphic'' applied to trees refers to usual graph isomorphism rather than an isomorphism of embedded trees.
-
-Let $\fS_n$ denote the symmetric group on $n$ items.
-\begin{definition}
-\label{def:ptanglegram}
-A rooted (resp.\ unrooted) \emph{planar $n$-tanglegram} is an ordered triple $(p_1, p_2, \pairing)$ where $p_1$ and $p_2$ are rooted (resp.\ unrooted) trees with $n$ leaves embedded in the plane, and $\pairing \in \fS_n$ giving the bijection between the leaves.
-Let $\ptangle_n$ denote the set of planar $n$-tanglegrams.
-\end{definition}
-
 There is a graph realization of a tanglegram where every leaf of $t_1$ is connected via an edge to the corresponding leaf of $t_2$ under the bijection $\phi$.
-Of course, there is also a well-defined planar graph realization for planar tanglegrams obtained by connecting leaves of planar trees $p_1$ and $p_2$ under $\pairing \in \fS_n$.
 There is a clear 1-to-1 correspondence between tanglegrams under relabeling and their graph realization.
 If the two trees are rooted, we assume that something is done to distinguish the root nodes from other nodes of the tree.
 As described in the section on future work, the case of unrooted tanglegrams does not follow directly from an understanding of rooted tanglegrams, and we will limit ourselves to rooted tanglegrams for the purposes of this paper.
@@ -262,36 +243,8 @@ Or should we think about modding out by the action of the symmetric group on lab
 Action by conjugation of the mappings?
 
 
-We are mapping labels, not positions?
-
-
-Given a subgroup $J$ of a group $G$, the \emph{right coset} $Jg$ of $G$ is the set of elements of the form $\{jg \mid j \in J\}$;
-given two subgroups $J$ and $K$ of $G$, the \emph{double coset} $JgK$ for some $g \in G$ is the set of elements $\{jgk \mid j \in J, k \in K\}$.
-We will use these formalisms to describe how tree symmetries induce symmetries of planar tanglegrams.
-
-Given a planar tanglegram define the forgetful map $f: \ptangle_n \rightarrow \tangle_n$ by
-\begin{equation}
-\label{eq:forgetful}
-(p_1, p_2, \sigma) \mapsto (t_1, t_2, \phi_\sigma).
-\end{equation}
-This map is surjective because any tanglegram can be embedded in the plane.
-Furthermore, the pre-image of the forgetful map's algebraic component can be described in terms of double cosets:
-\begin{proposition}
-\label{prop:doubleCosets}
-Let $(p_1, p_2, \sigma)$ be a planar embedding of an $n$-tanglegram $y$. Then
-\[
-\aut(p_1) \sigma \aut(p_2) = \{\tau \in \fS_n \mid f(p_1, p_2, \tau) = y\}.
-\]
-\end{proposition}
-\begin{proof}
-By definition of the automorphism group of a planar tree, $f(p_1, p_2, \tau) = y$ for any $\tau \in \aut(p_1) \sigma \aut(p_2)$.
-Now take $\tau$ from $\{\tau \in \fS_n \mid f(p_1, p_2, \tau) = y\} \setminus \aut(p_1) \sigma \aut(p_2)$.
-Thus $\sigma \not \in \aut(p_1) \tau \aut(p_2)$, which implies that $f(p_1, p_2, \tau) \neq y$, a contradiction.
-\end{proof}
-
 We will use these two representations interchangeably.
 For example, we will refer often to the coset of a tanglegram.
-Note that the various planar embeddings of the tanglegram are equivalent to choices of representatives $\pairing'$ of the coset tanglegram.
 
 For stanglegrams, there is an additional symmetry coming from inverting $\pairing$ when the two trees in the tanglegram have the same shape.
 
@@ -406,6 +359,56 @@ Thus, the pre-image of this map for a given tangle gives the possible labelings 
 In the case of stanglegrams when the trees have identical shapes, these objects are identified as elements of the wreath product $\fS_n \wrtwo$.
 There is still a well-defined map of these objects to the collection of double cosets $\aut(t) \pairing \aut(t)$ which are unique up to inversion of $\pairing$.
 As in the previous case, the pre-image of this map for a given stangle gives the possible labelings of that tangle.
+
+
+\subsection{Planar tanglegram enumeration}
+
+We can think about the forgetful map
+\[
+f_T: planar_n \rightarrow \tree_n
+\]
+mapping each (labeled) planar tree to its corresponding phylogenetic tree.
+Thus $f_T^{-1}(t)$ are the planar embeddings of a tree, which are in one-to-one correspondence with the automorphism group $\aut(t)$.
+
+\[
+0 \rightarrow \aut(t) \rightarrow planar_n \rightarrow \tree_n \rightarrow \shape_n \rightarrow 0
+\]
+
+
+It is easier to describe mappings between trees embedded in the plane than trees in the abstract, and thus we introduce the notion of a \emph{planar} tanglegram.
+This notion is a slight simplification of the notion of a \emph{drawing} used by previous authors \cite{Venkatachalam2010-zh} which will be convenient for our purposes.
+We use the term \emph{planar embedding} as it is used in graph theory.
+If not otherwise specified, ``isomorphic'' applied to trees refers to usual graph isomorphism rather than an isomorphism of embedded trees.
+
+Let $\fS_n$ denote the symmetric group on $n$ items.
+\begin{definition}
+\label{def:ptanglegram}
+A rooted (resp.\ unrooted) \emph{planar $n$-tanglegram} is an ordered triple $(p_1, p_2, \pairing)$ where $p_1$ and $p_2$ are rooted (resp.\ unrooted) trees with $n$ leaves embedded in the plane, and $\pairing \in \fS_n$ giving the bijection between the leaves.
+Let $\ptangle_n$ denote the set of planar $n$-tanglegrams.
+\end{definition}
+
+Of course, there is also a well-defined planar graph realization for planar tanglegrams obtained by connecting leaves of planar trees $p_1$ and $p_2$ under $\pairing \in \fS_n$.
+
+Given a planar tanglegram define the forgetful map $f: \ptangle_n \rightarrow \tangle_n$ by
+\begin{equation}
+\label{eq:forgetful}
+(p_1, p_2, \sigma) \mapsto (t_1, t_2, \phi_\sigma).
+\end{equation}
+This map is surjective because any tanglegram can be embedded in the plane.
+Furthermore, the pre-image of the forgetful map's algebraic component can be described in terms of double cosets:
+\begin{proposition}
+\label{prop:doubleCosets}
+Let $(p_1, p_2, \sigma)$ be a planar embedding of an $n$-tanglegram $y$. Then
+\[
+\aut(p_1) \sigma \aut(p_2) = \{\tau \in \fS_n \mid f(p_1, p_2, \tau) = y\}.
+\]
+\end{proposition}
+\begin{proof}
+By definition of the automorphism group of a planar tree, $f(p_1, p_2, \tau) = y$ for any $\tau \in \aut(p_1) \sigma \aut(p_2)$.
+Now take $\tau$ from $\{\tau \in \fS_n \mid f(p_1, p_2, \tau) = y\} \setminus \aut(p_1) \sigma \aut(p_2)$.
+Thus $\sigma \not \in \aut(p_1) \tau \aut(p_2)$, which implies that $f(p_1, p_2, \tau) \neq y$, a contradiction.
+\end{proof}
+
 
 
 
