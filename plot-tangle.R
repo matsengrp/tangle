@@ -5,15 +5,22 @@ library(dendextend)
 
 args <- commandArgs(TRUE)
 
-stopifnot(length(args) == 3)
+stopifnot(length(args) %in% c(3, 4))
 
 idx_file <- args[1]
-which_tangle <- args[2]
+which_tangle_zero_idx <- args[2]
 out_file <- args[3]
 
+plot_fun <- ifelse(
+        length(args) == 4,
+        function(x) plot(x, use.edge.length = FALSE, main = args[4], axes=FALSE),
+        function(x) plot(x, use.edge.length = FALSE))
+
+
 df <- read.table(idx_file, stringsAsFactors=FALSE)
-t1 <- df[which_tangle, 3]
-t2 <- df[which_tangle, 4]
+w = as.integer(which_tangle_zero_idx)+1
+t1 <- df[w, 3]
+t2 <- df[w, 4]
 
 dendrogram_of_newick <- function(s) {
   t <- read.tree(text=s)
@@ -26,5 +33,5 @@ dl <- dendlist(dendrogram_of_newick(t1),dendrogram_of_newick(t2))
 svg(out_file)
 dl %>%
     untangle(method = "step2side") %>%
-    plot(use.edge.length = FALSE)
-dev.off()
+    plot_fun
+    dev.off()
