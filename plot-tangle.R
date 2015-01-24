@@ -13,8 +13,8 @@ out_file <- args[3]
 
 plot_fun <- ifelse(
         length(args) == 4,
-        function(x) plot(x, use.edge.length = FALSE, main = args[4], axes=FALSE),
-        function(x) plot(x, use.edge.length = FALSE))
+        function(x) plot(x, use.edge.length = FALSE, main = args[4], axes=FALSE, leaflab="none"),
+        function(x) plot(x, use.edge.length = FALSE, leaflab="none"))
 
 
 df <- read.table(idx_file, stringsAsFactors=FALSE)
@@ -33,5 +33,6 @@ dl <- dendlist(dendrogram_of_newick(t1),dendrogram_of_newick(t2))
 svg(out_file)
 dl %>%
     untangle(method = "step2side") %>%
+    set("branches_lwd", 3) %>%  # Thicken branches.
     plot_fun
     dev.off()
