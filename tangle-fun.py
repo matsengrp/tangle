@@ -1,5 +1,6 @@
 from collections import OrderedDict
-from sage.all import gap
+import sage.all as sg
+import sage.gap as gap
 # Depends on all-hail-sage/tree-fun.py
 
 gap.eval("""
@@ -152,7 +153,7 @@ def shortest_fewest_cycles_sorted(perm_list):
 def symmetric_group_dict(t1, t2, mu):
     n = n_leaves(t1) - 1
     assert(n == n_leaves(t2) - 1)
-    return SymmetricGroup(n)(mu).dict()
+    return sg.SymmetricGroup(n)(mu).dict()
 
 
 def graph_of_tangle(t1, t2, coset, symmetric=True):
@@ -205,7 +206,7 @@ def reanimate_tangle(t1, t2, coset_str):
 
 
 def load_tangles(fname):
-    return list(reanimate_tangle(*x) for x in load(fname))
+    return list(reanimate_tangle(*x) for x in sg.load(fname))
 
 
 def trees_shapes_autos_dn(n):
@@ -234,7 +235,7 @@ def make_tangles_extras(n, symmetric=True):
     symmetric determines if we should consider all ordered or unordered pairs
     of trees.
     """
-    fS = SymmetricGroup(n)
+    fS = sg.SymmetricGroup(n)
     (trees, shapes, shape_autos, dn_trees) = trees_shapes_autos_dn(n)
 
     # Iterate over all pairs of tree shape representatives.
@@ -263,7 +264,7 @@ def make_tangles_extras(n, symmetric=True):
 
 
 def count_labeled_tangles(n, symmetric=True, verbose=False):
-    fS = SymmetricGroup(n)
+    fS = sg.SymmetricGroup(n)
     W = wreath_square(fS)
     (trees, shapes, shape_autos, dn_trees) = trees_shapes_autos_dn(n)
     right_fS_cosets = [right_cosets(fS, a) for a in shape_autos]
@@ -283,7 +284,7 @@ def count_labeled_tangles(n, symmetric=True, verbose=False):
                 total_count += size(double_cosets(W, E, F))
                 if verbose:
                     print to_newick(shapes[i]) + '\t' + to_newick(shapes[j])
-                    print "has {} cosets".format(size(cosets))
+                    # print "has {} cosets".format(size(cosets))
                     for c in double_cosets(W, E, F):
                         print str_of_wreath_elt(n, representative(c))
             else:
