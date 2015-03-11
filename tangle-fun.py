@@ -1,11 +1,12 @@
 from collections import OrderedDict
+import os
 import sage.all as sg
-import sage.gap as gap
 # Depends on all-hail-sage/tree-fun.py
 
-gap.eval("""
-Read("tangle-fun.g");
-""")
+if os.path.exists("tangle-fun.g"):
+    gap.eval("""
+    Read("tangle-fun.g");
+    """)
 
 
 # Groups and cosets
