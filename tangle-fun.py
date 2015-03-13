@@ -114,6 +114,13 @@ def on_double_cosets(coset, g):
     """
     return gap.function_call('OnDoubleCosets', [coset, gap(g)])
 
+def standardize_double_coset(dc):
+    """
+    Make the double coset representative be the minimum possible.
+    According to the GAP documentation, this is guaranteed to work within a GAP
+    session, but not between sessions.
+    """
+    return gap.function_call('StandardizeDoubleCoset', dc)
 
 def double_coset_inverse(coset):
     """
@@ -204,6 +211,10 @@ def saveable_tangle(t1, t2, coset):
 
 def reanimate_tangle(t1, t2, coset_str):
     return (t1, t2, gap(coset_str))
+
+
+def standardize_tangle(t1, t2, coset):
+    return (t1, t2, standardize_double_coset(coset))
 
 
 def load_tangles(fname):

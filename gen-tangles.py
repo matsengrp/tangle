@@ -27,11 +27,12 @@ assert(len(tangles) == len(newick_set))
 with open(tangle_base+".idx", "w") as f:
     print "-"*len(tangles)
     for (x, t1_idx, t2p_idx) in tangles_extras:
+        x = standardize_tangle(*x)
         f.write("\t".join([str(o) for o in [
             t1_idx,
             t2p_idx,
-            to_newick_pair(*x),
-            "".join(str(x[2]).split())  # Cosets with no whitespace.
+            "".join(str(x[2]).split()),  # Cosets with no whitespace.
+            to_newick_pair(*x)
             ]])+"\n")
         stdout.write("*")
         stdout.flush()

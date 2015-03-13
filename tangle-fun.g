@@ -23,6 +23,17 @@ DoubleCosetInverse := function(coset)
 end;;
 
 
+StandardizeDoubleCoset := function(dc)
+    local canonical_elt;
+    canonical_elt := Minimum(Orbit(RightActingGroup(dc),
+        CanonicalRightCosetElement(LeftActingGroup(dc), Representative(dc))));
+    return DoubleCoset(
+        LeftActingGroup(dc),
+        canonical_elt,
+        RightActingGroup(dc));
+end;;
+
+
 # This function returns a list of double cosets of the form UgU in G that are
 # unique under inversion. That is, a complete list of such double cosets where
 # we consider UgU and Ug^{-1}U to be the same.
