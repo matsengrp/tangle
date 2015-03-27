@@ -6,3 +6,6 @@ Follow [these instructions](http://www.liafa.univ-paris-diderot.fr/~labbe/blogue
 
 This project uses git submodules.
 [Know how to use them](http://git-scm.com/book/en/Git-Tools-Submodules#Cloning-a-Project-with-Submodules).
+
+
+[![DOI](https://zenodo.org/badge/doi/10.5281/zenodo.16427.svg)](http://dx.doi.org/10.5281/zenodo.16427)
