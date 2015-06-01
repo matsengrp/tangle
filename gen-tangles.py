@@ -3,7 +3,7 @@
 import argparse
 from sys import stdout
 from sage.all import *
-load("all-hail-sage/tree-fun.py")
+load("all-hail-sage/phylogeny.py")
 load("tangle-fun.py")
 
 parser = argparse.ArgumentParser(description='Generate tangles',
@@ -37,7 +37,7 @@ with open(tangle_base+".idx", "w") as f:
         stdout.flush()
     print ""
 # Print an enumeration of trees so we can make sense of the .idx file
-trees = enumerate_rooted_trees(n)
+trees = enumerate_trees(n, rooted=True)
 with open("tree{}.tre".format(n), "w") as f:
     for t in trees:
-        f.write(to_newick(t) + "\n")
+        f.write(t.to_newick() + "\n")
