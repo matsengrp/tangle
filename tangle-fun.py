@@ -106,11 +106,13 @@ def inverse_unique_double_cosets(G, U):
 
 # Tangles
 
-def symmetric_group_dict(t1, t2, mu):
-    n = t1.n_leaves() - 1
-    assert(n == t2.n_leaves() - 1)
-    return sg.SymmetricGroup(n)(mu).dict()
+def leaf_symmetric_group(t1, t2, mu):
+    G = t1.leaf_symmetric_group()
+    assert(G == t2.leaf_symmetric_group())
+    return G
 
+def symmetric_group_dict(t1, t2, mu):
+    return leaf_symmetric_group(t1, t2, mu)(mu).dict()
 
 def graph_of_tangle(t1, t2, coset, symmetric=True):
     """
@@ -165,12 +167,15 @@ def load_tangles(fname):
     return list(reanimate_tangle(*x) for x in sg.load(fname))
 
 
-def trees_shapes_autos_dn(n):
-    trees = enumerate_trees(n, rooted=True)
+def trees_shapes_autos_dn(n, rooted=True):
+    trees = enumerate_trees(n, rooted)
     # So that we can recognize trees after acting on t2 by mu^{-1}.
     # `dn` is short for a dictionary keyed on Newick strings.
     dn_trees = {trees[i].to_newick(): i for i in range(len(trees))}
     shapes = []
+    # Use Newick shape representation to get a non-redundant collection. Works
+    # for rooted and unrooted trees because we are always writing trees as
+    # being rooted at zero.
     dn_shapes = OrderedDict()
     for i in range(len(trees)):
         shape_i = trees[i].to_newick_shape()
@@ -183,7 +188,7 @@ def trees_shapes_autos_dn(n):
     return (trees, shapes, shape_autos, dn_trees)
 
 
-def make_tangles_extras(n, symmetric=True):
+def make_tangles_extras(n, symmetric=True, rooted=True):
     """
     Make all the tangles with n leaves, along with the number of labeled
     tangles isomorphic to that tangle, and the indices of the mu = id version
@@ -191,8 +196,11 @@ def make_tangles_extras(n, symmetric=True):
     symmetric determines if we should consider all ordered or unordered pairs
     of trees.
     """
-    fS = sg.SymmetricGroup(n)
-    (trees, shapes, shape_autos, dn_trees) = trees_shapes_autos_dn(n)
+    if rooted:
+        fS = sg.SymmetricGroup(n)
+    else:
+        fS = unrooted_symmetric_group(n)
+    (trees, shapes, shape_autos, dn_trees) = trees_shapes_autos_dn(n, rooted)
 
     # Iterate over all pairs of tree shape representatives.
     tangles = []

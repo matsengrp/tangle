@@ -11,12 +11,14 @@ parser = argparse.ArgumentParser(description='Generate tangles',
 
 parser.add_argument('n', type=int, help='How many leaves')
 parser.add_argument('--asymmetric', action='store_true',
-                    help='Generate tangles without exchange symmetry.')
+                    help='Generate tanglegrams without exchange symmetry.')
+parser.add_argument('--unrooted', action='store_true',
+                    help='Generate unrooted tanglegrams.')
 
 args = parser.parse_args()
 n = args.n
 
-tangles_extras = make_tangles_extras(n, not args.asymmetric)
+tangles_extras = make_tangles_extras(n, not args.asymmetric, not args.unrooted)
 tangles = [extra[0] for extra in tangles_extras]
 tangle_base = "tangle{}".format(n)
 sage.structure.sage_object.save(
