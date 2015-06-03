@@ -107,9 +107,9 @@ def inverse_unique_double_cosets(G, U):
 # Tangles
 
 def leaf_symmetric_group(t1, t2, mu):
-    G = t1.leaf_symmetric_group()
-    assert(G == t2.leaf_symmetric_group())
-    return G
+    n = t1.n_leaves()
+    assert(n == t2.n_leaves())
+    return SymmetricGroup(n)
 
 def symmetric_group_dict(t1, t2, mu):
     return leaf_symmetric_group(t1, t2, mu)(mu).dict()
@@ -168,7 +168,7 @@ def load_tangles(fname):
 
 
 def trees_shapes_autos_dn(n, rooted=True):
-    trees = enumerate_trees(n, rooted)
+    trees = enumerate_bifurcating_trees(n, rooted)
     # So that we can recognize trees after acting on t2 by mu^{-1}.
     # `dn` is short for a dictionary keyed on Newick strings.
     dn_trees = {trees[i].to_newick(): i for i in range(len(trees))}
@@ -192,16 +192,12 @@ def make_tangles_extras(n, symmetric=True, rooted=True):
     """
     Make all the tangles with n leaves, along with the number of labeled
     tangles isomorphic to that tangle, and the indices of the mu = id version
-    of those trees in enumerate_rooted_trees.
+    of those trees in enumerate_bifurcating_trees.
     symmetric determines if we should consider all ordered or unordered pairs
     of trees.
     """
-    if rooted:
-        fS = sg.SymmetricGroup(n)
-    else:
-        fS = unrooted_symmetric_group(n)
+    fS = sg.SymmetricGroup(n)
     (trees, shapes, shape_autos, dn_trees) = trees_shapes_autos_dn(n, rooted)
-
     # Iterate over all pairs of tree shape representatives.
     tangles = []
     for i in range(len(shapes)):

@@ -25,6 +25,14 @@ sage.structure.sage_object.save(
     [saveable_tangle(*x) for x in tangles],
     filename=tangle_base)
 newick_set = set(to_newick_pair(*x) for x in tangles)
+newick_list = list(to_newick_pair(*x) for x in tangles)
+for x in newick_set:
+    print x
+print ""
+for x in sorted(newick_list):
+    print x
+for x in tangles:
+    print x
 assert(len(tangles) == len(newick_set))
 with open(tangle_base+".idx", "w") as f:
     print "-"*len(tangles)
@@ -39,7 +47,7 @@ with open(tangle_base+".idx", "w") as f:
         stdout.flush()
     print ""
 # Print an enumeration of trees so we can make sense of the .idx file
-trees = enumerate_trees(n, rooted=True)
+trees = enumerate_bifurcating_trees(n, rooted=True)
 with open("tree{}.tre".format(n), "w") as f:
     for t in trees:
         f.write(t.to_newick() + "\n")

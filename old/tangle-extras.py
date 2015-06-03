@@ -83,4 +83,18 @@ def equivalence_class_representatives(criterion, things):
 
 def llt_isomorphism_matrix(l):
     n = len(l)
+
+
+# Trees
+    def correct_deg_two_vertex(self, v):
+        """
+        If v is a degree two vertex, remove it and heal the edge.
+        """
+        n = self.neighbors(v)
+        if len(n) == 2:
+            self.delete_vertex(v)
+            self.add_edge(n[0], n[1])
+
+
+../
     return matrix(n, n, lambda i, j: int(l[i].llt_is_isomorphic(l[j])))
