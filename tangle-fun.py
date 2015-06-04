@@ -125,7 +125,7 @@ def graph_of_tangle(t1, t2, coset, symmetric=True):
     else:
         # By duplicating root edge we can distinguish between t1 and t2.
         g = t1.disjoint_union(duplicate_zero_edge(t2))
-    for i in range(1, t1.n_leaves()):
+    for i in range(1, t1.n_leaves()+1):
         g.add_edge((0, i), (1, mu_d[i]), True)
     return g
 
@@ -201,7 +201,7 @@ def make_tangles_extras(n, symmetric=True, rooted=True):
     # Iterate over all pairs of tree shape representatives.
     tangles = []
     for i in range(len(shapes)):
-        print "Tree {} of {}".format(i+1, len(shapes))
+        print "Shape {} of {}".format(i+1, len(shapes))
         for j in range(0, len(shapes)):
             # Enumerate all double cosets.
             A1 = shape_autos[i]
