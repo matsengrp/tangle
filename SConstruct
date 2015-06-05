@@ -1,20 +1,19 @@
+from collections import defaultdict
 import glob
 import os
 
-sobj = {}
-
-def gen_tangles(min, max, flags):
-    for i in range(min, max+1):
+def gen_tangles(tangles, min_leaves, max_leaves, flags):
+    for i in range(min_leaves, max_leaves+1):
         outs = [s.format(i)
                 for s in ['tangle{}.idx', 'tangle{}.sobj', 'tree{}.tre']]
-        sobj[i] = Command(outs,
+        tangles[i] = Command(outs,
             '#/gen-tangles.py',  # '#' means WRT SConstruct directory.
-            './$SOURCE {} --outdir {} {}'.format(flags, os.getcwd(), i))[1]
+            './$SOURCE {} --outdir {} {}'.format(flags, os.getcwd(), i))
 
-def check_tangles(min, max, flags):
-    for i in range(min, max+1):
+def check_tangles(tangles, min_leaves, max_leaves, flags):
+    for i in range(min_leaves, max_leaves+1):
         Command('tangle{}.check.txt'.format(i),
-            ['#/check-tangles.py', sobj[i]],
+            ['#/check-tangles.py', tangles[i][1]],  # [1] is the .sobj file
             './${SOURCES[0]} ${SOURCES[1]} '+flags+' > $TARGET')
 
 def call_sconscript(dir):
