@@ -3,8 +3,8 @@
 import argparse
 from sys import stdout
 from sage.all import *
-load("all-hail-sage/phylogeny.py")
-load("tangle-fun.py")
+load(os.path.dirname(os.path.realpath(__file__))+'/all-hail-sage/phylogeny.py')
+load(os.path.dirname(os.path.realpath(__file__))+'/tangle-fun.py')
 
 parser = argparse.ArgumentParser(description='Generate tangles',
                                  prog='gen-tangles.py')

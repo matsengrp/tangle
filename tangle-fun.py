@@ -3,10 +3,10 @@ import os
 import sage.all as sg
 # Depends on all-hail-sage/phylogeny.py
 
-if os.path.exists("tangle-fun.g"):
-    gap.eval("""
-    Read("tangle-fun.g");
-    """)
+wd = os.path.dirname(os.path.realpath(__file__));
+gap.eval("""
+Read("{}/tangle-fun.g");
+""".format(wd))
 
 
 # Groups and cosets
