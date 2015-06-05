@@ -1,3 +1,4 @@
-Import('gen_tangles')
+Import('*')
 
 gen_tangles(3, 4, '--unrooted')
+check_tangles(3, 4, '')

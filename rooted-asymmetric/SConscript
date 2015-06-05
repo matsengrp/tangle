@@ -1,3 +1,4 @@
-Import('gen_tangles')
+Import('*')
 
 gen_tangles(2, 4, '--asymmetric')
+check_tangles(2, 4, '--asymmetric')

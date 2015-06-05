@@ -123,8 +123,8 @@ def graph_of_tangle(t1, t2, coset, symmetric=True):
     if symmetric:
         g = t1.disjoint_union(t2)
     else:
-        # By duplicating root edge we can distinguish between t1 and t2.
-        g = t1.disjoint_union(duplicate_zero_edge(t2))
+        # Make t2 special so that we can distinguish it from t1.
+        g = t1.disjoint_union(t2.make_special())
     for i in range(1, t1.n_leaves()+1):
         g.add_edge((0, i), (1, mu_d[i]), True)
     return g
