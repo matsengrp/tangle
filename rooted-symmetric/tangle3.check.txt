@@ -1,0 +1,1 @@
+Tangles in rooted-symmetric/tangle3.sobj are graph-distinct: 2 tangles with total count 6.

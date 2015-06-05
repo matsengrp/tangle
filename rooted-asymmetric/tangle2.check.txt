@@ -1,0 +1,1 @@
+Tangles in rooted-asymmetric/tangle2.sobj are graph-distinct: 1 tangles with total count 2.

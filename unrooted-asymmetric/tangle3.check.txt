@@ -1,0 +1,1 @@
+Tangles in unrooted-asymmetric/tangle3.sobj are graph-distinct: 1 tangles with total count 6.
