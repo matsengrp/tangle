@@ -14,6 +14,8 @@ parser.add_argument('--asymmetric', action='store_true',
                     help='Generate tanglegrams without exchange symmetry.')
 parser.add_argument('--unrooted', action='store_true',
                     help='Generate unrooted tanglegrams.')
+parser.add_argument('--outdir', type=str, default='.',
+                    help='Directory for results; default is script dir.')
 
 args = parser.parse_args()
 n = args.n
@@ -22,7 +24,7 @@ rooted = not args.unrooted
 symmetric = not args.asymmetric
 tangles_extras = make_tangles_extras(n, symmetric=symmetric, rooted=rooted)
 tangles = [extra[0] for extra in tangles_extras]
-tangle_base = "tangle{}".format(n)
+tangle_base = args.outdir+"/tangle{}".format(n)
 sage.structure.sage_object.save(
     [saveable_tangle(*x) for x in tangles],
     filename=tangle_base)
@@ -43,6 +45,6 @@ with open(tangle_base+".idx", "w") as f:
     print ""
 # Print an enumeration of trees so we can make sense of the .idx file
 trees = enumerate_bifurcating_trees(n, rooted=rooted)
-with open("tree{}.tre".format(n), "w") as f:
+with open(args.outdir+"/tree{}.tre".format(n), "w") as f:
     for t in trees:
         f.write(t.to_newick() + "\n")

@@ -1,0 +1,3 @@
+Import('gen_tangles')
+
+gen_tangles(2, 4, '--asymmetric')
