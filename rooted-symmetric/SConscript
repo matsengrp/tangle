@@ -3,3 +3,4 @@ results = {}
 
 gen_tangles(results, 2, 4, '')
 check_tangles(results, 2, 4, '')
+plot_counts(results)

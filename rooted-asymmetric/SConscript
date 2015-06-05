@@ -3,3 +3,4 @@ results = {}
 
 gen_tangles(results, 2, 4, '--asymmetric')
 check_tangles(results, 2, 4, '--asymmetric')
+plot_counts(results)

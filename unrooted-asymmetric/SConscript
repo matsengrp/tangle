@@ -3,3 +3,4 @@ results = {}
 
 gen_tangles(results, 3, 4, '--unrooted --asymmetric')
 check_tangles(results, 3, 4, '--asymmetric')
+plot_counts(results)
