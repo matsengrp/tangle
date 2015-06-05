@@ -20,19 +20,16 @@ def check_tangles(tangles, min_leaves, max_leaves, flags):
             ['#/check-tangles.py', tangles[i][1]],  # [1] is the .sobj file
             './${SOURCES[0]} ${SOURCES[1]} '+flags+' > $TARGET')
 
-def plot_counts(tangles):
+def count(tangles):
     counts = Command('counts.txt',
         map(lambda x: x[0], tangles.values()),
         'wc -l $SOURCES | head -n -1 | column -t | sed "s/[ ][ ]*/\\t/g" > $TARGET')
-    env.Command('counts.svg',
-        ['#/scripts/plot.py', counts],
-        '${SOURCES[0]} -o $TARGET ${SOURCES[1]}')
 
 
 def call_sconscript(dir):
     SConscript(
         '{}/SConscript'.format(dir),
-        exports='gen_tangles check_tangles plot_counts')
+        exports='gen_tangles check_tangles count')
 
 dirs = [
     'rooted-asymmetric',

@@ -1,2 +1,4 @@
 1	unrooted-symmetric/tangle3.idx
 2	unrooted-symmetric/tangle4.idx
+4	unrooted-symmetric/tangle5.idx
+22	unrooted-symmetric/tangle6.idx

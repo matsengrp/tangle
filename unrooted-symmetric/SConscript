@@ -1,6 +1,6 @@
 Import('*')
 results = {}
 
-gen_tangles(results, 3, 4, '--unrooted')
-check_tangles(results, 3, 4, '')
-plot_counts(results)
+gen_tangles(results, 3, 6, '--unrooted')
+check_tangles(results, 3, 6, '')
+count(results)

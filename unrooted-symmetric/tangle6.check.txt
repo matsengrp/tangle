@@ -1,0 +1,1 @@
+Tangles in unrooted-symmetric/tangle6.sobj are graph-distinct: 22 tangles with total count 1968.

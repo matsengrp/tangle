@@ -1,0 +1,1 @@
+Tangles in rooted-symmetric/tangle5.sobj are graph-distinct: 69 tangles with total count 658.
