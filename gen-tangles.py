@@ -14,6 +14,8 @@ parser.add_argument('--asymmetric', action='store_true',
                     help='Generate tanglegrams without exchange symmetry.')
 parser.add_argument('--unrooted', action='store_true',
                     help='Generate unrooted tanglegrams.')
+parser.add_argument('--sametree', action='store_true',
+                    help='Only generate tanglegrams on isomorphic pairs of trees.')
 parser.add_argument('--outdir', type=str, default='.',
                     help='Directory for results; default is script dir.')
 
@@ -22,7 +24,8 @@ n = args.n
 
 rooted = not args.unrooted
 symmetric = not args.asymmetric
-tangles_extras = make_tangles_extras(n, symmetric=symmetric, rooted=rooted)
+tangles_extras = make_tangles_extras(n, symmetric=symmetric,
+                                     rooted=rooted, sametree=args.sametree)
 tangles = [extra[0] for extra in tangles_extras]
 tangle_base = args.outdir+"/tangle{}".format(n)
 sage.structure.sage_object.save(

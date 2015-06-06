@@ -31,8 +31,11 @@ dirs = [
     'unrooted-asymmetric',
     'rooted-symmetric',
     'unrooted-symmetric']
+sametree_dirs = [
+    'sametree-rooted-asymmetric',
+    'sametree-rooted-symmetric']
 
-for d in dirs:
+for d in dirs + sametree_dirs:
     SConscript(
         '{}/SConscript'.format(d),
         exports='gen_tangles check_tangles count')

@@ -188,12 +188,14 @@ def trees_shapes_autos_dn(n, rooted=True):
     return (trees, shapes, shape_autos, dn_trees)
 
 
-def make_tangles_extras(n, symmetric=True, rooted=True):
+def make_tangles_extras(n, symmetric=True, rooted=True, sametree=False):
     """
     Make all the tangles with n leaves, along with the number of labeled
     tangles isomorphic to that tangle, and the indices of the mu = id version
     of those trees in enumerate_bifurcating_trees.
-    symmetric determines if we should consider all ordered or unordered pairs
+    `symmetric` determines if we should consider all ordered or unordered pairs
+    of trees.
+    If `sametree` is True, then only consider tanglegrams on isomorphic pairs
     of trees.
     """
     fS = sg.SymmetricGroup(n)
@@ -202,7 +204,11 @@ def make_tangles_extras(n, symmetric=True, rooted=True):
     tangles = []
     for i in range(len(shapes)):
         print "Shape {} of {}".format(i+1, len(shapes))
-        for j in range(0, len(shapes)):
+        if sametree:
+            j_range = [i]
+        else:
+            j_range = range(0, len(shapes))
+        for j in j_range:
             # Enumerate all double cosets.
             A1 = shape_autos[i]
             A2 = shape_autos[j]
