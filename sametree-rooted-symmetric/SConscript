@@ -1,0 +1,6 @@
+Import('*')
+results = {}
+
+gen_tangles(results, 2, 5, '--sametree')
+check_tangles(results, 2, 5, '')
+count(results)
