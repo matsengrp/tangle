@@ -1,6 +1,11 @@
 Import('*')
 results = {}
 
-gen_tangles(results, 2, 5, '--asymmetric')
-check_tangles(results, 2, 5, '--asymmetric')
+if 'big_run' in env['ENV'].keys():
+    max_leaves_gen, max_leaves_check = 8, 7
+else:
+    max_leaves_gen, max_leaves_check = 6, 5
+
+gen_tangles(results, 2, max_leaves_gen, '--asymmetric')
+check_tangles(results, 2, max_leaves_check, '--asymmetric')
 count(results)

@@ -1,6 +1,11 @@
 Import('*')
 results = {}
 
-gen_tangles(results, 3, 6, '--unrooted')
-check_tangles(results, 3, 6, '')
+if 'big_run' in env['ENV'].keys():
+    max_leaves_gen, max_leaves_check = 9, 7
+else:
+    max_leaves_gen, max_leaves_check = 6, 5
+
+gen_tangles(results, 3, max_leaves_gen, '--unrooted')
+check_tangles(results, 3, max_leaves_check, '')
 count(results)

@@ -2,3 +2,4 @@
 2	rooted-symmetric/tangle3.idx
 10	rooted-symmetric/tangle4.idx
 69	rooted-symmetric/tangle5.idx
+807	rooted-symmetric/tangle6.idx

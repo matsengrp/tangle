@@ -1,6 +1,10 @@
 Import('*')
 results = {}
 
-gen_tangles(results, 2, 5, '--sametree')
-check_tangles(results, 2, 5, '')
+if 'big_run' in env['ENV'].keys():
+    max_leaves_gen = 9
+else:
+    max_leaves_gen = 6
+
+gen_tangles(results, 2, max_leaves_gen, '--sametree')
 count(results)

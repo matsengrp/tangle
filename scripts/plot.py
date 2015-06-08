@@ -47,7 +47,7 @@ for k in df.keys():
 # Clear out this sametree nonsense.
 for k in df.keys():
     if 'sametree' in k:
-        df.pop[k]
+        df.pop(k)
 
 mpl.rcParams.update({
     'font.size': 18, 'axes.labelsize': 18,

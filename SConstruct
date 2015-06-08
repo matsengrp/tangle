@@ -37,7 +37,7 @@ dirs = [
 for d in dirs:
     SConscript(
         '{}/SConscript'.format(d),
-        exports='gen_tangles check_tangles count')
+        exports='env gen_tangles check_tangles count')
 
 env.Command(
     'counts.svg',
