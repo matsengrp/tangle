@@ -6,6 +6,5 @@ if 'big_run' in env['ENV'].keys():
 else:
     max_leaves_gen = 6
 
-gen_tangles(results, 2, 6, '--asymmetric --sametree')
-check_tangles(results, 2, 5, '--asymmetric')
+gen_tangles(results, 2, max_leaves_gen, '--asymmetric --sametree')
 count(results)
