@@ -33,12 +33,30 @@ for new_df in map(df_of_counts, args.counts):
     df = df.merge(new_df, how='outer')
 df.sort(axis=1, inplace=True)  # Sort columns alphabetically.
 
+# Calculate the number of symmetric tanglegrams.
+for k in df.keys():
+    if 'sametree' in k and 'asymmetric' in k:
+        m = re.match(r'(?:sametree )?([^-]*) a?symmetric', k)
+        assert(m)
+        t = m.group(1)  # Rooted vs unrooted
+        df['alt {} symmetric'.format(t)] = \
+            df[t+' asymmetric']/2  + \
+            df['sametree {} symmetric'.format(t)] - \
+            df[k]/2
+
+# Clear out this sametree nonsense.
+for k in df.keys():
+    if 'sametree' in k:
+        df.pop[k]
+
 mpl.rcParams.update({
     'font.size': 18, 'axes.labelsize': 18,
     'xtick.labelsize':16, 'ytick.labelsize':16,
     'legend.fontsize':16,
     'font.family': 'Lato',
     'font.weight': 600, 'axes.labelweight': 600})
+
+print df
 
 p = df.plot(x='n_leaves', logy=True)
 p.grid(b=None)
