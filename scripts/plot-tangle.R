@@ -5,7 +5,7 @@ library(dendextend)
 
 args <- commandArgs(TRUE)
 
-if(!(length(args) %in% c(3, 4))) {
+if(!(length(args) == 3)) {
     cat("Usage: idx_file which_tangle_one_idx out_file\n")
     stop()
 }
@@ -14,11 +14,7 @@ idx_file <- args[1]
 which_tangle <- args[2]
 out_file <- args[3]
 
-plot_fun <- ifelse(
-        length(args) == 4,
-        function(x) plot(x, use.edge.length = FALSE, main = args[4], axes=FALSE, leaflab="none"),
-        function(x) plot(x, use.edge.length = FALSE, axes=FALSE, leaflab="none"))
-
+plot_fun <- function(x) plot(x, use.edge.length = FALSE, axes=FALSE, leaflab="none")
 
 df <- read.table(idx_file, stringsAsFactors=FALSE)
 w = as.integer(which_tangle)
